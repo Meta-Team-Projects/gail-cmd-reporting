@@ -23,36 +23,40 @@ import {
     Help,
     ChevronLeft,
 } from '@mui/icons-material'
+import { MenuType } from '../constants/menuTypes'
 
 const drawerWidth = 240
 
 const menuItems = [
-    { text: 'Home', icon: <Home />, path: '/' },
-    { text: 'Data Ingestion', icon: <DataUsage />, path: '/data-ingestion' },
-    { text: 'AI Configuration', icon: <Settings />, path: '/ai-config' },
-    { text: 'FAQs', icon: <QuestionAnswer />, path: '/faqs' },
-    { text: 'Saved Queries', icon: <GetApp />, path: '/saved-queries' },
-    { text: 'Saved Notes', icon: <Note />, path: '/saved-notes' },
-    { text: 'Recent Sessions', icon: <History />, path: '/recent-sessions' },
-    { text: 'Session Log', icon: <History />, path: '/session-log' },
+    { text: 'Home', icon: <Home />, type: MenuType.NONE },
+    { text: 'Data Ingestion', icon: <DataUsage />, type: MenuType.DOCUMENT_INGESTION },
+    { text: 'AI Configuration', icon: <Settings />, type: MenuType.AI_CONFIGURATION },
+    { text: 'FAQs', icon: <QuestionAnswer />, type: MenuType.FAQS },
+    { text: 'Saved Queries', icon: <GetApp />, type: MenuType.SAVED_QUERIES },
+    { text: 'Saved Notes', icon: <Note />, type: MenuType.SAVED_NOTES },
+    { text: 'Recent Sessions', icon: <History />, type: MenuType.RECENT_SESSIONS },
+    { text: 'Session Log', icon: <History />, type: MenuType.SESSION_LOG },
 ]
 
 const bottomMenuItems = [
-    { text: 'Profile', icon: <AccountCircle />, path: '/profile' },
-    { text: 'Support', icon: <Help />, path: '/support' },
+    { text: 'Profile', icon: <AccountCircle />, type: MenuType.NONE },
+    { text: 'Support', icon: <Help />, type: MenuType.NONE },
 ]
 
-const Sidebar = ({ open, handleDrawerToggle }) => {
+const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
+    const handleMenuItemClick = (menuType) => {
+        if (menuType !== MenuType.NONE) {
+            onMenuClick(menuType)
+        }
+    }
 
     const drawer = (
         <>
             <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1, position: 'relative' }}>
-                <img src="/logo.png" alt="Logo" style={{ width: 40, height: 40 }} />
-                <Typography variant="h6" component="div">
-                    GAIL Chat
-                </Typography>
+                <img src="/gail_logo.png" alt="Logo" style={{ width: 40, height: 40 }} />
                 {open && (
                     <IconButton
                         onClick={handleDrawerToggle}
@@ -71,11 +75,31 @@ const Sidebar = ({ open, handleDrawerToggle }) => {
             <List>
                 {menuItems.map((item) => (
                     <ListItem key={item.text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon sx={{ color: 'primary.main' }}>
+                        <ListItemButton
+                            onClick={() => handleMenuItemClick(item.type)}
+                            selected={activeMenu === item.type}
+                            sx={{
+                                '&.Mui-selected': {
+                                    bgcolor: 'primary.dark',
+                                    '&:hover': {
+                                        bgcolor: 'primary.dark',
+                                    },
+                                },
+                            }}
+                        >
+                            <ListItemIcon sx={{
+                                color: activeMenu === item.type ? 'primary.contrastText' : 'primary.main'
+                            }}>
                                 {item.icon}
                             </ListItemIcon>
-                            <ListItemText primary={item.text} />
+                            <ListItemText
+                                primary={item.text}
+                                sx={{
+                                    '& .MuiListItemText-primary': {
+                                        color: activeMenu === item.type ? 'primary.contrastText' : 'text.primary',
+                                    },
+                                }}
+                            />
                         </ListItemButton>
                     </ListItem>
                 ))}

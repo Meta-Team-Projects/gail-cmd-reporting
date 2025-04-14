@@ -11,20 +11,61 @@ import {
   ChevronLeft,
   ChevronRight,
   VerticalSplit,
+  Menu as MenuIcon,
 } from '@mui/icons-material'
 import Sidebar from './components/Sidebar'
 import MainContent from './components/MainContent'
 import DocumentIngestion from './components/DocumentIngestion'
+import AIConfiguration from './components/AIConfiguration'
+import FAQs from './components/FAQs'
+import SavedNotes from './components/SavedNotes'
+import SavedQueries from './components/SavedQueries'
+import RecentSessions from './components/RecentSessions'
+import SessionLog from './components/SessionLog'
+import { MenuType } from './constants/menuTypes'
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     background: {
-      default: '#0A1929',
-      paper: '#132F4C',
+      default: '#1a1f2c',
+      paper: '#242936',
     },
     primary: {
-      main: '#3399FF',
+      main: '#3b82f6',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: 'rgba(255, 255, 255, 0.7)',
+    },
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+            },
+            '&:hover fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#3b82f6',
+            },
+          },
+        },
+      },
     },
   },
 })
@@ -32,6 +73,7 @@ const darkTheme = createTheme({
 function App() {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(true)
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false)
+  const [activeRightMenu, setActiveRightMenu] = useState(MenuType.NONE)
   const isMobile = useMediaQuery(darkTheme.breakpoints.down('sm'))
 
   const handleLeftDrawerToggle = () => {
@@ -42,6 +84,39 @@ function App() {
     setRightSidebarOpen(!rightSidebarOpen)
   }
 
+  const handleMenuClick = (menuType) => {
+    if (activeRightMenu === menuType && rightSidebarOpen) {
+      // If clicking the same menu that's already open, close it
+      setRightSidebarOpen(false)
+      setActiveRightMenu(MenuType.NONE)
+    } else {
+      // Open the new menu
+      setRightSidebarOpen(true)
+      setActiveRightMenu(menuType)
+    }
+  }
+
+  const renderRightMenu = () => {
+    switch (activeRightMenu) {
+      case MenuType.DOCUMENT_INGESTION:
+        return <DocumentIngestion open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+      case MenuType.AI_CONFIGURATION:
+        return <AIConfiguration open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+      case MenuType.FAQS:
+        return <FAQs open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+      case MenuType.SAVED_QUERIES:
+        return <SavedQueries open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+      case MenuType.SAVED_NOTES:
+        return <SavedNotes open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+      case MenuType.RECENT_SESSIONS:
+        return <RecentSessions open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+      case MenuType.SESSION_LOG:
+        return <SessionLog open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+      default:
+        return null
+    }
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -49,6 +124,8 @@ function App() {
         <Sidebar
           open={leftSidebarOpen}
           handleDrawerToggle={handleLeftDrawerToggle}
+          onMenuClick={handleMenuClick}
+          activeMenu={activeRightMenu}
         />
         <Box
           component="main"
@@ -77,12 +154,12 @@ function App() {
                 },
               }}
             >
-              <VerticalSplit />
+              <MenuIcon />
             </IconButton>
           )}
 
           {/* Right sidebar toggle button - shown only when sidebar is closed */}
-          {!rightSidebarOpen && (
+          {!rightSidebarOpen && activeRightMenu !== MenuType.NONE && (
             <IconButton
               color="inherit"
               aria-label="open right drawer"
@@ -107,10 +184,7 @@ function App() {
             rightSidebarOpen={rightSidebarOpen}
             leftSidebarOpen={leftSidebarOpen}
           />
-          <DocumentIngestion
-            open={rightSidebarOpen}
-            onToggle={handleRightDrawerToggle}
-          />
+          {renderRightMenu()}
         </Box>
       </Box>
     </ThemeProvider>
