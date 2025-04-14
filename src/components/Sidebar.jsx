@@ -144,7 +144,10 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
                     '& .MuiDrawer-paper': {
                         boxSizing: 'border-box',
                         width: drawerWidth,
-                        bgcolor: 'background.paper',
+                        bgcolor: 'rgba(164, 191, 255, 0.08)',
+                        borderRight: '0.5px solid rgba(255, 255, 255, 0.15)',
+                        boxShadow: '0px 4px 8px rgba(18, 18, 18, 0.25)',
+                        borderRadius: '15px',
                         transform: !open ? `translateX(-${drawerWidth}px)` : 'none',
                         transition: theme.transitions.create('transform', {
                             easing: theme.transitions.easing.sharp,

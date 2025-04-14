@@ -11,6 +11,7 @@ import {
     AppBar,
     Toolbar,
     InputAdornment,
+    SvgIcon,
 } from '@mui/material'
 import {
     Send,
@@ -27,6 +28,7 @@ import {
     VolumeUp,
     Source,
     IosShare,
+    PersonAdd,
 } from '@mui/icons-material'
 import axios from 'axios'
 
@@ -90,7 +92,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                 ml: 1,
                 maxWidth: rightSidebarOpen ? 'calc(100% - 400px)' : '100%',
                 transition: 'max-width 0.3s ease',
-                bgcolor: '#1a1f2c',
+                bgcolor: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
                 height: '100vh',
                 position: 'relative',
             }}
@@ -100,7 +102,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                 position="sticky"
                 elevation={0}
                 sx={{
-                    bgcolor: '#1a1f2c',
+                    bgcolor: 'rgba(164, 191, 255, 0)',
                     borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                     backdropFilter: 'blur(20px)',
                 }}
@@ -111,10 +113,13 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
+                            bgcolor: "#ffffff22",
                             width: '100%',
                             maxWidth: '1200px',
                             mx: 'auto',
                             px: { xs: 2, sm: 4, md: 6, lg: 8 },
+                            py: 0.5,
+                            borderRadius: '20px',
                         }}
                     >
                         <TextField
@@ -123,7 +128,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             size="small"
                             sx={{
                                 flex: 1,
-                                maxWidth: '400px',
+                                maxWidth: '600px',
                                 '& .MuiOutlinedInput-root': {
                                     bgcolor: 'rgba(255, 255, 255, 0.03)',
                                     borderRadius: '8px',
@@ -147,7 +152,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                         />
                         <Box sx={{ display: 'flex', gap: 2 }}>
                             <IconButton sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                                <Avatar sx={{ width: 32, height: 32 }} />
+                                <PersonAdd sx={{ width: 32, height: 32 }} />
+                            </IconButton>
+                            <IconButton sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                                <img src='./incognito-1.svg' style={{ width: 32, height: 32 }}></img>
                             </IconButton>
                         </Box>
                     </Box>
@@ -276,7 +284,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 <Box
                                     sx={{
                                         display: 'flex',
-                                        justifyContent: 'flex-start',
+                                        justifyContent: 'flex-end',
                                         gap: 1,
                                         mt: 1,
                                     }}
@@ -349,20 +357,23 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                     bottom: 0,
                     left: leftSidebarOpen ? '240px' : 0,
                     right: rightSidebarOpen ? '400px' : 0,
-                    bgcolor: 'rgba(26, 31, 44, 0.8)',
+                    bgcolor: 'rgba(255, 255, 255, 0)',
                     borderTop: '1px solid rgba(255, 255, 255, 0.08)',
                     transition: 'left 0.3s ease, right 0.3s ease',
                     backdropFilter: 'blur(20px)',
-                    zIndex: 10,
+                    zIndex: 3,
                 }}
             >
                 <Box
                     sx={{
                         maxWidth: '1200px',
                         mx: 'auto',
+                        my: 1,
                         width: '100%',
                         px: { xs: 2, sm: 4, md: 6, lg: 8 },
-                        py: 2.5,
+                        py: 1.5,
+                        bgcolor: 'rgba(164, 191, 255, 0.08)',
+                        borderRadius: '20px',
                     }}
                 >
                     <Box
@@ -370,6 +381,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
+                            padding: '10px',
                         }}
                     >
                         {/* Action Buttons */}
@@ -379,10 +391,11 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 gap: 0.5,
                                 '& .MuiButton-root': {
                                     color: 'rgba(255, 255, 255, 0.7)',
+                                    bgcolor: 'rgba(255, 255, 255, 0.03)',
                                     textTransform: 'none',
                                     fontSize: '0.875rem',
                                     padding: '6px 12px',
-                                    borderRadius: '6px',
+                                    borderRadius: '12px',
                                     border: 'none',
                                     minWidth: 'auto',
                                     fontWeight: 500,

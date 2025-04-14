@@ -42,13 +42,14 @@ const FAQs = ({ open, onToggle }) => {
                 position: 'fixed',
                 right: 0,
                 top: 0,
-                bgcolor: 'background.default',
+                bgcolor: 'rgba(164, 191, 255, 0.08)',
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'width 0.3s ease',
                 overflow: 'hidden',
-                borderLeft: '1px solid',
-                borderColor: 'divider',
+                borderLeft: '0.5px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0px 4px 8px rgba(18, 18, 18, 0.25)',
+                borderRadius: '15px',
                 zIndex: 1100,
             }}
         >

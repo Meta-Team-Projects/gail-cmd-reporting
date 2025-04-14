@@ -28,8 +28,8 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     background: {
-      default: '#1a1f2c',
-      paper: '#242936',
+      default: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
+      paper: '#ffffff22',
     },
     primary: {
       main: '#3b82f6',
