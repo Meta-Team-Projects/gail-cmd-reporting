@@ -29,7 +29,7 @@ const darkTheme = createTheme({
     mode: 'dark',
     background: {
       default: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
-      paper: '#ffffff22',
+      paper: 'rgba(164, 191, 255, 0.08)',
     },
     primary: {
       main: '#3b82f6',
