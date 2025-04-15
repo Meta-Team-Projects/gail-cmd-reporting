@@ -129,9 +129,9 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
             .filter(field => response[field] !== undefined)
             .map(field => {
                 if (field === 'has_answer') {
-                    return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field] ? 'Yes' : 'No'}\n\n`
+                    return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field] ? 'Yes' : 'No'}\n\n\n`
                 }
-                return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}\n\n`
+                return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}\n\n\n`
             })
             .join('')
 
@@ -277,9 +277,9 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 bgcolor: msg.type === 'user'
                                     ? 'rgba(255, 255, 255, 0.1)'
                                     : msg.isError ? '#a4bfff0a' : '#a4bfff0a',
-                                width: 28,
-                                height: 28,
-                                fontSize: '0.875rem',
+                                width: 40,
+                                height: 40,
+                                fontSize: '1rem',
                                 mt: 0.5,
                                 flexShrink: 0,
                             }}
@@ -297,6 +297,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                         justifyContent: 'flex-end',
                                         gap: 1,
                                         mb: 1,
+                                        p: 1,
                                     }}
                                 >
                                     <IconButton
@@ -328,9 +329,9 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             <Paper
                                 elevation={0}
                                 sx={{
-                                    p: 2,
+                                    p: 4,
                                     bgcolor: msg.type === 'user'
-                                        ? '#rgba(73, 124, 242, 0.3)'
+                                        ? 'rgba(73, 124, 242, 0.3)'
                                         : msg.isError
                                             ? 'rgba(252, 72, 72, 0.30)'
                                             : 'rgba(255, 255, 255, 0.03)',
@@ -339,22 +340,168 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     borderTopLeftRadius: '2px',
                                     width: 'fit-content',
                                     maxWidth: '100%',
+                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                    '&:hover': {
+                                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
+                                    },
                                 }}
                             >
                                 {msg.type === 'ai' ? (
                                     <ReactMarkdown
                                         remarkPlugins={[remarkGfm]}
                                         components={{
+                                            p: ({ node, ...props }) => (
+                                                <Typography
+                                                    {...props}
+                                                    sx={{
+                                                        fontSize: '1rem',
+                                                        lineHeight: 1.6,
+                                                        letterSpacing: '0.01em',
+                                                        mb: 2,
+                                                        color: 'inherit',
+                                                    }}
+                                                />
+                                            ),
+                                            h1: ({ node, ...props }) => (
+                                                <Typography
+                                                    {...props}
+                                                    variant="h5"
+                                                    sx={{
+                                                        fontWeight: 600,
+                                                        mb: 2,
+                                                        color: 'inherit',
+                                                    }}
+                                                />
+                                            ),
+                                            h2: ({ node, ...props }) => (
+                                                <Typography
+                                                    {...props}
+                                                    variant="h6"
+                                                    sx={{
+                                                        fontWeight: 600,
+                                                        mb: 2,
+                                                        color: 'inherit',
+                                                    }}
+                                                />
+                                            ),
+                                            h3: ({ node, ...props }) => (
+                                                <Typography
+                                                    {...props}
+                                                    variant="subtitle1"
+                                                    sx={{
+                                                        fontWeight: 600,
+                                                        mb: 2,
+                                                        color: 'inherit',
+                                                    }}
+                                                />
+                                            ),
+                                            ul: ({ node, ...props }) => (
+                                                <Box
+                                                    component="ul"
+                                                    sx={{
+                                                        pl: 3,
+                                                        mb: 2,
+                                                        '& li': {
+                                                            mb: 1,
+                                                        },
+                                                    }}
+                                                    {...props}
+                                                />
+                                            ),
+                                            ol: ({ node, ...props }) => (
+                                                <Box
+                                                    component="ol"
+                                                    sx={{
+                                                        pl: 3,
+                                                        mb: 2,
+                                                        '& li': {
+                                                            mb: 1,
+                                                        },
+                                                    }}
+                                                    {...props}
+                                                />
+                                            ),
+                                            li: ({ node, ...props }) => (
+                                                <Typography
+                                                    component="li"
+                                                    sx={{
+                                                        fontSize: '1rem',
+                                                        lineHeight: 1.6,
+                                                        color: 'inherit',
+                                                    }}
+                                                    {...props}
+                                                />
+                                            ),
                                             table: ({ node, ...props }) => (
-                                                <Box sx={{ overflowX: 'auto' }}>
-                                                    <table {...props} style={{ borderCollapse: 'collapse', width: '100%' }} />
+                                                <Box sx={{ overflowX: 'auto', mb: 2 }}>
+                                                    <table
+                                                        {...props}
+                                                        style={{
+                                                            borderCollapse: 'collapse',
+                                                            width: '100%',
+                                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                        }}
+                                                    />
                                                 </Box>
                                             ),
                                             th: ({ node, ...props }) => (
-                                                <th {...props} style={{ border: '1px solid rgba(255, 255, 255, 0.1)', padding: '8px' }} />
+                                                <th
+                                                    {...props}
+                                                    style={{
+                                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                        padding: '12px',
+                                                        textAlign: 'left',
+                                                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                                    }}
+                                                />
                                             ),
                                             td: ({ node, ...props }) => (
-                                                <td {...props} style={{ border: '1px solid rgba(255, 255, 255, 0.1)', padding: '8px' }} />
+                                                <td
+                                                    {...props}
+                                                    style={{
+                                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                        padding: '12px',
+                                                    }}
+                                                />
+                                            ),
+                                            code: ({ node, ...props }) => (
+                                                <Box
+                                                    component="code"
+                                                    sx={{
+                                                        bgcolor: 'rgba(255, 255, 255, 0.1)',
+                                                        p: '2px 4px',
+                                                        borderRadius: '4px',
+                                                        fontSize: '0.9em',
+                                                        fontFamily: 'monospace',
+                                                    }}
+                                                    {...props}
+                                                />
+                                            ),
+                                            pre: ({ node, ...props }) => (
+                                                <Box
+                                                    component="pre"
+                                                    sx={{
+                                                        bgcolor: 'rgba(255, 255, 255, 0.1)',
+                                                        p: 2,
+                                                        borderRadius: '8px',
+                                                        overflowX: 'auto',
+                                                        mb: 2,
+                                                    }}
+                                                    {...props}
+                                                />
+                                            ),
+                                            blockquote: ({ node, ...props }) => (
+                                                <Box
+                                                    component="blockquote"
+                                                    sx={{
+                                                        borderLeft: '4px solid rgba(255, 255, 255, 0.2)',
+                                                        pl: 2,
+                                                        py: 1,
+                                                        my: 2,
+                                                        color: 'inherit',
+                                                    }}
+                                                    {...props}
+                                                />
                                             ),
                                         }}
                                     >
@@ -363,11 +510,12 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 ) : (
                                     <Typography
                                         sx={{
-                                            fontSize: '0.875rem',
-                                            lineHeight: 1.5,
+                                            fontSize: '1rem',
+                                            lineHeight: 1.6,
                                             letterSpacing: '0.01em',
                                             overflowWrap: 'break-word',
                                             wordBreak: 'break-word',
+                                            color: 'inherit',
                                         }}
                                     >
                                         {msg.content}
