@@ -31,6 +31,8 @@ import {
     PersonAdd,
 } from '@mui/icons-material'
 import axios from 'axios'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
     const [message, setMessage] = useState('')
@@ -48,31 +50,101 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
             setLoading(true)
 
             try {
-                // Using a placeholder API endpoint
                 const response = await axios.post('https://api.example.com/chat', {
-                    message: message,
+                    query: message,
                 })
+
+                // Check if response data is valid
+                if (!response.data || typeof response.data !== 'object') {
+                    throw new Error('Invalid response format')
+                }
 
                 const aiMessage = {
                     type: 'ai',
-                    content: response.data.message || 'Sample response from AI',
+                    content: response.data,
                     timestamp: new Date().toISOString(),
                 }
                 setMessages(prev => [...prev, aiMessage])
             } catch (error) {
                 console.error('Error sending message:', error)
-                const errorMessage = {
+
+                let errorMessage = "I couldn't process that request at the moment. Please try again later."
+
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    if (error.response.status === 404) {
+                        errorMessage = "I couldn't find any relevant information for your query. Please try rephrasing your question."
+                    } else if (error.response.status === 400) {
+                        errorMessage = "I couldn't understand your query. Please try rephrasing your question."
+                    } else if (error.response.status === 500) {
+                        errorMessage = "There was an error processing your request. Please try again later."
+                    }
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    errorMessage = "I'm having trouble connecting to the server. Please check your internet connection and try again."
+                }
+
+                const errorResponse = {
                     type: 'ai',
-                    content: "I apologize, but I couldn't process that request at the moment. Please try again later.",
+                    content: {
+                        error: true,
+                        message: errorMessage
+                    },
                     timestamp: new Date().toISOString(),
                     isError: true
                 }
-                setMessages(prev => [...prev, errorMessage])
+                setMessages(prev => [...prev, errorResponse])
             } finally {
                 setLoading(false)
                 setMessage('')
             }
         }
+    }
+
+    const formatResponse = (response) => {
+        if (!response) return ''
+
+        // Handle error responses
+        if (response.error) {
+            return `**ERROR:** ${response.message}`
+        }
+
+        // Known fields that should be displayed first
+        const knownFields = [
+            'document_name',
+            'question',
+            'question_part',
+            'date',
+            'ministry',
+            'subject',
+            'has_answer',
+            'similarity_score',
+            'answer'
+        ]
+
+        // Create markdown for known fields
+        let markdown = knownFields
+            .filter(field => response[field] !== undefined)
+            .map(field => {
+                if (field === 'has_answer') {
+                    return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field] ? 'Yes' : 'No'}`
+                }
+                return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}`
+            })
+            .join('\n')
+
+        // Add any additional fields that weren't in the known fields list
+        const additionalFields = Object.keys(response)
+            .filter(field => !knownFields.includes(field) && field !== 'error')
+            .map(field => `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}`)
+            .join('\n')
+
+        if (additionalFields) {
+            markdown += '\n\n**Additional Information:**\n' + additionalFields
+        }
+
+        return markdown
     }
 
     const actionButtons = [
@@ -118,7 +190,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             maxWidth: '1200px',
                             mx: 'auto',
                             px: { xs: 2, sm: 4, md: 6, lg: 8 },
-                            py: 0.5,
+                            py: "5px",
                             borderRadius: '20px',
                         }}
                     >
@@ -215,7 +287,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                         </Avatar>
                         <Box sx={{
                             flex: 1,
-                            minWidth: 0, // This ensures the box can shrink below its content size
+                            minWidth: 0,
                         }}>
                             {msg.type === 'ai' && (
                                 <Box
@@ -268,17 +340,38 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     maxWidth: '100%',
                                 }}
                             >
-                                <Typography
-                                    sx={{
-                                        fontSize: '0.875rem',
-                                        lineHeight: 1.5,
-                                        letterSpacing: '0.01em',
-                                        overflowWrap: 'break-word',
-                                        wordBreak: 'break-word',
-                                    }}
-                                >
-                                    {msg.content}
-                                </Typography>
+                                {msg.type === 'ai' ? (
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        components={{
+                                            table: ({ node, ...props }) => (
+                                                <Box sx={{ overflowX: 'auto' }}>
+                                                    <table {...props} style={{ borderCollapse: 'collapse', width: '100%' }} />
+                                                </Box>
+                                            ),
+                                            th: ({ node, ...props }) => (
+                                                <th {...props} style={{ border: '1px solid rgba(255, 255, 255, 0.1)', padding: '8px' }} />
+                                            ),
+                                            td: ({ node, ...props }) => (
+                                                <td {...props} style={{ border: '1px solid rgba(255, 255, 255, 0.1)', padding: '8px' }} />
+                                            ),
+                                        }}
+                                    >
+                                        {formatResponse(msg.content)}
+                                    </ReactMarkdown>
+                                ) : (
+                                    <Typography
+                                        sx={{
+                                            fontSize: '0.875rem',
+                                            lineHeight: 1.5,
+                                            letterSpacing: '0.01em',
+                                            overflowWrap: 'break-word',
+                                            wordBreak: 'break-word',
+                                        }}
+                                    >
+                                        {msg.content}
+                                    </Typography>
+                                )}
                             </Paper>
                             {msg.type === 'ai' && (
                                 <Box
