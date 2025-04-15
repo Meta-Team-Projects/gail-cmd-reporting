@@ -190,8 +190,8 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             width: '100%',
                             maxWidth: '1200px',
                             mx: 'auto',
+                            my: 1,
                             px: { xs: 2, sm: 4, md: 6, lg: 8 },
-                            py: "5px",
                             borderRadius: '20px',
                         }}
                     >
@@ -228,7 +228,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 <PersonAdd sx={{ width: 32, height: 32 }} />
                             </IconButton>
                             <IconButton sx={{ color: 'rgb(255, 255, 255)' }}>
-                                <img src='./incognito.svg' style={{ width: 40, height: 40 }}></img>
+                                <img src='./incognito.svg' style={{ width: 32, height: 32 }}></img>
                             </IconButton>
                         </Box>
                     </Box>
