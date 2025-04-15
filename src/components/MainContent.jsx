@@ -223,12 +223,12 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 ),
                             }}
                         />
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <IconButton sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                        <Box sx={{ display: 'flex', gap: 1 }}>
+                            <IconButton sx={{ color: 'rgb(255, 255, 255)' }}>
                                 <PersonAdd sx={{ width: 32, height: 32 }} />
                             </IconButton>
-                            <IconButton sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                                <img src='./incognito-1.svg' style={{ width: 32, height: 32 }}></img>
+                            <IconButton sx={{ color: 'rgb(255, 255, 255)' }}>
+                                <img src='./incognito.svg' style={{ width: 40, height: 40 }}></img>
                             </IconButton>
                         </Box>
                     </Box>
