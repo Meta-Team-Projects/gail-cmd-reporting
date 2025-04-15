@@ -55,8 +55,8 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
 
     const drawer = (
         <>
-            <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1, position: 'relative' }}>
-                <img src="/gail_logo.png" alt="Logo" style={{ width: 40, height: 40 }} />
+            <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1, position: 'relative', justifyContent: 'center' }}>
+                <img src="/gail_logo.png" alt="Logo" style={{ width: 60, height: 60 }} />
                 {open && (
                     <IconButton
                         onClick={handleDrawerToggle}

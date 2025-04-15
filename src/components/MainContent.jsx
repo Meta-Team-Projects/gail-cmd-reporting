@@ -38,20 +38,22 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(false)
-
+    const BASE_URL = import.meta.env.VITE_CHAT_API_URL;
     const handleSend = async () => {
-        if (message.trim()) {
+        const query = message.trim()
+        setMessage('')
+        if (query) {
             const userMessage = {
                 type: 'user',
-                content: message,
+                content: query,
                 timestamp: new Date().toISOString(),
             }
             setMessages([...messages, userMessage])
             setLoading(true)
 
             try {
-                const response = await axios.post('https://api.example.com/chat', {
-                    query: message,
+                const response = await axios.post(BASE_URL + '/query', {
+                    query: query,
                 })
 
                 // Check if response data is valid
@@ -97,7 +99,6 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                 setMessages(prev => [...prev, errorResponse])
             } finally {
                 setLoading(false)
-                setMessage('')
             }
         }
     }
@@ -128,20 +129,20 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
             .filter(field => response[field] !== undefined)
             .map(field => {
                 if (field === 'has_answer') {
-                    return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field] ? 'Yes' : 'No'}`
+                    return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field] ? 'Yes' : 'No'}\n\n`
                 }
-                return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}`
+                return `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}\n\n`
             })
-            .join('\n')
+            .join('')
 
         // Add any additional fields that weren't in the known fields list
         const additionalFields = Object.keys(response)
             .filter(field => !knownFields.includes(field) && field !== 'error')
-            .map(field => `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}`)
-            .join('\n')
+            .map(field => `**${field.replace(/_/g, ' ').toUpperCase()}:** ${response[field]}\n\n`)
+            .join('')
 
         if (additionalFields) {
-            markdown += '\n\n**Additional Information:**\n' + additionalFields
+            markdown += '\n**Additional Information:**\n\n' + additionalFields
         }
 
         return markdown
@@ -185,7 +186,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            bgcolor: "#ffffff22",
+                            bgcolor: "rgba(164, 191, 255, 0.08)",
                             width: '100%',
                             maxWidth: '1200px',
                             mx: 'auto',
@@ -275,7 +276,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             sx={{
                                 bgcolor: msg.type === 'user'
                                     ? 'rgba(255, 255, 255, 0.1)'
-                                    : msg.isError ? '#dc2626' : '#3b82f6',
+                                    : msg.isError ? '#a4bfff0a' : '#a4bfff0a',
                                 width: 28,
                                 height: 28,
                                 fontSize: '0.875rem',
@@ -329,9 +330,9 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 sx={{
                                     p: 2,
                                     bgcolor: msg.type === 'user'
-                                        ? '#3b82f6'
+                                        ? '#rgba(73, 124, 242, 0.3)'
                                         : msg.isError
-                                            ? '#dc2626'
+                                            ? 'rgba(252, 72, 72, 0.30)'
                                             : 'rgba(255, 255, 255, 0.03)',
                                     color: msg.type === 'user' || msg.isError ? 'white' : 'text.primary',
                                     borderRadius: '12px',
