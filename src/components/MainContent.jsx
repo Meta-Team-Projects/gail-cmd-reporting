@@ -150,9 +150,9 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
 
     const actionButtons = [
         { icon: <Summarize />, label: 'Summarize' },
-        { icon: <FormatColorText />, label: 'Highlight' },
+        // { icon: <FormatColorText />, label: 'Highlight' },
         { icon: <AutoFixHigh />, label: 'Simplify' },
-        { icon: <AutoGraph />, label: 'Graph' },
+        // { icon: <AutoGraph />, label: 'Graph' },
     ]
 
     return (

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
     Box,
     Paper,
@@ -11,6 +12,8 @@ import {
     Chip,
     Stack,
     Button,
+    Menu,
+    MenuItem,
 } from '@mui/material'
 import {
     ChevronRight,
@@ -20,28 +23,24 @@ import {
     Edit,
     Delete,
     Add as AddIcon,
+    MoreVert,
 } from '@mui/icons-material'
 
-const SavedNotes = ({ open, onToggle }) => {
-    const categories = ['All', 'HR', 'Finance', 'Procurement']
-    const notes = [
-        {
-            title: 'Note 1',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porta arcu quam, at lobortis leo ultricies sit amet. Donec porttitor dui nulla, sed dictum tortor viverra id.',
-        },
-        {
-            title: 'Note 2',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porta arcu quam, at lobortis leo ultricies sit amet. Donec porttitor dui nulla, sed dictum tortor viverra id.',
-        },
-        {
-            title: 'Note 3',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porta arcu quam, at lobortis leo ultricies sit amet. Donec porttitor dui nulla, sed dictum tortor viverra id.',
-        },
-        {
-            title: 'Note 4',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porta arcu quam, at lobortis leo ultricies sit amet. Donec porttitor dui nulla, sed dictum tortor viverra id.',
-        },
+const SessionList = ({ open, onToggle }) => {
+    const sessions = [
+        { id: '1', name: 'Session 1' },
+        { id: '2', name: 'Session 2' },
+        { id: '3', name: 'Session 3' },
+        { id: '4', name: 'Session 4' },
     ]
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Paper
@@ -71,7 +70,7 @@ const SavedNotes = ({ open, onToggle }) => {
             }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
                     <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                        Saved Notes
+                        Session List
                     </Typography>
                     {open && (
                         <IconButton
@@ -114,87 +113,47 @@ const SavedNotes = ({ open, onToggle }) => {
                         )
                     }}
                 />
-
-                <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: 'wrap', gap: 1 }}>
-                    {categories.map((category) => (
-                        <Chip
-                            key={category}
-                            label={category}
-                            variant={category === 'All' ? 'filled' : 'outlined'}
-                            size="small"
-                            sx={{
-                                borderRadius: 1,
-                                bgcolor: category === 'All' ? 'primary.dark' : 'transparent',
-                                borderColor: 'divider',
-                                '& .MuiChip-label': {
-                                    color: category === 'All' ? 'primary.contrastText' : 'text.primary',
-                                }
-                            }}
-                        />
-                    ))}
-                    <Chip
-                        icon={<AddIcon />}
-                        size="small"
-                        variant="outlined"
-                        sx={{
-                            borderRadius: 1,
-                            borderStyle: 'dashed',
-                        }}
-                    />
-                </Stack>
             </Box>
 
             <List sx={{ flexGrow: 1, overflow: 'auto', px: 2, py: 1 }}>
-                {notes.map((note, index) => (
+                {sessions.map((session) => (
                     <ListItem
-                        key={index}
+                        key={session.id}
                         sx={{
                             bgcolor: 'background.paper',
                             borderRadius: 1,
                             mb: 1,
                             p: 2,
                             display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'stretch',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                         }}
                     >
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                            <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-                                {note.title}
-                            </Typography>
-                            <Stack direction="row" spacing={1}>
-                                <IconButton size="small">
-                                    <Download sx={{ fontSize: '1.2rem' }} />
-                                </IconButton>
-                                <IconButton size="small">
-                                    <Edit sx={{ fontSize: '1.2rem' }} />
-                                </IconButton>
-                                <IconButton size="small">
-                                    <Delete sx={{ fontSize: '1.2rem' }} />
-                                </IconButton>
-                            </Stack>
-                        </Box>
-                        <Typography variant="body2" color="text.secondary" noWrap>
-                            {note.content}
-                        </Typography>
+                        <ListItemText primary={session.name} secondary={`ID: ${session.id}`} />
+                        <IconButton size="small" onClick={handleMenuClick}>
+                            <MoreVert />
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                            sx={{
+                                '& .MuiPaper-root': {
+                                    bgcolor: 'rgba(164, 191, 255, 0.08)',
+                                    borderRadius: 1,
+                                    boxShadow: '0px 4px 8px rgba(18, 18, 18, 0.25)',
+                                },
+                            }}
+                        >
+                            <MenuItem onClick={handleMenuClose} >Rename</MenuItem>
+                            <MenuItem onClick={handleMenuClose}>Export</MenuItem>
+                            <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
+                        </Menu>
                     </ListItem>
                 ))}
             </List>
-
-            <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
-                <Button
-                    variant="contained"
-                    fullWidth
-                    sx={{
-                        borderRadius: 2,
-                        textTransform: 'none',
-                    }}
-                >
-                    Save and update
-                </Button>
-            </Box>
-        </Paper>
+        </Paper >
     )
 }
 
-export default SavedNotes 
+export default SessionList
