@@ -329,7 +329,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                             <Paper
                                 elevation={0}
                                 sx={{
-                                    p: 4,
+                                    p: 2,
                                     bgcolor: msg.type === 'user'
                                         ? 'rgba(73, 124, 242, 0.3)'
                                         : msg.isError
