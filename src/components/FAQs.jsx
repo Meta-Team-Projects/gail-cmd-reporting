@@ -37,12 +37,13 @@ const FAQs = ({ open, onToggle }) => {
     return (
         <Paper
             sx={{
-                width: open ? 400 : 0,
-                height: '100vh',
+                width: open ? 350 : 0,
+                marginTop: '2.5vh',
+                height: '95vh',
                 position: 'fixed',
-                right: 0,
+                right: '1.5vh',
                 top: 0,
-                bgcolor: 'rgba(164, 191, 255, 0.08)',
+                bgcolor: 'background.sidebar',
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'width 0.3s ease',
@@ -68,6 +69,7 @@ const FAQs = ({ open, onToggle }) => {
                         <IconButton
                             onClick={onToggle}
                             sx={{
+                                color: 'text.primary',
                                 '&:hover': {
                                     bgcolor: 'action.hover',
                                 },

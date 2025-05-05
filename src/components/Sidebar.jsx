@@ -9,7 +9,6 @@ import {
     Typography,
     useTheme,
     useMediaQuery,
-    IconButton,
 } from '@mui/material'
 import {
     Home,
@@ -21,7 +20,6 @@ import {
     History,
     AccountCircle,
     Help,
-    ChevronLeft,
 } from '@mui/icons-material'
 import { MenuType } from '../constants/menuTypes'
 
@@ -29,13 +27,13 @@ const drawerWidth = 240
 
 const menuItems = [
     { text: 'Home', icon: <Home />, type: MenuType.NONE },
-    // { text: 'Data Ingestion', icon: <DataUsage />, type: MenuType.DOCUMENT_INGESTION },
-    // { text: 'AI Configuration', icon: <Settings />, type: MenuType.AI_CONFIGURATION },
+    { text: 'Data Ingestion', icon: <DataUsage />, type: MenuType.DOCUMENT_INGESTION },
+    { text: 'AI Configuration', icon: <Settings />, type: MenuType.AI_CONFIGURATION },
     { text: 'FAQs', icon: <QuestionAnswer />, type: MenuType.FAQS },
     { text: 'Saved Queries', icon: <GetApp />, type: MenuType.SAVED_QUERIES },
-    // { text: 'Saved Notes', icon: <Note />, type: MenuType.SAVED_NOTES },
+    { text: 'Saved Notes', icon: <Note />, type: MenuType.SAVED_NOTES },
     { text: 'Recent Sessions', icon: <History />, type: MenuType.RECENT_SESSIONS },
-    // { text: 'Session Log', icon: <History />, type: MenuType.SESSION_LOG },
+    { text: 'Session Log', icon: <History />, type: MenuType.SESSION_LOG },
 ]
 
 const bottomMenuItems = [
@@ -53,66 +51,98 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
         }
     }
 
+    const renderMenuItem = (item) => (
+        <ListItemButton
+            onClick={() => handleMenuItemClick(item.type)}
+            selected={activeMenu === item.type}
+            sx={{
+                pl: 2,
+                borderLeft: activeMenu === item.type ? '6px solid #303030' : '4px solid transparent',
+                bgcolor: 'transparent',
+                '&:hover': {
+                    bgcolor: 'transparent',
+                },
+                '&.Mui-selected': {
+                    bgcolor: 'transparent',
+                },
+                '&.Mui-selected:hover': {
+                    bgcolor: 'transparent',
+                },
+            }}
+        >
+            <ListItemIcon sx={{ color: activeMenu === item.type ? '#303030' : '#081A3366' }}>
+                {item.icon}
+            </ListItemIcon>
+            <ListItemText
+                primary={item.text}
+                sx={{
+                    '& .MuiListItemText-primary': {
+                        color: activeMenu === item.type ? '#303030' : '#081A3366',
+                        fontWeight: activeMenu === item.type ? 600 : 300,
+                    },
+                }}
+            />
+        </ListItemButton>
+    )
+
     const drawer = (
         <>
-            <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1, position: 'relative', justifyContent: 'center' }}>
-                <img src="/gail_logo.png" alt="Logo" style={{ width: 60, height: 60 }} />
+            <Box sx={{ px: 2, py: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <img src="/gail_logo.png" alt="Logo" style={{ width: 40, height: 40 }} />
                 {open && (
-                    <IconButton
-                        onClick={handleDrawerToggle}
+                    <Typography
+                        variant="h6"
                         sx={{
-                            position: 'absolute',
-                            right: 8,
-                            '&:hover': {
-                                bgcolor: 'action.hover',
-                            },
+                            fontWeight: 600,
+                            fontSize: '16px',
+                            color: '#000000',
+                            whiteSpace: 'nowrap',
                         }}
                     >
-                        <ChevronLeft />
-                    </IconButton>
+                        GAIL (India)
+                    </Typography>
                 )}
             </Box>
+
             <List>
-                {menuItems.map((item) => (
+                {/* Section 1: Home */}
+                <ListItem disablePadding>{renderMenuItem(menuItems[0])}</ListItem>
+
+                <Box sx={{ height: 32 }} />
+
+                {/* Section 2: Data Ingestion, AI Configuration, FAQs */}
+                {menuItems.slice(1, 4).map((item) => (
                     <ListItem key={item.text} disablePadding>
-                        <ListItemButton
-                            onClick={() => handleMenuItemClick(item.type)}
-                            selected={activeMenu === item.type}
-                            sx={{
-                                '&.Mui-selected': {
-                                    bgcolor: 'primary.dark',
-                                    '&:hover': {
-                                        bgcolor: 'primary.dark',
-                                    },
-                                },
-                            }}
-                        >
-                            <ListItemIcon sx={{
-                                color: activeMenu === item.type ? 'primary.contrastText' : 'primary.main'
-                            }}>
-                                {item.icon}
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={item.text}
-                                sx={{
-                                    '& .MuiListItemText-primary': {
-                                        color: activeMenu === item.type ? 'primary.contrastText' : 'text.primary',
-                                    },
-                                }}
-                            />
-                        </ListItemButton>
+                        {renderMenuItem(item)}
+                    </ListItem>
+                ))}
+
+                <Box sx={{ height: 32 }} />
+
+                {/* Section 3: Saved Queries to Session Log */}
+                {menuItems.slice(4).map((item) => (
+                    <ListItem key={item.text} disablePadding>
+                        {renderMenuItem(item)}
                     </ListItem>
                 ))}
             </List>
+
             <Box sx={{ mt: 'auto' }}>
                 <List>
                     {bottomMenuItems.map((item) => (
                         <ListItem key={item.text} disablePadding>
                             <ListItemButton>
-                                <ListItemIcon sx={{ color: 'primary.main' }}>
+                                <ListItemIcon sx={{ color: activeMenu === item.type ? '#303030' : '#081A3366' }}>
                                     {item.icon}
                                 </ListItemIcon>
-                                <ListItemText primary={item.text} />
+                                <ListItemText
+                                    primary={item.text}
+                                    sx={{
+                                        '& .MuiListItemText-primary': {
+                                            color: '#081A3366',
+                                        },
+                                    }}
+                                />
                             </ListItemButton>
                         </ListItem>
                     ))}
@@ -138,13 +168,16 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
                 open={isMobile ? open : true}
                 onClose={handleDrawerToggle}
                 ModalProps={{
-                    keepMounted: true, // Better open performance on mobile
+                    keepMounted: true,
                 }}
                 sx={{
                     '& .MuiDrawer-paper': {
+                        marginTop: '2.5vh',
+                        height: '95vh',
+                        marginLeft: '1.5vh',
                         boxSizing: 'border-box',
                         width: drawerWidth,
-                        bgcolor: 'rgba(164, 191, 255, 0.08)',
+                        bgcolor: '#FFFFFF',
                         borderRight: '0.5px solid rgba(255, 255, 255, 0.15)',
                         boxShadow: '0px 4px 8px rgba(18, 18, 18, 0.25)',
                         borderRadius: '15px',
@@ -162,4 +195,4 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
     )
 }
 
-export default Sidebar 
+export default Sidebar

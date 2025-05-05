@@ -46,12 +46,12 @@ const SavedNotes = ({ open, onToggle }) => {
     return (
         <Paper
             sx={{
-                width: open ? 400 : 0,
-                height: '100vh',
+                width: open ? 350 : 0,
+                height: '95vh',
                 position: 'fixed',
-                right: 0,
-                top: 0,
-                bgcolor: 'rgba(164, 191, 255, 0.08)',
+                right: '1.5vh',
+                top: '2.5vh',
+                bgcolor: 'background.sidebar',
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'width 0.3s ease',
@@ -77,6 +77,7 @@ const SavedNotes = ({ open, onToggle }) => {
                         <IconButton
                             onClick={onToggle}
                             sx={{
+                                color: 'text.primary',
                                 '&:hover': {
                                     bgcolor: 'action.hover',
                                 },
@@ -108,7 +109,7 @@ const SavedNotes = ({ open, onToggle }) => {
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton size="small">
-                                    <FilterIcon />
+                                    <FilterIcon sx={{ color: 'text.secondary' }}/>
                                 </IconButton>
                             </InputAdornment>
                         )
@@ -164,13 +165,13 @@ const SavedNotes = ({ open, onToggle }) => {
                             </Typography>
                             <Stack direction="row" spacing={1}>
                                 <IconButton size="small">
-                                    <Download sx={{ fontSize: '1.2rem' }} />
+                                    <Download sx={{ fontSize: '1.2rem' ,color: 'text.secondary'}} />
                                 </IconButton>
                                 <IconButton size="small">
-                                    <Edit sx={{ fontSize: '1.2rem' }} />
+                                    <Edit sx={{ fontSize: '1.2rem' ,color: 'text.secondary'}} />
                                 </IconButton>
                                 <IconButton size="small">
-                                    <Delete sx={{ fontSize: '1.2rem' }} />
+                                    <Delete sx={{ fontSize: '1.2rem' ,color: 'text.secondary'}} />
                                 </IconButton>
                             </Stack>
                         </Box>
