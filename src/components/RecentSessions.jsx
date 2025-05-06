@@ -45,12 +45,12 @@ const SessionList = ({ open, onToggle }) => {
     return (
         <Paper
             sx={{
-                width: open ? 400 : 0,
-                height: '100vh',
+                width: open ? 350 : 0,
+                height: '95vh',
                 position: 'fixed',
-                right: 0,
-                top: 0,
-                bgcolor: 'rgba(164, 191, 255, 0.08)',
+                right: '1.5vh',
+                top: '2.5vh',
+                bgcolor: 'background.sidebar',
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'width 0.3s ease',
@@ -76,6 +76,7 @@ const SessionList = ({ open, onToggle }) => {
                         <IconButton
                             onClick={onToggle}
                             sx={{
+                                color: 'text.primary',
                                 '&:hover': {
                                     bgcolor: 'action.hover',
                                 },
@@ -107,7 +108,7 @@ const SessionList = ({ open, onToggle }) => {
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton size="small">
-                                    <FilterIcon />
+                                    <FilterIcon sx={{ color: 'text.secondary' }}/>
                                 </IconButton>
                             </InputAdornment>
                         )
@@ -130,7 +131,7 @@ const SessionList = ({ open, onToggle }) => {
                         }}
                     >
                         <ListItemText primary={session.name} secondary={`ID: ${session.id}`} />
-                        <IconButton size="small" onClick={handleMenuClick}>
+                        <IconButton size="small" onClick={handleMenuClick} sx={{ color: 'text.secondary' }}>
                             <MoreVert />
                         </IconButton>
                         <Menu

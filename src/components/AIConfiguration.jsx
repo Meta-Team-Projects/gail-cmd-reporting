@@ -73,12 +73,12 @@ const AIConfiguration = ({ open, onToggle }) => {
     return (
         <Paper
             sx={{
-                width: open ? 400 : 0,
-                height: '100vh',
+                width: open ? 350 : 0,
+                height: '95vh',
                 position: 'fixed',
-                right: 0,
-                top: 0,
-                bgcolor: 'background.default',
+                right: '1.5vh',
+                top: '2.5vh',
+                bgcolor: 'background.sidebar',
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'width 0.3s ease',
@@ -103,6 +103,7 @@ const AIConfiguration = ({ open, onToggle }) => {
                         <IconButton
                             onClick={onToggle}
                             sx={{
+                                color: '#515151',
                                 '&:hover': {
                                     bgcolor: 'action.hover',
                                 },

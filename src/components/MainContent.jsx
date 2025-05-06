@@ -29,6 +29,7 @@ import {
     Source,
     IosShare,
     PersonAdd,
+    AttachFile
 } from '@mui/icons-material'
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
@@ -158,91 +159,122 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
     return (
         <Box
             sx={{
+                marginTop: '2.5vh',
+                height: '95vh',
+                marginLeft: '1.5vh',
+                boxShadow: '0px 4px 8px rgba(18, 18, 18, 0.25)',
+                borderRadius: '15px',
+                overflow: 'hidden', 
                 flexGrow: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
-                ml: 1,
-                maxWidth: rightSidebarOpen ? 'calc(100% - 400px)' : '100%',
+                ml: 3,
+                maxWidth: {
+                    xs: '90%',  
+                    sm: '94.5%',  
+                    md: rightSidebarOpen ? 'calc(100% - 400px)' : '97%', // Desktop
+                },
                 transition: 'max-width 0.3s ease',
-                bgcolor: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
-                height: '100vh',
+                bgcolor:'#F6F6F6',
+                //bgcolor: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
                 position: 'relative',
             }}
         >
             {/* Top Bar */}
-            <AppBar
-                position="sticky"
-                elevation={0}
+            <Toolbar sx={{ minHeight: '64px !important' }}>
+            <Box
                 sx={{
-                    bgcolor: 'rgba(164, 191, 255, 0)',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                    backdropFilter: 'blur(20px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+                maxWidth: '1200px',
+                mx: 'auto',
+                px: { xs: 2, sm: 2, md: 2, lg: 2 },
+                py: 1,
                 }}
             >
-                <Toolbar sx={{ minHeight: '64px !important' }}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            bgcolor: "rgba(164, 191, 255, 0.08)",
-                            width: '100%',
-                            maxWidth: '1200px',
-                            mx: 'auto',
-                            my: 1,
-                            px: { xs: 2, sm: 4, md: 6, lg: 8 },
-                            borderRadius: '20px',
-                        }}
-                    >
-                        <TextField
-                            placeholder="Search here..."
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                flex: 1,
-                                maxWidth: '600px',
-                                '& .MuiOutlinedInput-root': {
-                                    bgcolor: 'rgba(255, 255, 255, 0.03)',
-                                    borderRadius: '8px',
-                                    color: 'white',
-                                    height: '40px',
-                                    '& fieldset': {
-                                        borderColor: 'rgba(255, 255, 255, 0.08)',
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: 'rgba(255, 255, 255, 0.12)',
-                                    },
-                                },
-                            }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Search sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        <Box sx={{ display: 'flex', gap: 1 }}>
-                            <IconButton sx={{ color: 'rgb(255, 255, 255)' }}>
-                                <img src='./adduser.svg' style={{ width: 35, height: 35 }}></img>
-                            </IconButton>
-                            <IconButton sx={{ color: 'rgb(255, 255, 255)' }}>
-                                <img src='./incognito.svg' style={{ width: 35, height: 35 }}></img>
-                            </IconButton>
-                        </Box>
-                    </Box>
-                </Toolbar>
-            </AppBar>
+                {/* Left: Title */}
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#3C3C3C' }}>
+                Session 1
+                </Typography>
+
+                {/* Center: Search Box */}
+                <TextField
+                placeholder="Search here..."
+                variant="outlined"
+                size="small"
+                sx={{
+                    flex: 1,
+                    maxWidth: '400px',
+                    mx: 3,
+                    '& .MuiOutlinedInput-root': {
+                    bgcolor: '#E9EDF3',
+                    borderRadius: '12px',
+                    color: '#515151',
+                    height: '36px',
+                    paddingRight: 1,
+                    '& fieldset': {
+                        borderColor: 'transparent',
+                        color: '#515151',
+                    },
+                    '&.Mui-focused fieldset': {
+                        borderColor: '#515151', // When focused or selecred border change
+                    },
+                    },
+                    '& input::placeholder': {
+                    color: '#888',
+                    },
+                }}
+                InputProps={{
+                    startAdornment: (
+                    <InputAdornment position="start">
+                        <Search sx={{ fontSize: 18, color: '#888' }} />
+                    </InputAdornment>
+                    ),
+                    endAdornment: (
+                    <InputAdornment position="end">
+                        <Mic sx={{ fontSize: 18, color: '#888' }} />
+                    </InputAdornment>
+                    ),
+                }}
+                />
+
+                {/* Right: Icons */}
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                <IconButton
+                    sx={{
+                    border: '1px solid #081A33',
+                    borderRadius: '8px',
+                    py: 0.5,
+                    px: 1,
+                    color: '#081A33',
+                    }}
+                >
+                    <PersonAdd sx={{width: '18px', height: 'auto'}}/>
+                </IconButton>
+                <IconButton
+                    sx={{
+                    border: '1px solid #081A33',
+                    borderRadius: '8px',
+                    p: 0.5,
+                    }}
+                >
+                    <img src="./incognito-1.svg" alt="Incognito" style={{ width: 24, height: 24 }} />
+                </IconButton>
+                </Box>
+            </Box>
+            </Toolbar>
+
 
             {/* Chat Messages */}
             <Box
                 sx={{
                     flexGrow: 1,
                     overflow: 'auto',
-                    px: { xs: 2, sm: 4, md: 6, lg: 8 },
-                    py: 3,
-                    mb: '160px',
+                    px: { xs: 2, sm: 2, md: 2, lg: 2 },
+                    py: 1,
                     maxWidth: '1400px',
                     mx: 'auto',
                     width: '100%',
@@ -275,8 +307,8 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                         <Avatar
                             sx={{
                                 bgcolor: msg.type === 'user'
-                                    ? 'rgba(255, 255, 255, 0.1)'
-                                    : msg.isError ? '#a4bfff0a' : '#a4bfff0a',
+                                    ? '#ffd95c'
+                                    : msg.isError ? '#f8f0d7' : '#a4bfff0a',
                                 width: 40,
                                 height: 40,
                                 fontSize: '1rem',
@@ -295,18 +327,18 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     sx={{
                                         display: 'flex',
                                         justifyContent: 'flex-end',
+                                        mt: -2,
+                                        mb: 2,
                                         gap: 1,
-                                        mb: 1,
-                                        p: 1,
                                     }}
                                 >
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
-                                            padding: '2px',
+                                            color: 'black',
+                                            padding: '0px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -315,10 +347,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
-                                            padding: '2px',
+                                            color: 'black',
+                                            padding: '0px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -331,11 +363,11 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 sx={{
                                     p: 2,
                                     bgcolor: msg.type === 'user'
-                                        ? 'rgba(73, 124, 242, 0.3)'
+                                        ? '#FFD95C1A'
                                         : msg.isError
                                             ? 'rgba(252, 72, 72, 0.30)'
                                             : 'rgba(255, 255, 255, 0.03)',
-                                    color: msg.type === 'user' || msg.isError ? 'white' : 'text.primary',
+                                    color: msg.type === 'user' || msg.isError ? '#303308' : 'text.primary',
                                     borderRadius: '12px',
                                     borderTopLeftRadius: '2px',
                                     width: 'fit-content',
@@ -534,10 +566,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '2px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -546,10 +578,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '2px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -558,10 +590,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '2px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -595,89 +627,114 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
             <Paper
                 elevation={0}
                 sx={{
-                    position: 'fixed',
-                    bottom: 0,
-                    left: leftSidebarOpen ? '240px' : 0,
-                    right: rightSidebarOpen ? '400px' : 0,
-                    bgcolor: 'rgba(255, 255, 255, 0)',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                    position: 'relative',
+                    mt: 'auto',
+                    ml: '2.5vh',
+                    mr: '2.5vh',
+                    mb: '1.5vh',
                     transition: 'left 0.3s ease, right 0.3s ease',
-                    backdropFilter: 'blur(20px)',
+                    bgcolor: 'transparent',
                     zIndex: 3,
                 }}
             >
-                <Box
+                {/* Action Buttons */}
+                <ButtonGroup
+                    variant="text"
                     sx={{
-                        maxWidth: '1200px',
-                        mx: 'auto',
-                        my: 1,
-                        width: '100%',
-                        px: { xs: 2, sm: 4, md: 6, lg: 8 },
-                        py: 1.5,
-                        bgcolor: 'rgba(164, 191, 255, 0.08)',
-                        borderRadius: '20px',
+                        gap: 0.5,
+                        '& .MuiButton-root': {
+                            color: '#515151',
+                            bgcolor: '#FFD95C33',
+                            textTransform: 'none',
+                            fontSize: '0.875rem',
+                            padding: '6px 12px',
+                            borderRadius: '12px',
+                            border: 'none',
+                            minWidth: 'auto',
+                            fontWeight: 500,
+                            mb: 1,
+                            '&:hover': {
+                                bgcolor: '#ffd95c',
+                            },
+                            '& .MuiSvgIcon-root': {
+                                fontSize: '1.125rem',
+                                marginRight: '6px',
+                            },
+                        }
                     }}
                 >
+                    {actionButtons.map((button) => (
+                        <Button
+                            key={button.label}
+                            startIcon={button.icon}
+                            sx={{
+                                '&:hover': {
+                                    bgcolor: 'rgba(255, 255, 255, 0.05)',
+                                }
+                            }}
+                        >
+                            {button.label}
+                        </Button>
+                    ))}
+                    <Button
+                        startIcon={<Add />}
+                        sx={{
+                            ml: 0.5,
+                            borderLeft: '1px solid rgba(255, 255, 255, 0.08) !important',
+                            paddingLeft: '12px !important',
+                        }}
+                    >
+                        More
+                    </Button>
+                </ButtonGroup>
+                <Box
+                    sx={{
+                        maxWidth: 'auto',
+                        mx: 'auto',
+                        my: 'auto',
+                        width: '100%',
+                        px: { xs: 2, sm: 2, md: 2, lg: 2 },
+                        py: 1.5,
+                        bgcolor: '#1846870D',
+                    border: '1px solid #081A33',
+                    borderRadius: '15px',
+                    }}
+                >
+                    
                     <Box
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
-                            padding: '10px',
+                            padding: '1px',
                         }}
                     >
-                        {/* Action Buttons */}
-                        <ButtonGroup
-                            variant="text"
-                            sx={{
-                                gap: 0.5,
-                                '& .MuiButton-root': {
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                    bgcolor: 'rgba(255, 255, 255, 0.03)',
-                                    textTransform: 'none',
-                                    fontSize: '0.875rem',
-                                    padding: '6px 12px',
-                                    borderRadius: '12px',
-                                    border: 'none',
-                                    minWidth: 'auto',
-                                    fontWeight: 500,
-                                    '&:hover': {
-                                        bgcolor: 'rgba(255, 255, 255, 0.05)',
-                                    },
-                                    '& .MuiSvgIcon-root': {
-                                        fontSize: '1.125rem',
-                                        marginRight: '6px',
-                                    },
-                                }
-                            }}
-                        >
-                            {actionButtons.map((button) => (
-                                <Button
-                                    key={button.label}
-                                    startIcon={button.icon}
-                                    sx={{
-                                        '&:hover': {
-                                            bgcolor: 'rgba(255, 255, 255, 0.05)',
-                                        }
-                                    }}
-                                >
-                                    {button.label}
-                                </Button>
-                            ))}
-                            <Button
-                                startIcon={<Add />}
+                    {/* Wrapper for Input + Below Buttons */}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1,
+                        }}
+                    >
+                        {/* Top Row: Mic + Input + Send */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <IconButton
                                 sx={{
-                                    ml: 0.5,
-                                    borderLeft: '1px solid rgba(255, 255, 255, 0.08) !important',
-                                    paddingLeft: '12px !important',
+                                    bgcolor: '#FFD95C',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    color: '#515151',
+                                    '&:hover': {
+                                        bgcolor: '#FFCB42',
+                                    },
                                 }}
+                                onClick={() => {/* Handle Mic */}}
                             >
-                                More
-                            </Button>
-                        </ButtonGroup>
+                                <Mic sx={{ fontSize: 18 }} />
+                            </IconButton>
 
-                        {/* Input Area */}
-                        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', width: '100%' }}>
                             <TextField
                                 fullWidth
                                 variant="outlined"
@@ -686,80 +743,104 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                 onChange={(e) => setMessage(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                                 sx={{
-                                    flex: 1,
                                     '& .MuiOutlinedInput-root': {
-                                        bgcolor: 'rgba(255, 255, 255, 0.03)',
-                                        borderRadius: '10px',
-                                        color: 'white',
-                                        height: '44px',
+                                        borderRadius: '8px',
+                                        height: '36px',
+                                        color:'#878787',
+                                        backgroundColor: '#FFD95C1A',
                                         '& fieldset': {
-                                            borderColor: 'rgba(255, 255, 255, 0.08)',
+                                            borderColor: '#51515133',
                                         },
                                         '&:hover fieldset': {
-                                            borderColor: 'rgba(255, 255, 255, 0.12)',
+                                            borderColor: '#51515133',
                                         },
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#3b82f6',
+                                            borderColor: '#515151',
                                         },
                                     },
                                     '& .MuiOutlinedInput-input': {
-                                        padding: '10px 14px',
+                                        padding: '8px 14px',
                                         fontSize: '0.875rem',
-                                        '&::placeholder': {
-                                            color: 'rgba(255, 255, 255, 0.5)',
-                                            opacity: 1,
-                                        },
                                     },
                                 }}
                             />
+
+                            <IconButton
+                                sx={{
+                                    bgcolor: '#FFD95C',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    color: '#515151',
+                                    '&:hover': {
+                                        bgcolor: '#FFCB42',
+                                    },
+                                }}
+                                onClick={handleSend}
+                            >
+                                <Send sx={{ fontSize: 18 }} />
+                            </IconButton>
+                        </Box>
+
+                        {/* Bottom Row: 2 Left buttons + 1 Right button */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
                             <Box sx={{ display: 'flex', gap: 1 }}>
+                            <IconButton
+                                sx={{
+                                bgcolor: '#FFD95C',
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '8px',
+                                color: '#515151',
+                                '&:hover': { bgcolor: '#FFCB42' },
+                                }}
+                                onClick={() => { /* handle file attach */ }}
+                            >
+                                <AttachFile sx={{ fontSize: 18 }} />
+                            </IconButton>
+
                                 <IconButton
                                     sx={{
-                                        color: 'rgba(255, 255, 255, 0.7)',
-                                        bgcolor: 'rgba(255, 255, 255, 0.03)',
-                                        borderRadius: '8px',
+                                        bgcolor: '#FFD95C',
                                         width: '36px',
                                         height: '36px',
-                                        '&:hover': {
-                                            bgcolor: 'rgba(255, 255, 255, 0.05)',
-                                        },
-                                    }}
-                                    onClick={() => {/* Handle mic */ }}
-                                >
-                                    <Mic sx={{ fontSize: 18 }} />
-                                </IconButton>
-                                <IconButton
-                                    sx={{
-                                        color: 'white',
-                                        bgcolor: '#3b82f6',
                                         borderRadius: '8px',
-                                        width: '36px',
-                                        height: '36px',
+                                        color: '#515151',
                                         '&:hover': {
-                                            bgcolor: '#2563eb',
+                                            bgcolor: '#FFCB42',
                                         },
                                     }}
-                                    onClick={handleSend}
                                 >
-                                    <Send sx={{ fontSize: 18 }} />
-                                </IconButton>
-                                <IconButton
-                                    sx={{
-                                        color: 'rgba(255, 255, 255, 0.7)',
-                                        bgcolor: 'rgba(255, 255, 255, 0.03)',
-                                        borderRadius: '8px',
-                                        width: '36px',
-                                        height: '36px',
-                                        '&:hover': {
-                                            bgcolor: 'rgba(255, 255, 255, 0.05)',
-                                        },
-                                    }}
-                                    onClick={() => {/* Handle enhance */ }}
-                                >
-                                    <AutoFixHigh sx={{ fontSize: 18 }} />
+                                    <img src="./star-icon.svg" alt="Star" style={{ width: 24, height: 24 }} />
                                 </IconButton>
                             </Box>
+
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    bgcolor: '#FFD95C',
+                                    color: '#515151',
+                                    borderRadius: '8px',
+                                    textTransform: 'none',
+                                    fontWeight: 500,
+                                    px: 2,
+                                    py: 0.8,
+                                    '&:hover': {
+                                        bgcolor: '#FFCB42',
+                                    },
+                                }}
+                                startIcon={<AutoFixHigh />}
+                            >
+                                Enhance
+                            </Button>
                         </Box>
+                    </Box>
                     </Box>
                 </Box>
             </Paper>

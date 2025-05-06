@@ -30,13 +30,14 @@ const darkTheme = createTheme({
     background: {
       default: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
       paper: 'rgba(164, 191, 255, 0.08)',
+      sidebar: '#F6F6F6'
     },
     primary: {
-      main: '#3b82f6',
+      main: '#FFD95C',
     },
     text: {
-      primary: '#ffffff',
-      secondary: 'rgba(255, 255, 255, 0.7)',
+      primary: '#515151',
+      secondary: '#FFD95C',
     },
   },
   typography: {
@@ -61,7 +62,7 @@ const darkTheme = createTheme({
               borderColor: 'rgba(255, 255, 255, 0.2)',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#3b82f6',
+              borderColor: '#515151',
             },
           },
         },
