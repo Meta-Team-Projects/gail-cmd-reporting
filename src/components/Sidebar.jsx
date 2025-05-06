@@ -7,6 +7,7 @@ import {
     ListItemButton,
     Box,
     Typography,
+    IconButton,
     useTheme,
     useMediaQuery,
 } from '@mui/material'
@@ -20,6 +21,7 @@ import {
     History,
     AccountCircle,
     Help,
+    ChevronLeft
 } from '@mui/icons-material'
 import { MenuType } from '../constants/menuTypes'
 
@@ -90,6 +92,7 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
             <Box sx={{ px: 2, py: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
                 <img src="/gail_logo.png" alt="Logo" style={{ width: 40, height: 40 }} />
                 {open && (
+                    <>
                     <Typography
                         variant="h6"
                         sx={{
@@ -101,6 +104,20 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
                     >
                         GAIL (India)
                     </Typography>
+                    <IconButton
+                        onClick={handleDrawerToggle}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            color: '#000000',
+                            '&:hover': {
+                                bgcolor: 'action.hover',
+                            },
+                        }}
+                    >
+                        <ChevronLeft />
+                    </IconButton>
+                </>
                 )}
             </Box>
 
@@ -176,7 +193,7 @@ const Sidebar = ({ open, handleDrawerToggle, onMenuClick, activeMenu }) => {
                         height: '95vh',
                         marginLeft: '1.5vh',
                         boxSizing: 'border-box',
-                        width: drawerWidth,
+                        width: open ? drawerWidth : 0,
                         bgcolor: '#FFFFFF',
                         borderRight: '0.5px solid rgba(255, 255, 255, 0.15)',
                         boxShadow: '0px 4px 8px rgba(18, 18, 18, 0.25)',

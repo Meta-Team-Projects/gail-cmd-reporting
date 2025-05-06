@@ -58,7 +58,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                 borderBottom: '1px solid',
                 borderColor: 'divider',
             }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
                     <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
                         Document Ingestion
                     </Typography>
@@ -103,7 +103,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                             },
                         }}
                     />
-                    <Typography variant="body2" sx={{ textAlign: 'center', color: '#C4C4C4', my: 1 }}>
+                    <Typography variant="body2" sx={{ textAlign: 'center', color: '#C4C4C4', my: 0.5, mb: -1 }}>
                         OR
                     </Typography>
                 </Box>
@@ -115,7 +115,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                         borderRadius: 2,
                         p: 3,
                         textAlign: 'center',
-                        mb: 2,
+                        mb: 1,
                         bgcolor: '#FFD95C1A',
                         display: 'flex',
                         flexDirection: 'column',

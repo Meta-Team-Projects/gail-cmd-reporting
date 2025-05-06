@@ -170,7 +170,11 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                 flexDirection: 'column',
                 gap: 2,
                 ml: 3,
-                maxWidth: rightSidebarOpen ? 'calc(100% - 400px)' : '97.5%',
+                maxWidth: {
+                    xs: '90%',  
+                    sm: '94.5%',  
+                    md: rightSidebarOpen ? 'calc(100% - 400px)' : '97%', // Desktop
+                },
                 transition: 'max-width 0.3s ease',
                 bgcolor:'#F6F6F6',
                 //bgcolor: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
