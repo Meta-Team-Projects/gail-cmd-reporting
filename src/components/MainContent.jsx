@@ -327,16 +327,18 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     sx={{
                                         display: 'flex',
                                         justifyContent: 'flex-end',
-                                        gap: 0,
+                                        mt: -2,
+                                        mb: 2,
+                                        gap: 1,
                                     }}
                                 >
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '0px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -345,10 +347,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '0px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -564,10 +566,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '2px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -576,10 +578,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '2px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -588,10 +590,10 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                     <IconButton
                                         size="small"
                                         sx={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            color: 'black',
                                             padding: '2px',
                                             '&:hover': {
-                                                color: 'rgba(255, 255, 255, 0.8)',
+                                                color: 'black',
                                             },
                                         }}
                                     >
@@ -815,7 +817,7 @@ const MainContent = ({ rightSidebarOpen, leftSidebarOpen }) => {
                                         },
                                     }}
                                 >
-                                    <AutoFixHigh sx={{ fontSize: 18 }} />
+                                    <img src="./star-icon.svg" alt="Star" style={{ width: 24, height: 24 }} />
                                 </IconButton>
                             </Box>
 
