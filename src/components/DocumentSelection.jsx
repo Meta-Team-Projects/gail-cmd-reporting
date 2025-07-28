@@ -1,0 +1,598 @@
+import { useState, useEffect, useRef } from 'react'
+import axios from 'axios'
+
+import {
+    Box,
+    TextField,
+    IconButton,
+    Slider,
+    Typography,
+    Popper,
+    ClickAwayListener,
+    Paper,
+    ButtonGroup,
+    Button,
+    Avatar,
+    AppBar,
+    Toolbar,
+    InputAdornment,
+    SvgIcon,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Tooltip,
+    Link,
+    Divider,
+    Chip,
+    Stack,
+    List,
+    ListItem
+} from '@mui/material'
+
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import CircleIcon from '@mui/icons-material/Circle';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+// import placeholder from '../assets/placeholder.png'
+// import placeholder_2 from '../assets/placeholder_2.png'
+// import placeholder_3 from '../assets/placeholder_3.png'
+import {
+    CloudUpload,
+    PlayArrow as PlayArrowIcon,
+    Delete,
+ } from '@mui/icons-material'
+
+const DocumentSelection = ({
+    leftSidebarOpen,
+    selectedPreview,
+    onNavigateToReport,
+    selectedDocs,
+    setSelectedDocs
+    }) => {
+    const categories = ['All', 'Pinned', 'Recently Viewed']
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [documentList, setDocumentList] = useState({})
+    const [stats, setStats] = useState(null);
+    const fileInputRef = useRef(null)
+    const [currentPage, setCurrentPage] = useState(0)
+    const itemsPerPage = 7;
+
+    const key = selectedCategory === 'All' ? null : selectedCategory.toLowerCase();
+    let docs = key ? (documentList[key] || []) : Object.values(documentList).flat();
+    // Apply search filter if needed here
+    const paginatedDocs = docs.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+    const totalPages = Math.ceil(docs.length / itemsPerPage);
+
+
+    const handleToggle = (name) => {
+        setSelectedDocs(prev =>
+            prev.includes(name)
+            ? prev.filter(n => n !== name)
+            : [...prev, name]
+        );
+    };
+
+    const [visibleDocs, setVisibleDocs] = useState({});
+    const handleToggleVisibility = (docName) => {
+        setVisibleDocs(prev => ({
+            ...prev,
+            [docName]: !prev[docName]
+        }));
+    };
+
+    // const imageOptions = [placeholder, placeholder_2, placeholder_3]
+    // //const allImages = [...Array(18)].map((_, idx) => imageOptions[idx % imageOptions.length])
+    // const allImages = [
+    //     ...Array(6).fill(placeholder),
+    //     ...Array(6).fill(placeholder_2),
+    //     ...Array(6).fill(placeholder_3),
+    // ]
+    // const [page, setPage] = useState(0)
+
+    const handleUploadFiles = async (e) => {
+        const files = Array.from(e.target.files)
+        const tooBig = files.filter(f => f.size > 10 * 1024 * 1024)
+        if (tooBig.length) {
+            alert(`These file(s) exceed 10 MB and won’t be uploaded:\n${tooBig.map(f=>f.name).join('\n')}`)
+            e.target.value = null
+            return
+        }
+        const formData = new FormData()
+        files.forEach(f => formData.append('files', f))
+        formData.append('source', uploadSource)
+
+        const startMs = Date.now();
+        try {
+            setUploadStatus('loading')
+            setUploadSnackOpen(true)
+            setUploadProgressKey(prev => prev + 1) // reset progress bar animation
+
+            await axios.post(
+                `${import.meta.env.VITE_CHAT_API_URL}/upload-docs`,
+                formData,
+                { headers: { 'Content-Type': 'multipart/form-data' } }
+            )
+
+            const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
+            setUploadDuration(elapsed);
+
+            await fetchDocuments()
+            setUploadStatus('success')
+            setTimeout(() => setUploadSnackOpen(false), 4000)
+        } catch (err) {
+            console.error('Error uploading files', err)
+            setUploadStatus('error')
+            setTimeout(() => setUploadSnackOpen(false), 4000)
+        } finally {
+        e.target.value = null
+        }
+    }
+
+    const fetchDocuments = async () => {
+        try {
+            const { data } = await axios.get(
+                `${import.meta.env.VITE_CHAT_API_URL}/list-documents`
+            )
+            setDocumentList(data.document_list || {})
+        } catch (err) {
+            console.error('Error loading documents', err)
+        }
+    }
+    const collectStats = async () => {
+    try {
+        const { data } = await axios.get(
+        `${import.meta.env.VITE_CHAT_API_URL}/collection_stats`
+        );
+        setStats(data);
+    } catch (error) {
+        console.error('Error fetching stats', error);
+    }
+    };
+
+    useEffect(() => {
+        fetchDocuments();
+        collectStats();
+    }, []);
+
+    const panelRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <Box
+        sx={{
+            marginTop: '2.5vh',
+            height: '95vh',
+            marginLeft: '1vw',
+            //marginRight: '0.25vw',
+            boxShadow: '2px 0px 8px #50505040',
+            bgcolor:'#FFFFFF',
+            border: '1px solid #E0E7F0',
+            borderRadius: '15px',
+            // borderRadius: layoutMode === 'expand' || layoutMode === 'collapse' 
+            //     || layoutMode === 'fullscreenFormulate' || layoutMode === 'fullscreenMain' || layoutMode === 'fiftyfifty'
+            //     ? '15px 0 0 15px'  
+            //     : '15px',          
+            overflow: 'hidden',
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            maxWidth: {
+                xs: '90%',
+                sm: '94.5%',
+                md: '98%'
+            },
+            transition: 'max-width 0.3s ease',
+            //filter: dimMainContent ? 'grayscale(0.5) brightness(0.5)' : 'none',
+            //bgcolor: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
+            position: 'relative',
+        }}
+    >
+        <Box sx={{
+            p: 2.5,
+            pb: 0, mb: -2
+        }}>
+            <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, fontSize: '24px', color: '#081A33'}}>
+                CMD Platform
+            </Typography>
+        </Box>
+        <Box sx={{
+            //border: '1px solid black',
+            display: 'flex',
+        }}>
+            {/* Left Section */}
+            <Box sx={{
+                //border: '1px solid red',
+                maxWidth: leftSidebarOpen ? '1000px' : '1100px',
+                transition: 'max-width 0.3s ease',
+                display: 'flex',
+                flexDirection: 'column', gap: 1
+            }}>
+                <Box
+                    sx={{
+                    px: 2,
+                    py:0.5,
+                    //mt: -1,
+                    mx: 2,
+                    //mb: 1,
+                    background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
+                    borderRadius: 2,
+                    //border: '1px solid #CBD0DC',
+                    boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                    //height: '100px',
+                    transition: 'all 0.3s ease',
+                    }}
+                >
+                    <Typography variant="subtitle2" sx={{
+                        fontWeight: 600, fontSize: '20px', color: '#081A33'
+                    }}>
+                        Document Selection
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{
+                        fontSize: '16.5px', color: '#081A33'
+                    }}>
+                        Select one or multiple documents from the list, or upload your own files to update the report template. These documents will be used to customize and enrich the final report.
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        border: '2px dashed #E6E6E6',
+                        borderRadius: 2,
+                        p: 1,
+                        textAlign: 'center',
+                        bgcolor: '#FFD95C1A',   //later
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 0.5,
+                        mx: 2,
+                    }}
+                >
+
+                    {/* hidden file input + upload handler */}
+                    <input
+                    type="file"
+                    multiple
+                    hidden
+                    ref={fileInputRef}
+                    onChange={handleUploadFiles}
+                    />
+
+                    <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
+                    
+                    <Typography variant="caption" display="block" color="#515151"
+                    sx={{ fontWeight: 500, fontSize: '0.625vw'}}>
+                        Choose a file
+                    </Typography>
+                    <Typography variant="caption" display="block" color="#515151"
+                    sx={{ fontWeight: 500, fontSize: '0.625vw'}}>
+                        DOCX format, up to 10MB
+                    </Typography>
+                    
+                    <Button
+                        variant="contained"
+                        onClick={() => fileInputRef.current.click()}
+                        sx={{
+                        borderRadius: 2,
+                        bgcolor: '#FFD95C',
+                        color: '#515151',
+                        textTransform: 'none',
+                        px: 3,
+                        py: 0.5,
+                        fontWeight: 500,
+                        fontSize: '0.7292vw',
+                        mt: 1,
+                        mb:1,
+                        }}
+                    >
+                        Browse File
+                    </Button>
+                </Box>
+                <Box sx={{
+                    px: 2,
+                    py: 0.5,
+                    pb: 1,
+                    //mt: 1,
+                    ml:2, mr:2,
+                    overflow: 'hidden',
+                    borderRadius: 2,
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: 0,
+                    border: '0.5px solid #00000033',
+                    transform: 'translateZ(0)',
+                    bgcolor: '#F5FAFF'
+                }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
+                            Documents Repository
+                        </Typography>
+                    </Box>
+
+                    <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
+                        <Box sx={{ 
+                            display: 'flex', flexWrap: 'wrap',
+                            gap: 1, flexGrow: 1 }}>
+                            {categories.map((category) => (
+                                <Chip
+                                    key={category}
+                                    label={category}
+                                    variant="filled"
+                                    size="small"
+                                    onClick={() => setSelectedCategory(category)}
+                                    sx={{
+                                        px: '9px',
+                                        py: '9px',
+                                        fontWeight: 500,
+                                        fontSize: '0.7292vw',
+                                        color: '#081A33',
+                                        borderRadius: '16px',
+                                        bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
+                                        '&:hover': { bgcolor: '#FEC636' },
+                                        boxShadow: '0px 4px 8px #15151540'
+                                    }}
+                                />
+                            ))}
+                        </Box>
+                    </Stack>
+                    <Box
+                    sx={{
+                        mt: 1,
+                        flexGrow: 1,
+                        // overflowY: 'auto !important',
+                        overflow: 'hidden',
+                        '&::-webkit-scrollbar': { 
+                        display: 'none',
+                        width: '0.2083vw' 
+                        },
+                        '&::-webkit-scrollbar-track': { 
+                            background: 'transparent'
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#0088d7',
+                            borderRadius: '3px',
+                        },
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#0088d7 transparent'
+                    }}>
+                                
+                    {/* determine which docs to show */}
+                    {(() => {
+                        // flatten all docs if 'All', else pick selected category
+                        const key = selectedCategory === 'All'
+                        ? null
+                        : selectedCategory.toLowerCase()
+                        let docs = []
+                        if (key) {
+                        docs = documentList[key] || []
+                        } else {
+                        docs = Object.values(documentList).flat()
+                        }
+                        // filter by search
+                        return (
+                        <List sx={{ px: 0 }}>
+                            {paginatedDocs
+                            // .filter(name =>
+                            //     name.toLowerCase().includes(searchTerm.toLowerCase())
+                            // )
+                            .map(name => {
+                                const isSelected = selectedDocs.includes(name);
+                                return (
+                                <ListItem
+                                key={name}
+                                disableGutters
+                                sx={{
+                                    bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
+                                    borderRadius: 2,
+                                    mb: '4px',
+                                    p: 0.5,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    border: '0.5px solid #00000033',
+                                }}
+                                >
+                                    <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                         <IconButton
+                                         size="small"
+                                         onClick={() => {
+                                            setSelectedDocs(prev =>
+                                                prev.includes(name)
+                                                ? prev.filter(n => n !== name)
+                                                : [...prev, name]
+                                            );
+                                         }}
+                                         >   
+                                            {isSelected ? (
+                                                <CircleIcon
+                                                sx={{
+                                                    fontSize: '0.8333vw',
+                                                    fill: '#081A33',
+                                                    stroke: '#515151',
+                                                    strokeWidth: 1.5,
+                                                    transition: 'all 0.2s ease'
+                                                }}
+                                                />
+                                            ) : (
+                                                <CircleOutlinedIcon sx={{ 
+                                                    fontSize: '0.8333vw',
+                                                    fill: '#FFD95C0A',
+                                                    stroke: '#515151',
+                                                    strokeWidth: 1.5,
+                                                    transition: 'all 0.2s ease',
+                                                }}
+                                                />
+                                            )}
+                                                
+                                        </IconButton> 
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 600,
+                                                color: '#515151',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                fontSize: '0.8333vw'
+                                            }}
+                                            >
+                                            {(() => {
+                                                const dotIdx = name.lastIndexOf('.');
+                                                const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
+                                                const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
+                                                return base.length > 20
+                                                ? `${base.slice(0,20)}...${ext}`
+                                                : name;
+                                            })()
+                                        }
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <IconButton
+                                        size="small"
+                                        onClick={() => handleToggleVisibility(name)}
+                                        >
+                                            {visibleDocs[name] ? (
+                                                <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                            ) : (
+                                                <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
+                                            )}
+                                        </IconButton>
+                                        <IconButton 
+                                        size="small"
+                                        // onClick={e => {
+                                        //         e.stopPropagation();
+                                        //         setDialogDocName(name);
+                                        //         setOpenDeleteDialog(true);
+                                        //}}
+                                        >
+                                            <Tooltip title='Delete' placement='bottom' arrow>
+                                                <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                                            </Tooltip>
+                                        </IconButton>
+                                    </Box>
+                                </ListItem>
+                            );
+                            })}
+                        </List>
+                    )
+                    })()}
+                    </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center', mb: -0.5
+                    }}>
+                        {/* Left Arrow */}
+                        <IconButton 
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 0))}
+                        disabled={currentPage === 0}
+                        sx={{
+                            color: '#081A33',
+                            backgroundColor: '#FFD95C',
+                            borderRadius: '50%',
+                            '&:disabled': {opacity: 0.5},
+                            '&:hover': {backgroundColor: '#FFCB42'},
+                        }}>
+                            <PlayArrowIcon sx={{transform: 'scaleX(-1)'}}/>
+                        </IconButton>
+                        {/* Page Label */}
+                        <Typography variant="body2" 
+                        sx={{color: '#AEAEAE'}}>
+                            {currentPage + 1}/{totalPages || 1}
+                        </Typography>
+                        {/* Right Arrow */}
+                        <IconButton 
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages - 1))}
+                        disabled={currentPage >= totalPages - 1}
+                        sx={{
+                            color: '#081A33',
+                            backgroundColor: '#FFD95C',
+                            borderRadius: '50%',
+                            '&:disabled': {opacity: 0},
+                            '&:hover': {backgroundColor: '#FFCB42'},
+                        }}>
+                            <PlayArrowIcon sx={{color: '#081A33'}}/>
+                        </IconButton>
+                    </Box>
+                </Box>    
+            </Box>
+            {/* Right Section */}
+            <Box sx={{
+                //border: '1px solid blue',
+                flexGrow: 1
+            }}>
+                <Box
+                    sx={{
+                        border: '1px solid #D2D2D2',
+                        borderRadius: 2,
+                        textAlign: 'center',
+                        bgcolor: '#F5FAFF',   //later
+                        //boxShadow: '0px 2px 8px #76767640',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        ml: 1, mr: 2, 
+                        height: '100%',
+                        transition: 'all 0.3s ease',
+                        position: 'relative',
+                    }}
+                >
+                    <Box
+                        sx={{
+                        backgroundColor: '#0088D6CC',
+                        height: '42px',
+                        width: '100%',
+                        borderTopLeftRadius: 4,
+                        borderTopRightRadius: 4,
+                        }}
+                    />
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexGrow: 1,
+                        width: '100%'
+                    }}>
+                        {selectedPreview && (
+                            <>
+                            <Box 
+                            component="img"
+                            src={selectedPreview}
+                            alt="Selected Preview"
+                            sx={{
+                                width: '100%',
+                                objectFit: 'contain'
+                            }}
+                            />
+                            <Button
+                            variant= "contained"
+                            onClick={onNavigateToReport}
+                            sx={{
+                                position: 'absolute',
+                                bottom: 15,
+                                right: 15,
+                                fontSize: '15px',
+                                fontWeight: 600,
+                                color: '#081A33',
+                                backgroundColor: '#FFD95C',
+                                '&:hover': {bgcolor: '#FFCB42'}
+                            }}
+                            >
+                                Generate Report
+                            </Button>
+                            </>
+                        )}
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
+    </Box>
+  )
+}
+
+export default DocumentSelection

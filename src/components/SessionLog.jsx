@@ -46,7 +46,7 @@ const SessionLog = ({ open, onToggle }) => {
     return (
         <Paper
             sx={{
-                width: open ? 350 : 0,
+                width: open ? 450 : 0,
                 height: '95vh',
                 position: 'fixed',
                 right: '1.5vh',

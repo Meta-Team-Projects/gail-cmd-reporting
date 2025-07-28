@@ -15,10 +15,21 @@
     "@mui/icons-material": "^7.0.1",
     "@mui/material": "^7.0.1",
     "axios": "^1.8.4",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "markdown-it": "^14.1.0",
+    "pdfjs-dist": "^5.3.93",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-draggable": "^4.4.6",
+    "react-hook-speech-to-text": "^0.8.0",
+    "react-linkify": "^1.0.0-alpha",
     "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1"
+    "react-pdf": "^10.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "turndown": "^7.2.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -29,6 +40,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "sass-embedded": "^1.89.1",
     "vite": "^6.2.0"
   }
 }

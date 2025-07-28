@@ -85,6 +85,26 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to bottom, #FFD856 0%, #FFFFFF 65%);
+  background: #0088d7;
   color: #ffffff;
+}
+
+/*Media Queries*/ 
+@media (max-width: 1024px) and (orientation: portrait){
+  body::before{
+    content: "Please switch to Landscape Mode";
+    display: block;
+    position: fixed;
+    font-size: 2vh;
+    z-index: 1400;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+  }
 }

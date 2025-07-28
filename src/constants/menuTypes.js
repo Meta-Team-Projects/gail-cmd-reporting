@@ -7,4 +7,5 @@ export const MenuType = {
   SAVED_NOTES: "saved_notes",
   RECENT_SESSIONS: "recent_sessions",
   SESSION_LOG: "session_log",
+  FORMULATE: "formulate",
 };
