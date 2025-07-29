@@ -38,7 +38,8 @@ import placeholder_3 from '../assets/placeholder_3.png'
 import {
     CloudUpload,
     FindInPage,
-    PlayArrow as PlayArrowIcon
+    PlayArrow as PlayArrowIcon,
+    Search as SearchIcon,
  } from '@mui/icons-material'
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 
@@ -53,6 +54,7 @@ const TemplateSelection = ({
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
+    const [searchTerm, setSearchTerm] = useState('')
 
     const imageOptions = [placeholder, placeholder_2, placeholder_3]
     //const allImages = [...Array(18)].map((_, idx) => imageOptions[idx % imageOptions.length])
@@ -165,10 +167,11 @@ const TemplateSelection = ({
             {/* Left Section */}
             <Box sx={{
                 //border: '1px solid red',
-                maxWidth: leftSidebarOpen ? '1000px' : '1100px',
+                maxWidth: leftSidebarOpen ? '800px' : '900px',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
-                flexDirection: 'column', gap: 1
+                flexDirection: 'column', 
+                gap: 1
             }}>
                 <Box sx={{
                     mx: 2,
@@ -250,14 +253,53 @@ const TemplateSelection = ({
                             ))}
                         </Box>
                     </Stack>
+                    <Box sx={{ mr: 4}}>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            placeholder="Search here..."
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                            size="small"
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    bgcolor: '#0088D61A', //later
+                                    borderRadius: 10,
+                                    height: '30px',
+                                    fontSize: '16px',
+                                    color: '#515151',
+                                }
+                            }}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon sx={{ color: '#515151', fontSize: '20px' }} />
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    </Box>
                     <Box sx={{
                         mt: 1,
                         display:'flex',
                         flexWrap: 'wrap',
-                        gap: '1%',
-                        maxHeight: '280px',
+                        gap: '2%',
+                        pr: 3,
+                        maxHeight: '250px',
                         overflowY: 'auto',
-                        pr: 4,
+                        overflowX: 'hidden',
+                        '&::-webkit-scrollbar': { 
+                            width: '0.2083vw' 
+                        },
+                        '&::-webkit-scrollbar-track': { 
+                            background: 'transparent'
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#0088d7',
+                            borderRadius: '3px',
+                        },
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#0088d7 transparent'
                     }}>
                         {allImages.map((src, idx) => (
                             <Box
@@ -329,10 +371,9 @@ const TemplateSelection = ({
                         flexDirection: 'column',
                         alignItems: 'center',
                         gap: 0.5,
-                        ml: 2, mr: 2
+                        mx: 2
                     }}
                 >
-
                     {/* hidden file input + upload handler */}
                     <input
                     type="file"
@@ -345,7 +386,7 @@ const TemplateSelection = ({
                     <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
                     
                     <Typography variant="caption" display="block" color="#515151"
-                    sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -1}}>
+                    sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -0.5}}>
                         Choose a file
                     </Typography>
                     <Typography variant="caption" display="block" color="#515151"
@@ -358,17 +399,49 @@ const TemplateSelection = ({
                         onClick={() => fileInputRef.current.click()}
                         sx={{
                         borderRadius: 2,
-                        bgcolor: '#FFD95C',
-                        color: '#515151',
+                        bgcolor: '#0088D6',
+                        color: '#ffffff',
                         textTransform: 'none',
                         px: 3,
                         py: 0.5,
                         fontWeight: 500,
                         fontSize: '0.7292vw',
-                        mb:1,
+                        my:1,
                         }}
                     >
-                        Browse File
+                        Browse Reports
+                    </Button>
+                </Box>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mx: 2
+                }}>
+                    <Button
+                    variant= "contained"
+                    sx={{
+                        fontSize: '0.78vw ',
+                        fontWeight: 600,
+                        color: '#081A33',
+                        backgroundColor: '#FFD95C',
+                        '&:hover': {bgcolor: '#FFCB42'}
+                    }}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                    variant= "contained"
+                    onClick={onNavigateToDoc}
+                    sx={{
+                        fontSize: '0.78vw',
+                        fontWeight: 600,
+                        color: '#081A33',
+                        backgroundColor: '#FFD95C',
+                        '&:hover': {bgcolor: '#FFCB42'}
+                    }}
+                    >
+                        {isEditMode ? 'Done' : 'Next'}
                     </Button>
                 </Box>
             </Box>
@@ -421,22 +494,6 @@ const TemplateSelection = ({
                                 objectFit: 'contain'
                             }}
                             />
-                            <Button
-                            variant= "contained"
-                            onClick={onNavigateToDoc}
-                            sx={{
-                                position: 'absolute',
-                                bottom: 15,
-                                right: 15,
-                                fontSize: '15px',
-                                fontWeight: 600,
-                                color: '#081A33',
-                                backgroundColor: '#FFD95C',
-                                '&:hover': {bgcolor: '#FFCB42'}
-                            }}
-                            >
-                                {isEditMode ? 'Done' : 'Next'}
-                            </Button>
                             </>
                         ) : (
                             <>

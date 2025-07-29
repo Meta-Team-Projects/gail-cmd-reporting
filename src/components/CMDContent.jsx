@@ -37,6 +37,7 @@ import {
 
 import {
     Search as SearchIcon,
+    TrendingFlat as TrendingFlatIcon,
     Delete
 } from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -217,9 +218,13 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     alignItems: 'center',
                     gap: 2
                 }}>
-                    <Typography>
-                        Start Now
-                    </Typography>
+                    <Box sx={{
+                        display: 'flex', gap: 1, alignItems: 'center'}}>
+                        <Typography>
+                            Start Now
+                        </Typography>
+                        <TrendingFlatIcon />
+                    </Box>
                     <Button
                     onClick={onNavigateToTemplate}
                     variant="contained"
@@ -272,9 +277,13 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     alignItems: 'center',
                     gap: 2
                 }}>
-                    <Typography>
-                        Continue
-                    </Typography>
+                    <Box sx={{
+                        display: 'flex', gap: 1, alignItems: 'center'}}>
+                        <Typography>
+                            Continue
+                        </Typography>
+                        <TrendingFlatIcon />
+                    </Box>
                     <Button
                     variant="contained"
                     sx={{

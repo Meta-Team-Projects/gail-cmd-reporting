@@ -210,6 +210,14 @@ const DocumentSelection = ({
                 display: 'flex',
                 flexDirection: 'column', gap: 1
             }}>
+                <Box sx={{
+                    mx: 2,
+                    border: '1px solid black',
+                    borderRadius: 10,
+                    height: '40px'
+                }}>
+
+                </Box>
                 <Box
                     sx={{
                     px: 2,
@@ -225,16 +233,26 @@ const DocumentSelection = ({
                     transition: 'all 0.3s ease',
                     }}
                 >
-                    <Typography variant="subtitle2" sx={{
+                    
+                    {/* <Typography variant="subtitle2" sx={{
                         fontWeight: 600, fontSize: '20px', color: '#081A33'
                     }}>
                         Document Selection
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="subtitle2" sx={{
                         fontSize: '16.5px', color: '#081A33'
                     }}>
                         Select one or multiple documents from the list, or upload your own files to update the report template. These documents will be used to customize and enrich the final report.
                     </Typography>
+                </Box> 
+                <Box sx={{
+                    border: '1px solid black',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: 1,
+                    mx: 2,
+                }}>
+
                 </Box>
                 <Box
                     sx={{
