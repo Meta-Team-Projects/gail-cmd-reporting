@@ -170,23 +170,31 @@ const TemplateSelection = ({
                 display: 'flex',
                 flexDirection: 'column', gap: 1
             }}>
+                <Box sx={{
+                    mx: 2,
+                    border: '1px solid black',
+                    borderRadius: 10,
+                    height: '40px'
+                }}>
+
+                </Box>
                 <Box
                     sx={{
                     px: 2,
                     py:0.5,
                     mx: 2,
-                    background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
+                    background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                     borderRadius: 2,
                     //border: '1px solid #CBD0DC',
                     boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                     transition: 'all 0.3s ease',
                     }}
                 >
-                    <Typography variant="subtitle2" sx={{
+                    {/* <Typography variant="subtitle2" sx={{
                         fontWeight: 600, fontSize: '20px', color: '#081A33'
                     }}>
                         Template Selection
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="subtitle2" sx={{
                         fontSize: '16.5px', color: '#081A33'
                     }}>
@@ -204,18 +212,19 @@ const TemplateSelection = ({
                     flexGrow: 1,
                     display: 'flex',
                     flexDirection: 'column',
+                    gap: 1,
                     minHeight: 0,
                     //border: '0.5px solid #00000033',
                     transform: 'translateZ(0)',
                     bgcolor: '#F5FAFF'
                 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
                             Reports Repository
                         </Typography>
                     </Box>
 
-                    <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
+                    <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
                         <Box sx={{ 
                             display: 'flex', flexWrap: 'wrap',
                             gap: 1, flexGrow: 1 }}>
@@ -242,13 +251,15 @@ const TemplateSelection = ({
                         </Box>
                     </Stack>
                     <Box sx={{
-                        minHeight: '280px',
-                        mt: 2,
+                        mt: 1,
                         display:'flex',
                         flexWrap: 'wrap',
-                        justifyContent: 'space-between'
+                        gap: '1%',
+                        maxHeight: '280px',
+                        overflowY: 'auto',
+                        pr: 4,
                     }}>
-                        {currentImages.map((src, idx) => (
+                        {allImages.map((src, idx) => (
                             <Box
                                 key={idx}
                                 component="img"
@@ -258,19 +269,19 @@ const TemplateSelection = ({
                                 sx={{
                                     width: '32%',
                                     mb: 1.5,
-                                    borderRadius: 1,
+                                    borderRadius: '5px',
                                     objectFit: 'cover',
                                     cursor: 'pointer',
                                 }}
                             />
                         ))}
                     </Box>
-                    <Box sx={{
+                    {/* <Box sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center'
                     }}>
-                        {/* Left Arrow */}
+                        Left Arrow
                         <IconButton 
                         onClick={handlePrev}
                         disabled={page === 0}
@@ -285,12 +296,12 @@ const TemplateSelection = ({
                         }}>
                             <PlayArrowIcon sx={{transform: 'scaleX(-1)'}}/>
                         </IconButton>
-                        {/* Page Label */}
+                        Page Label
                         <Typography variant="body2" 
                         sx={{color: '#AEAEAE'}}>
                             {page + 1}/{Math.ceil(allImages.length / imagesPerPage)}
                         </Typography>
-                        {/* Right Arrow */}
+                        Right Arrow
                         <IconButton 
                         onClick={handleNext}
                         disabled={page === totalPages - 1}
@@ -305,7 +316,7 @@ const TemplateSelection = ({
                         }}>
                             <PlayArrowIcon sx={{color: '#081A33'}}/>
                         </IconButton>
-                    </Box>
+                    </Box> */}
                 </Box>
                 <Box
                     sx={{

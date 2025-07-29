@@ -51,6 +51,20 @@ const CMDContent = ({onNavigateToTemplate}) => {
     const [documentList, setDocumentList] = useState({})
     const [searchTerm, setSearchTerm] = useState('')
     const [stats, setStats] = useState(null)
+    const [pinnedDocs, setPinnedDocs] = useState(new Set())
+
+    const togglePin = (docName) => {
+        setPinnedDocs(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(docName)) {
+                newSet.delete(docName);
+            } else {
+                newSet.add(docName);
+            }
+            return newSet;
+        });
+    };
+
 
     const [numPages, setNumPages] = useState(null);
     const onDocumentLoadSuccess = ({numPages}) => {
@@ -104,7 +118,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
+            gap: 1,
             maxWidth: {
                 xs: '90%',
                 sm: '94.5%',
@@ -140,40 +154,73 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 CMD Platform
             </Typography>
         </Box>
+        {/* Top 3 Boxes */}
         <Box
+        sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            mx: 2,
+            height: '300px'
+        }}>
+            <Box
+                sx={{
+                width: '32.5%',
+                px: 2,
+                py: 1,
+                background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
+                borderRadius: 2,
+                border: '1px solid #CBD0DC',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                }}
+            >
+                <Box>
+                    <Typography variant="subtitle2" sx={{
+                        fontWeight: 600, fontSize: '20px', color: '#081A33'
+                    }}>
+                        Get started with report generation!
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{
+                        fontSize: '18px', color: '#081A33'
+                    }}>
+                        Select a template, choose key documents, and let CMD Platform generate clear, insight-rich reports fast and structured.
+                    </Typography>
+                </Box>
+            </Box>
+            <Box
             sx={{
-            px: 2,
-            py:0.5,
-            mt: -1,
-            ml: 2,
-            mr: 2,
-            mb: -1,
-            background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
-            borderRadius: 2,
-            border: '1px solid #CBD0DC',
-            boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
-            }}
-        >
-            <Box>
-                <Typography variant="subtitle2" sx={{
-                    fontWeight: 600, fontSize: '20px', color: '#081A33'
-                }}>
-                    Get started with report generation!
-                </Typography>
-            </Box>
-            <Box>
-                <Typography variant="subtitle2" sx={{
-                    fontSize: '18px', color: '#081A33'
-                }}>
-                    Generate a new, fresh report tailored to your latest needs. This report will include up-to-date insights and clear, organized information.
-                </Typography>
-            </Box>
-            <Box sx= {{
-                py: 2,
+                width: '32.5%',
+                px: 2,
+                py: 1,
+                background: 'linear-gradient(to right, #FFE56D, #FFD65A)',
+                borderRadius: 2,
+                border: '1px solid #CBD0DC',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                 display: 'flex',
-                gap: 2
+                flexDirection: 'column', justifyContent: 'space-between'
             }}>
-                <Button
+                <Box>
+                    <Typography variant="subtitle2" sx={{
+                        fontWeight: 600, fontSize: '20px', color: '#081A33'
+                    }}>
+                        Generate New Response
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{
+                        fontSize: '18px', color: '#081A33'
+                    }}>
+                        Need a new version of an existing report or exploring a new angle? Generate custom responses with updated data, context, and formatting.
+                    </Typography>
+                </Box> 
+                <Box sx= {{
+                    py: 2,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 2
+                }}>
+                    <Typography>
+                        Start Now
+                    </Typography>
+                    <Button
                     onClick={onNavigateToTemplate}
                     variant="contained"
                     
@@ -192,7 +239,43 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 >
                     Generate Report
                 </Button>
-                <Button
+                </Box>
+            </Box>
+            <Box
+            sx={{
+                width: '32.5%',
+                px: 2,
+                py: 1,
+                background: 'linear-gradient(to right, #E3F1FF1F, #D3E8F9)',
+                borderRadius: 2,
+                border: '1px solid #CBD0DC',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                display: 'flex',
+                flexDirection: 'column', justifyContent: 'space-between'
+            }}>
+                <Box>
+                    <Typography variant="subtitle2" sx={{
+                        fontWeight: 600, fontSize: '20px', color: '#081A33'
+                    }}>
+                        Resume from last session 
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{
+                        fontSize: '18px', color: '#081A33'
+                    }}>
+                        Continue working where you left off. Your documents and settings are auto-saved so you can pick up seamlessly.
+                    </Typography>
+                </Box> 
+                <Box sx= {{
+                    py: 2,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 2
+                }}>
+                    <Typography>
+                        Continue
+                    </Typography>
+                    <Button
                     variant="contained"
                     sx={{
                         borderRadius: 2,
@@ -206,223 +289,276 @@ const CMDContent = ({onNavigateToTemplate}) => {
                         py: '6.83px',
                         boxShadow: '0px 4px 8px #15151540'
                     }}
-                >
-                    Resume from last session
-                </Button>
+                    >
+                        Resume from last session
+                    </Button>
+                </Box>
             </Box>
         </Box>
+
         <Box sx={{
-            px: 2.5,
             display: 'flex',
-            justifyContent: 'space-between'
+            gap: 1,
+            mx: 2,
+            //border: '1px solid green'
         }}>
-            <Typography sx={{
-                color: '#081A33',
-                fontWeight: 700, fontSize: '20px'
+            {/* Left Section */}
+            <Box sx={{
+                flex: 1,
+                borderRadius: '12px',
+                //border: '1px solid red',
+                bgcolor: '#F5FAFF',
+                px: 2, py: 1,
+                mb: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1
             }}>
-                Latest Reports
-            </Typography>
-            <AccessTimeIcon sx={{color: '#081A33'}}/>
-        </Box>
-        <Box sx={{
-            maxHeight: '160px',
-            ml: 2, mr: 2, my: -1,
-            display: 'flex',
-            justifyContent: 'space-between'
-        }}>
-            {/* Fill Later */}
-            <img src={placeholder} alt="Placeholder" style={{width: '32.5%'}}/>
-            <img src={placeholder_2} alt="Placeholder" style={{width: '32.5%'}}/>
-            <img src={placeholder_3} alt="Placeholder" style={{width: '32.5%'}}/>
-            
-        </Box>
-        <Typography sx={{
-            px: 2.5, color: '#081A33',
-            fontWeight: 700, fontSize: '20px'
-        }}>
-            Reports Repository
-        </Typography>
-        
-        <Stack direction="row" sx={{ ml: 2.5, mt: -1, flexWrap: 'wrap', gap: '0.41vw' }}>
-            <Box sx={{ 
-                display: 'flex', flexWrap: 'wrap',
-                gap: 1, flexGrow: 1 }}>
-                {categories.map((category) => (
-                    <Chip
-                        key={category}
-                        label={category}
-                        variant="filled"
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                }}>
+                    <Typography sx={{
+                        color: '#081A33',
+                        fontWeight: 700, fontSize: '20px'
+                    }}>
+                        Latest Reports
+                    </Typography>
+                    <AccessTimeIcon sx={{color: '#081A33'}}/>
+                </Box>
+                <Box sx={{ flex: 1,
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                }}>
+                    {/* Fill Later */}
+                    <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
+                    <img src={placeholder_2} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
+                </Box>
+                <Box sx={{ flex: 1,
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                }}>
+                    {/* Fill Later */}
+                    <img src={placeholder_3} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
+                    <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
+                </Box>
+            </Box>
+
+            {/* Right Section */}
+            <Box sx={{
+                flex: 1,
+                borderRadius: '12px',
+                mb: 1,
+                //border: '1px solid blue',
+                bgcolor: '#F5FAFF',
+                px: 2, py: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1
+            }}>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                }}>
+                    <Typography sx={{
+                        color: '#081A33',
+                        fontWeight: 700, fontSize: '20px'
+                    }}>
+                        Reports Repository
+                    </Typography>
+                    <AccessTimeIcon sx={{color: '#081A33'}}/>
+                </Box> 
+                <Stack direction="row" 
+                sx={{flexWrap: 'wrap', gap: '0.41vw'
+
+                }}>
+                    <Box sx={{ 
+                        display: 'flex', flexWrap: 'wrap',
+                        gap: 1, flexGrow: 1
+                    }}>
+                        {categories.map((category) => (
+                            <Chip
+                                key={category}
+                                label={category}
+                                variant="filled"
+                                size="small"
+                                onClick={() => setSelectedCategory(category)}
+                                sx={{
+                                    px: '9px',
+                                    py: '9px',
+                                    fontWeight: 500,
+                                    fontSize: '0.7292vw',
+                                    color: '#081A33',
+                                    borderRadius: '16px',
+                                    bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
+                                    '&:hover': { bgcolor: '#FEC636' },
+                                    boxShadow: '0px 4px 8px #15151540'
+                                }}
+                            />
+                        ))}
+                    </Box>
+                </Stack>
+                <Box>
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        placeholder="Search here..."
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
                         size="small"
-                        onClick={() => setSelectedCategory(category)}
                         sx={{
-                            px: '9px',
-                            py: '9px',
-                            fontWeight: 500,
-                            fontSize: '0.7292vw',
-                            color: '#081A33',
-                            borderRadius: '16px',
-                            bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
-                            '&:hover': { bgcolor: '#FEC636' },
-                            boxShadow: '0px 4px 8px #15151540'
+                            '& .MuiOutlinedInput-root': {
+                                bgcolor: '#0088D61A', //later
+                                borderRadius: 10,
+                                height: '30px',
+                                fontSize: '16px',
+                                color: '#515151'
+                            }
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon sx={{ color: '#515151', fontSize: '20px' }} />
+                                </InputAdornment>
+                            )
                         }}
                     />
-                ))}
-            </Box>
-        </Stack>
-        <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Search here..."
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            size="small"
-            sx={{
-                px: 2,
-                '& .MuiOutlinedInput-root': {
-                    bgcolor: '#0088D61A', //later
-                    borderRadius: 10,
-                    height: '30px',
-                    fontSize: '16px',
-                    color: '#515151'
-                }
-            }}
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <SearchIcon sx={{ color: '#515151', fontSize: '20px' }} />
-                    </InputAdornment>
-                )
-            }}
-        />
-        <Box
-        ref={panelRef}
-        sx={{
-            px: 2,
-            py: 0.5,
-            ml:2, mr:2,
-            mb: 2,
-            borderRadius: 2,
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: 0,
-            border: '0.5px solid #00000033',
-            // border: '1px solid #008cff',
-            transform: 'translateZ(0)',
-            // bgcolor: '#e9f5fc',
-            bgcolor: '#F5FAFF'
-        }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
-                    All Reports
-                </Typography>
-                <Typography variant="subtitle2" sx={{fontSize: '18px', color: '#081A33'}}>
-                    View All &gt;
-                </Typography>
-            </Box>
-            <Box
-            sx={{
-                flexGrow: 1,
-                overflowY: 'auto !important',
-                overflowX: 'hidden',
-                '&::-webkit-scrollbar': { 
-                    width: '0.2083vw' 
-                },
-                '&::-webkit-scrollbar-track': { 
-                    background: 'transparent'
-                },
-                '&::-webkit-scrollbar-thumb': {
-                    backgroundColor: '#0088d7',
-                    borderRadius: '3px',
-                },
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#0088d7 transparent'
-            }}>
-            
-            {/* determine which docs to show */}
-            {(() => {
-                // flatten all docs if 'All', else pick selected category
-                const key = selectedCategory === 'All'
-                ? null
-                : selectedCategory.toLowerCase()
-                let docs = []
-                if (key) {
-                docs = documentList[key] || []
-                } else {
-                docs = Object.values(documentList).flat()
-                }
-                // filter by search
-                return (
-                <List sx={{ px: 0, mb: 1 }}>
-                    {docs
-                    // .filter(name =>
-                    //     name.toLowerCase().includes(searchTerm.toLowerCase())
-                    // )
-                    .map(name => (
-                        <ListItem
-                        key={name}
-                        disableGutters
-                        sx={{
-                            bgcolor: '#A9C7FF66',
-                            borderRadius: 2,
-                            mb: '0.2083vw',
-                            p: 0.5,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            border: '0.5px solid #00000033',
-                        }}
-                        >
-                            <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
-                                <IconButton size="small">
-                                    <Tooltip title="Pin" placement='bottom' arrow>
-                                        <PushPinIcon sx={{ 
-                                            fontSize: '0.8333vw',
-                                            stroke: 'black',
-                                            strokeWidth: 1.5,
-                                            transition: 'all 0.2s ease',
-                                        }}
-                                        />
-                                        </Tooltip>
-                                </IconButton>
-                                <Typography
-                                    sx={{
-                                        fontWeight: 600,
-                                        color: '#515151',
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        fontSize: '0.8333vw'
-                                    }}
-                                    >
-                                    {(() => {
-                                        const dotIdx = name.lastIndexOf('.');
-                                        const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
-                                        const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
-                                        return base.length > 20
-                                        ? `${base.slice(0,20)}...${ext}`
-                                        : name;
-                                    })()
-                                }
-                                </Typography>
-                            </Box>
-                            <IconButton 
-                            size="small"
-                            // onClick={e => {
-                            //         e.stopPropagation();
-                            //         setDialogDocName(name);
-                            //         setOpenDeleteDialog(true);
-                            //}}
+                </Box>
+                {/* <Box
+                ref={panelRef}
+                sx={{
+                    px: 2,
+                    py: 0.5,
+                    borderRadius: 2,
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: 0,
+                    border: '0.5px solid #00000033',
+                    // border: '1px solid #008cff',
+                    transform: 'translateZ(0)',
+                    // bgcolor: '#e9f5fc',
+                    bgcolor: '#F5FAFF'
+                }}> */}
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    p: 0.5
+                }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
+                        All Reports
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{fontSize: '18px', color: '#081A33'}}>
+                        View All &gt;
+                    </Typography>
+                </Box>
+                <Box
+                sx={{
+                    flexGrow: 1,
+                    maxHeight: '35vh',
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    '&::-webkit-scrollbar': { 
+                        width: '0.2083vw' 
+                    },
+                    '&::-webkit-scrollbar-track': { 
+                        background: 'transparent'
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#0088d7',
+                        borderRadius: '3px',
+                    },
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: '#0088d7 transparent'
+                }}>
+                
+                {/* determine which docs to show */}
+                {(() => {
+                    // flatten all docs if 'All', else pick selected category
+                    const key = selectedCategory === 'All'
+                    ? null
+                    : selectedCategory.toLowerCase()
+                    let docs = []
+                    if (key) {
+                    docs = documentList[key] || []
+                    } else {
+                    docs = Object.values(documentList).flat()
+                    }
+                    // filter by search
+                    return (
+                    <List sx={{ px: 0, mb: 1 }}>
+                        {docs
+                        // .filter(name =>
+                        //     name.toLowerCase().includes(searchTerm.toLowerCase())
+                        // )
+                        .map(name => (
+                            <ListItem
+                            key={name}
+                            disableGutters
+                            sx={{
+                                bgcolor: '#A9C7FF66',
+                                borderRadius: 2,
+                                mb: '0.2083vw',
+                                p: 0.5,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                border: '0.5px solid #00000033',
+                            }}
                             >
-                                <Tooltip title='Delete' placement='bottom' arrow>
-                                    <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
-                                </Tooltip>
-                            </IconButton>
-                        </ListItem>
-                    ))}
-                </List>
-            )
-            })()}
+                                <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                    <IconButton size="small" onClick={() => togglePin(name)}>
+                                        <Tooltip title="Pin" placement='bottom' arrow>
+                                            <PushPinIcon sx={{
+                                                fontSize: '0.8333vw',
+                                                color: pinnedDocs.has(name) ? '#000000' : '#A9C7FF66',
+                                                stroke: 'black',
+                                                strokeWidth: 1.5,
+                                                transition: 'all 0.2s ease',
+                                            }}
+                                            />
+                                            </Tooltip>
+                                    </IconButton>
+                                    <Typography
+                                        sx={{
+                                            fontWeight: 600,
+                                            color: '#515151',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            fontSize: '0.8333vw'
+                                        }}
+                                        >
+                                        {(() => {
+                                            const dotIdx = name.lastIndexOf('.');
+                                            const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
+                                            const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
+                                            return base.length > 20
+                                            ? `${base.slice(0,20)}...${ext}`
+                                            : name;
+                                        })()
+                                    }
+                                    </Typography>
+                                </Box>
+                                <IconButton 
+                                size="small"
+                                // onClick={e => {
+                                //         e.stopPropagation();
+                                //         setDialogDocName(name);
+                                //         setOpenDeleteDialog(true);
+                                //}}
+                                >
+                                    <Tooltip title='Delete' placement='bottom' arrow>
+                                        <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                                    </Tooltip>
+                                </IconButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                )
+                })()}
+                </Box>
             </Box>
         </Box>
     </Box>
