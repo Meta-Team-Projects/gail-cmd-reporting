@@ -41,17 +41,17 @@ import {
     PlayArrow as PlayArrowIcon,
     ZoomIn as ZoomInIcon,
     Delete,
- } from '@mui/icons-material'
+} from '@mui/icons-material'
 
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
 import { StepArrow,ArrowShape } from './StepArrow' 
- import edit_report from '../assets/edit_report_icon.png'
- import save_template from '../assets/save_template_icon.png'
- import download_report from '../assets/download_report_icon.png'
- import ai_icon from '../assets/ai_icon.png'
- import regenerate_response from '../assets/regenerate_response_icon.png'
- import generate_report from '../assets/generate_report_icon.png'
- import side_by_side_icon from '../assets/side_by_side_icon.png'
+import edit_report from '../assets/edit_report_icon.png'
+import save_template from '../assets/save_template_icon.png'
+import download_report from '../assets/download_report_icon.png'
+import ai_icon from '../assets/ai_icon.png'
+import regenerate_response from '../assets/regenerate_response_icon.png'
+import generate_report from '../assets/generate_report_icon.png'
+import side_by_side_icon from '../assets/side_by_side_icon.png'
 
 const ReportGeneration = ({
     leftSidebarOpen,
@@ -164,33 +164,33 @@ const ReportGeneration = ({
 
     const panelRef = useRef<HTMLDivElement>(null);
 
-const ArrowStepper = ({ activeStep }) => (
-  <Box display="flex" mt={2} mx={2}>
-    {steps.map((label, idx) => {
-      const isActive   = idx === activeStep
-      const isComplete = idx < activeStep
+    const ArrowStepper = ({ activeStep }) => (
+        <Box display="flex" mt={2} mx={2}>
+            {steps.map((label, idx) => {
+            const isActive   = idx === activeStep
+            const isComplete = idx < activeStep
 
-      const bg = isActive
-        ? '#081A33'
-        : isComplete
-          ? '#FFD95C'
-          : '#FFFFFF'
+            const bg = isActive
+                ? '#081A33'
+                : isComplete
+                ? '#FFD95C'
+                : '#FFFFFF'
 
-      // arrow border + inactive text color
-      const fg = isActive
-        ? '#FFFFFF'
-        : isComplete
-          ? '#081A33'
-          : '#B0B0B0'
+            // arrow border + inactive text color
+            const fg = isActive
+                ? '#FFFFFF'
+                : isComplete
+                ? '#081A33'
+                : '#B0B0B0'
 
-            return (
-        <StepArrow key={label} bg={bg} fg={fg}>
-          {label}
-        </StepArrow>
-      )
-    })}
-  </Box>
-)
+                    return (
+                <StepArrow key={label} bg={bg} fg={fg}>
+                {label}
+                </StepArrow>
+            )
+            })}
+        </Box>
+    )
 
 
   return (

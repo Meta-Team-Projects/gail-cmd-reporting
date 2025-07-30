@@ -127,33 +127,34 @@ const TemplateSelection = ({
 
     
 
-const ArrowStepper = ({ activeStep }) => (
-  <Box display="flex" mt={2} mx={2}>
-    {steps.map((label, idx) => {
-      const isActive   = idx === activeStep
-      const isComplete = idx < activeStep
+    const ArrowStepper = ({ activeStep }) => (
+        <Box display="flex" mt={2} mx={2}>
+            {steps.map((label, idx) => {
+            const isActive   = idx === activeStep
+            const isComplete = idx < activeStep
 
-      const bg = isActive
-        ? '#081A33'
-        : isComplete
-          ? '#FFD95C'
-          : '#FFFFFF'
+            const bg = isActive
+                ? '#081A33'
+                : isComplete
+                ? '#FFD95C'
+                : '#FFFFFF'
 
-      // arrow border + inactive text color
-      const fg = isActive
-        ? '#FFFFFF'
-        : isComplete
-          ? '#081A33'
-          : '#B0B0B0'
+            const fg = isActive
+                ? '#FFFFFF'
+                : isComplete
+                ? '#081A33'
+                : '#B0B0B0'
 
-      return (
-        <StepArrow key={label} bg={bg} fg={fg}>
-          {label}
-        </StepArrow>
-      )
-    })}
-  </Box>
-)
+            return (
+            <StepArrow key={label} bg={bg} fg={fg}>
+                    {/* masked arrow filled with bg */}
+                    <ArrowShape color={bg} />
+                    <span style={{ position: 'relative' }}>{label}</span>
+                    </StepArrow>
+                )
+                })}
+        </Box>
+    )
 
 
   return (
