@@ -214,6 +214,7 @@ const GeneratePreview = ({
                 flexDirection: 'column', 
                 gap: 1
             }}>
+                {/* Timeline */}
                 <Box sx={{
                     mx: 2,
                     border: '1px solid black',

@@ -39,6 +39,7 @@ import {
     ModeEditOutlined as ModeEditOutlinedIcon,
     FileDownloadOutlined as FileDownloadOutlinedIcon,
     PlayArrow as PlayArrowIcon,
+    ZoomIn as ZoomInIcon,
     Delete,
  } from '@mui/icons-material'
 
@@ -195,15 +196,28 @@ const ReportGeneration = ({
             </Typography>
         </Box>
         <Box sx={{
-            //border: '1px solid black',
-            display: 'flex', height: '100%', pb: 1
+            border: '1px solid black',
+            display: 'flex', height: '100%', pb: 1, gap: 1
         }}>
 
             {/* Left Section */}
             <Box sx={{
-                //border: '1px solid blue',
-                
+                border: '1px solid blue',
+                width: leftSidebarOpen ? '700px' : '800px',
+                transition: 'max-width 0.3s ease',
+                display: 'flex',
+                flexDirection: 'column', 
+                gap: 1
             }}>
+                {/* Timeline */}
+                <Box sx={{
+                    mx: 2,
+                    border: '1px solid black',
+                    borderRadius: 10,
+                    height: '40px'
+                }}>
+
+                </Box>
                 <Box
                     sx={{
                         border: '1px solid #D2D2D2',
@@ -240,11 +254,11 @@ const ReportGeneration = ({
                         }}>
                             Report 1
                         </Typography>
-                        <ModeEditOutlinedIcon 
+                        {/* <ModeEditOutlinedIcon 
                         sx={{
                             color: '#FFFFFF91',
                             fontSize: '20px'
-                        }}/>
+                        }}/> */}
                     </Box>
                     <IconButton sx={{
                         position: 'absolute',
@@ -268,7 +282,7 @@ const ReportGeneration = ({
                         borderRadius: '50%',
                         '&:hover': {backgroundColor: '#FFCB42'},
                         }}>
-                        <FileDownloadOutlinedIcon sx={{fontSize: '20px'}}/>
+                        <ZoomInIcon sx={{fontSize: '20px'}}/>
                     </IconButton>
                     <Box sx={{
                         display: 'flex',
@@ -297,11 +311,11 @@ const ReportGeneration = ({
 
             {/* Right Section */}
             <Box sx={{
-                //border: '1px solid red',
+                border: '1px solid red',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column',
-                flexGrow: 1,
+                flex: 1,
                 gap: 1,
             }}>
                 <Box sx={{
@@ -315,10 +329,10 @@ const ReportGeneration = ({
                         display: 'flex', alignItems: 'center',
                         justifyContent: 'space-between', p: 0.5
                     }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                             Reports Template
                         </Typography>
-                        <Widgets sx={{color: '#081A33', width: '20px', height: '20px'}}/>
+                        {/* <Widgets sx={{color: '#081A33', width: '20px', height: '20px'}}/> */}
                     </Box>
                     <Box sx={{
                         display: 'flex', alignItems: 'center',
@@ -327,17 +341,17 @@ const ReportGeneration = ({
                     }}>
                         <Typography variant="subtitle2"
                         sx={{
-                            fontWeight: 550, fontSize: '18px',
+                            fontWeight: 550, fontSize: '0.9375vw',
                             color: '#081A33'
                         }}>
-                            Report 1
+                            Daily Pipeline Operations Report
                         </Typography>
                         <IconButton 
                         onClick={onEditTemplate}
                         sx={{
                             color: '#081A33'
                         }}>
-                            <ModeEditOutlinedIcon />
+                            <ModeEditOutlinedIcon sx={{fontSize: '1.14vw'}}/>
                         </IconButton>
                     </Box>
                 </Box>
@@ -345,12 +359,11 @@ const ReportGeneration = ({
                 {/* Documents Repository */}
                 <Box sx={{
                     px: 2,
-                    py: 1,
+                    py: 1, pb: 2,
                     //mt: 1,
                     mr:2,
                     overflow: 'hidden',
                     borderRadius: 2,
-                    flexGrow: 1,
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 1,
@@ -360,25 +373,16 @@ const ReportGeneration = ({
                     bgcolor: '#F5FAFF'
                 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
                             Documents Repository
                         </Typography>
-                        <Button
-                        variant="contained"
-                        onClick={editDocuments}
+                        <IconButton
+                        size="small"
                         sx={{
-                        borderRadius: 2,
-                        bgcolor: '#0088D6',
-                        color: '#ffffff',
-                        px: 2,
-                        py: 0.5,
-                        fontWeight: 600,
-                        fontSize: '15px',
-                        '&:hover': {backgroundColor: '#0074BA'}
-                        }}
-                    >
-                        Edit Documents
-                    </Button>
+                            color: '#081A33'
+                        }}>
+                            <ModeEditOutlinedIcon sx={{fontSize: '1.14vw'}}/>
+                        </IconButton>
                     </Box>
                 
                     <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
@@ -410,11 +414,12 @@ const ReportGeneration = ({
                     <Box
                     sx={{
                         flexGrow: 1,
-                        // overflowY: 'auto !important',
+                        pr: 1,
+                        maxHeight: '50vh',
+                        overflowY: 'auto !important',
                         overflow: 'hidden',
                         '&::-webkit-scrollbar': { 
-                        display: 'none',
-                        width: '0.2083vw'
+                            width: '0.2083vw'
                         },
                         '&::-webkit-scrollbar-track': { 
                             background: 'transparent'
@@ -426,175 +431,108 @@ const ReportGeneration = ({
                         scrollbarWidth: 'thin',
                         scrollbarColor: '#0088d7 transparent'
                     }}>
-                                
-                    {/* determine which docs to show */}
-                    {(() => {
-                        // flatten all docs if 'All', else pick selected category
-                        const key = selectedCategory === 'All'
-                        ? null
-                        : selectedCategory.toLowerCase()
-                        let docs = []
-                        if (key) {
-                        docs = documentList[key] || []
-                        } else {
-                        docs = Object.values(documentList).flat()
-                        }
-                        // filter by search
-                        return (
-                        <List sx={{ px: 0 }}>
-                            {paginatedDocs
-                            // .filter(name =>
-                            //     name.toLowerCase().includes(searchTerm.toLowerCase())
-                            // )
-                            .map(name => {
-                                //const isSelected = selectedDocs.includes(name);
-                                return (
-                                <ListItem
-                                key={name}
-                                disableGutters
-                                sx={{
-                                    bgcolor: '#A9C7FF66',
-                                    borderRadius: 2,
-                                    mb: '4px',
-                                    p: 0.5,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    border: '0.5px solid #00000033',
-                                }}
-                                >
-                                    <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                        {/* determine which docs to show */}
+                        {(() => {
+                            const docs = selectedDocs;
+                            // filter by search
+                            return (
+                            <List sx={{ px: 0 }}>
+                                {docs
+                                // .filter(name =>
+                                //     name.toLowerCase().includes(searchTerm.toLowerCase())
+                                // )
+                                .map(name => {
+                                    //const isSelected = selectedDocs.includes(name);
+                                    return (
+                                    <ListItem
+                                    key={name}
+                                    disableGutters
+                                    sx={{
+                                        bgcolor: '#A9C7FF66',
+                                        borderRadius: 2,
+                                        mb: '4px',
+                                        p: 0.5,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        border: '0.5px solid #00000033',
+                                    }}
+                                    >
+                                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                                <IconButton
+                                                size="small"
+                                                // onClick={() => {
+                                                // setSelectedDocs(prev =>
+                                                //     prev.includes(name)
+                                                //     ? prev.filter(n => n !== name)
+                                                //     : [...prev, name]
+                                                // );
+                                                // }}
+                                                >
+                                                <CircleIcon
+                                                    sx={{
+                                                        fontSize: '0.8333vw',
+                                                        fill: '#081A33',
+                                                        stroke: '#515151',
+                                                        strokeWidth: 1.5,
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                    />
+                                                    
+                                            </IconButton> 
+                                            <Typography
+                                                sx={{
+                                                    fontWeight: 600,
+                                                    color: '#515151',
+                                                    whiteSpace: 'nowrap',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    fontSize: '0.8333vw'
+                                                }}
+                                                >
+                                                {(() => {
+                                                    const dotIdx = name.lastIndexOf('.');
+                                                    const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
+                                                    const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
+                                                    return base.length > 20
+                                                    ? `${base.slice(0,20)}...${ext}`
+                                                    : name;
+                                                })()
+                                            }
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <IconButton
                                             size="small"
-                                            // onClick={() => {
-                                            // setSelectedDocs(prev =>
-                                            //     prev.includes(name)
-                                            //     ? prev.filter(n => n !== name)
-                                            //     : [...prev, name]
-                                            // );
-                                            // }}
-                                            >   
-                                            {/* {isSelected ? (
-                                                <CircleIcon
-                                                sx={{
-                                                    fontSize: '0.8333vw',
-                                                    fill: '#081A33',
-                                                    stroke: '#515151',
-                                                    strokeWidth: 1.5,
-                                                    transition: 'all 0.2s ease'
-                                                }}
-                                                />
-                                            ) : (
-                                                <CircleOutlinedIcon sx={{ 
-                                                    fontSize: '0.8333vw',
-                                                    fill: '#FFD95C0A',
-                                                    stroke: '#515151',
-                                                    strokeWidth: 1.5,
-                                                    transition: 'all 0.2s ease',
-                                                }}
-                                                />
-                                            )} */}
-                                            <CircleIcon
-                                                sx={{
-                                                    fontSize: '0.8333vw',
-                                                    fill: '#081A33',
-                                                    stroke: '#515151',
-                                                    strokeWidth: 1.5,
-                                                    transition: 'all 0.2s ease'
-                                                }}
-                                                />
-                                                
-                                        </IconButton> 
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 600,
-                                                color: '#515151',
-                                                whiteSpace: 'nowrap',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                fontSize: '0.8333vw'
-                                            }}
+                                            onClick={() => handleToggleVisibility(name)}
                                             >
-                                            {(() => {
-                                                const dotIdx = name.lastIndexOf('.');
-                                                const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
-                                                const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
-                                                return base.length > 20
-                                                ? `${base.slice(0,20)}...${ext}`
-                                                : name;
-                                            })()
-                                        }
-                                        </Typography>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        <IconButton
-                                        size="small"
-                                        onClick={() => handleToggleVisibility(name)}
-                                        >
-                                            {visibleDocs[name] ? (
-                                                <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
-                                            ) : (
-                                                <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
-                                            )}
-                                        </IconButton>
-                                        <IconButton 
-                                        size="small"
-                                        // onClick={e => {
-                                        //         e.stopPropagation();
-                                        //         setDialogDocName(name);
-                                        //         setOpenDeleteDialog(true);
-                                        //}}
-                                        >
-                                            <Tooltip title='Delete' placement='bottom' arrow>
-                                                <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
-                                            </Tooltip>
-                                        </IconButton>
-                                    </Box>
-                                </ListItem>
-                            );
-                            })}
-                        </List>
-                    )
-                    })()}
+                                                {visibleDocs[name] ? (
+                                                    <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                                ) : (
+                                                    <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
+                                                )}
+                                            </IconButton>
+                                            <IconButton 
+                                            size="small"
+                                            // onClick={e => {
+                                            //         e.stopPropagation();
+                                            //         setDialogDocName(name);
+                                            //         setOpenDeleteDialog(true);
+                                            //}}
+                                            >
+                                                <Tooltip title='Delete' placement='bottom' arrow>
+                                                    <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                                                </Tooltip>
+                                            </IconButton>
+                                        </Box>
+                                    </ListItem>
+                                );
+                                })}
+                            </List>
+                        )
+                        })()} 
                     </Box>
-                    <Box sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                    }}>
-                        {/* Left Arrow */}
-                        <IconButton 
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 0))}
-                        disabled={currentPage === 0}
-                        sx={{
-                            color: '#081A33',
-                            backgroundColor: '#FFD95C',
-                            borderRadius: '50%',
-                            '&:disabled': {opacity: 0.5},
-                            '&:hover': {backgroundColor: '#FFCB42'},
-                        }}>
-                            <PlayArrowIcon sx={{transform: 'scaleX(-1)'}}/>
-                        </IconButton>
-                        {/* Page Label */}
-                        <Typography variant="body2" 
-                        sx={{color: '#AEAEAE'}}>
-                            {currentPage + 1}/{totalPages || 1}
-                        </Typography>
-                        {/* Right Arrow */}
-                        <IconButton 
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages - 1))}
-                        disabled={currentPage >= totalPages - 1}
-                        sx={{
-                            color: '#081A33',
-                            backgroundColor: '#FFD95C',
-                            borderRadius: '50%',
-                            '&:disabled': {opacity: 0},
-                            '&:hover': {backgroundColor: '#FFCB42'},
-                        }}>
-                            <PlayArrowIcon sx={{color: '#081A33'}}/>
-                        </IconButton>
-                    </Box>
-                    <Box sx={{
+                    {/* <Box sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
@@ -629,8 +567,27 @@ const ReportGeneration = ({
                         }}>
                             Generate New Response
                         </Button>
-                    </Box>
+                    </Box> */}
                 </Box> 
+
+                {/* Bottom Buttons */}
+                <Box sx={{
+                    px: 2,
+                    py: 1, pb: 2,
+                    //mt: 1,
+                    mr:2,
+                    overflow: 'hidden',
+                    borderRadius: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
+                    minHeight: 0,
+                    //border: '0.5px solid #00000033',
+                    transform: 'translateZ(0)',
+                    bgcolor: '#F5FAFF'
+                }}>
+
+                </Box>
             </Box>
         </Box>
     </Box>
