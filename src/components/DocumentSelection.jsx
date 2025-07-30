@@ -206,7 +206,7 @@ const DocumentSelection = ({
         }}>
             {/* Left Section */}
             <Box sx={{
-                border: '1px solid red',
+                //border: '1px solid red',
                 maxWidth: leftSidebarOpen ? '800px' : '900px',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
