@@ -486,15 +486,13 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 
                 {/* determine which docs to show */}
                 {(() => {
-                    // flatten all docs if 'All', else pick selected category
-                    const key = selectedCategory === 'All'
-                    ? null
-                    : selectedCategory.toLowerCase()
                     let docs = []
-                    if (key) {
-                    docs = documentList[key] || []
+                    if (selectedCategory === 'Pinned') {
+                        docs = Array.from(pinnedDocs)
+                    } else if (selectedCategory === 'Recently Viewed') {
+                        docs = documentList.recentlyViewed || []
                     } else {
-                    docs = Object.values(documentList).flat()
+                        docs = Object.values(documentList).flat()
                     }
                     // filter by search
                     return (
