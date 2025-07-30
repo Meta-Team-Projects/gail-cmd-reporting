@@ -41,6 +41,8 @@ import {
     CloudUpload,
     PlayArrow as PlayArrowIcon,
     Delete,
+    Widgets,
+    ModeEditOutlined as ModeEditOutlinedIcon,
  } from '@mui/icons-material'
 
 const GeneratePreview = ({
@@ -242,98 +244,100 @@ const GeneratePreview = ({
                         Document Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '16.5px', color: '#081A33'
+                        fontSize: '0.8854vw', color: '#081A33'
                     }}>
                         Finalize your report template and selected documents before generating the report. Make sure you've chosen the relevant documents and template, as these will shape the content and layout of your final report.
                     </Typography>
                 </Box>
 
                 <Box sx={{
-                    //border: '1px solid black',
-                    display: 'flex',
-                    height: '65vh',
+                    bgcolor: '#F5FAFF',
+                    borderRadius: 2,
                     mx: 2,
-                    gap: 1,
+                    px: 2, pt: 0.5, pb: 1 
 
                 }}>
-                    {/* Left of Left */}
                     <Box sx={{
-                        //border: '1px solid green',
-                        bgcolor: '#F5FAFF',
-                        overflow: 'hidden',
-                        borderRadius: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1.2,
-                        px: 2,
-                        py: 0.5,
-                        pb: 2,
+                        display: 'flex', alignItems: 'center',
+                        justifyContent: 'space-between', p: 0.5, pr: 0
                     }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
-                                Documents Repository
-                            </Typography>
-                        </Box>
-                        <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
-                            <Box sx={{ 
-                                display: 'flex', flexWrap: 'wrap',
-                                gap: 1, flexGrow: 1 }}>
-                                {categories.map((category) => (
-                                    <Chip
-                                        key={category}
-                                        label={category}
-                                        variant="filled"
-                                        size="small"
-                                        onClick={() => setSelectedCategory(category)}
-                                        sx={{
-                                            px: '9px',
-                                            py: '9px',
-                                            fontWeight: 500,
-                                            fontSize: '0.7292vw',
-                                            color: '#081A33',
-                                            borderRadius: '16px',
-                                            bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
-                                            '&:hover': { bgcolor: '#FEC636' },
-                                            boxShadow: '0px 4px 8px #15151540'
-                                        }}
-                                    />
-                                ))}
-                            </Box>
-                        </Stack>
-                        <Box
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
+                            Reports Template
+                        </Typography>
+                        <IconButton
+                        size="small"
                         sx={{
-                            mt: 1, pr: 1,
-                            // flexGrow: 1,
-                            maxHeight: '65vh',
-                            overflowY: 'auto !important',
-                            overflow: 'hidden',
-                            '&::-webkit-scrollbar': { 
-                            
-                            width: '0.2083vw' 
-                            },
-                            '&::-webkit-scrollbar-track': { 
-                                background: 'transparent'
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#0088d7',
-                                borderRadius: '3px',
-                            },
-                            scrollbarWidth: 'thin',
-                            scrollbarColor: '#0088d7 transparent'
+                            color: '#081A33'
                         }}>
-                                    
+                            <ModeEditOutlinedIcon sx={{fontSize: '1.14vw'}}/>
+                        </IconButton>
+                        {/* <Widgets sx={{color: '#081A33', width: '1.0417vw', height: '1.0417vw'}}/> */}
+                    </Box>
+                    <Box sx={{
+                        display: 'flex', alignItems: 'center',
+                        justifyContent: 'space-between', px: 2, py: 1,
+                        bgcolor: '#0088D61A', borderRadius: 2
+                    }}>
+                        <Typography variant="subtitle2"
+                        sx={{
+                            fontWeight: 550, fontSize: '0.9375vw',
+                            color: '#081A33'
+                        }}>
+                            Daily Pipeline Operations Report
+                        </Typography>
+                    </Box>
+                </Box>
+
+                {/* Selected Documents */}
+                <Box sx={{
+                    //border: '1px solid green',
+                    borderRadius: 2,
+                    bgcolor: '#F5FAFF',
+                    overflow: 'hidden',
+                    borderRadius: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '65vh',
+                    mx: 2,
+                    px: 2,
+                    py: 0.5,
+                    pb: 2,
+                }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5, pr: 0 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
+                            Selected Documents
+                        </Typography>
+                        <IconButton
+                        size="small"
+                        sx={{
+                            color: '#081A33'
+                        }}>
+                            <ModeEditOutlinedIcon sx={{fontSize: '1.14vw'}}/>
+                        </IconButton>
+                    </Box>
+                    <Box
+                    sx={{
+                        flexGrow: 1,
+                        pr: 1,
+                        maxHeight: '50vh',
+                        overflowY: 'auto !important',
+                        overflow: 'hidden',
+                        '&::-webkit-scrollbar': { 
+                            width: '0.2083vw'
+                        },
+                        '&::-webkit-scrollbar-track': { 
+                            background: 'transparent'
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#0088d7',
+                            borderRadius: '3px',
+                        },
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#0088d7 transparent'
+                    }}>
                         {/* determine which docs to show */}
                         {(() => {
-                            // flatten all docs if 'All', else pick selected category
-                            const key = selectedCategory === 'All'
-                            ? null
-                            : selectedCategory.toLowerCase()
-                            let docs = []
-                            if (key) {
-                            docs = documentList[key] || []
-                            } else {
-                            docs = Object.values(documentList).flat()
-                            }
+                            const docs = selectedDocs;
                             // filter by search
                             return (
                             <List sx={{ px: 0 }}>
@@ -342,13 +346,13 @@ const GeneratePreview = ({
                                 //     name.toLowerCase().includes(searchTerm.toLowerCase())
                                 // )
                                 .map(name => {
-                                    const isSelected = selectedDocs.includes(name);
+                                    //const isSelected = selectedDocs.includes(name);
                                     return (
                                     <ListItem
                                     key={name}
                                     disableGutters
                                     sx={{
-                                        bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
+                                        bgcolor: '#A9C7FF66',
                                         borderRadius: 2,
                                         mb: '4px',
                                         p: 0.5,
@@ -359,18 +363,17 @@ const GeneratePreview = ({
                                     }}
                                     >
                                         <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
-                                            <IconButton
-                                            size="small"
-                                            // onClick={() => {
-                                            //     setSelectedDocs(prev =>
-                                            //         prev.includes(name)
-                                            //         ? prev.filter(n => n !== name)
-                                            //         : [...prev, name]
-                                            //     );
-                                            // }}
-                                            >   
-                                                {isSelected ? (
-                                                    <CircleIcon
+                                                <IconButton
+                                                size="small"
+                                                // onClick={() => {
+                                                // setSelectedDocs(prev =>
+                                                //     prev.includes(name)
+                                                //     ? prev.filter(n => n !== name)
+                                                //     : [...prev, name]
+                                                // );
+                                                // }}
+                                                >
+                                                <CircleIcon
                                                     sx={{
                                                         fontSize: '0.8333vw',
                                                         fill: '#081A33',
@@ -379,16 +382,6 @@ const GeneratePreview = ({
                                                         transition: 'all 0.2s ease'
                                                     }}
                                                     />
-                                                ) : (
-                                                    <CircleOutlinedIcon sx={{ 
-                                                        fontSize: '0.8333vw',
-                                                        fill: '#FFD95C0A',
-                                                        stroke: '#515151',
-                                                        strokeWidth: 1.5,
-                                                        transition: 'all 0.2s ease',
-                                                    }}
-                                                    />
-                                                )}
                                                     
                                             </IconButton> 
                                             <Typography
@@ -441,221 +434,7 @@ const GeneratePreview = ({
                                 })}
                             </List>
                         )
-                        })()}
-                        </Box>
-                    </Box>
-
-                    {/* Right of Left */}
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                        gap: 1,
-                    }}>
-                        {/* Browse File Box */}
-                        <Box sx={{
-                            border: '2px dashed #E6E6E6',
-                            borderRadius: 2,
-                            p: 1,
-                            textAlign: 'center',
-                            bgcolor: '#FFD95C1A',   //later
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 0.5,
-                            height: '30%',
-                        }}>
-                            {/* hidden file input + upload handler */}
-                            <input
-                            type="file"
-                            multiple
-                            hidden
-                            ref={fileInputRef}
-                            onChange={handleUploadFiles}
-                            />
-
-                            <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
-                            
-                            <Typography variant="caption" display="block" color="#515151"
-                            sx={{ fontWeight: 500, fontSize: '0.78vw'}}>
-                                Choose a file
-                            </Typography>
-                            <Typography variant="caption" display="block" color="#515151"
-                            sx={{ fontWeight: 500, fontSize: '0.78vw'}}>
-                                DOCX format, up to 10MB
-                            </Typography>
-                            
-                            <Button
-                                variant="contained"
-                                onClick={() => fileInputRef.current.click()}
-                                sx={{
-                                borderRadius: 2,
-                                bgcolor: '#0088D6',
-                                color: '#ffffff',
-                                textTransform: 'none',
-                                px: 3,
-                                py: 0.5,
-                                fontWeight: 500,
-                                fontSize: '0.78vw',
-                                mt: 1,
-                                mb:1,
-                                }}
-                            >
-                                Browse File
-                            </Button>
-                        </Box>
-
-                        {/* Selected Documents Box */}
-                        <Box sx={{
-                            borderRadius: 2,
-                            px: 2,
-                            py: 0.5,
-                            pb: 2,
-                            textAlign: 'center',
-                            bgcolor: '#F5FAFF',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 0.5,
-                            height: '70%',
-                        }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
-                                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
-                                    Selected Documents
-                                </Typography>
-                            </Box>
-                            <Box
-                            sx={{
-                                flexGrow: 1,
-                                maxHeight: '50vh',
-                                overflowY: 'auto !important',
-                                overflow: 'hidden',
-                                '&::-webkit-scrollbar': { 
-                                    width: '0.2083vw'
-                                },
-                                '&::-webkit-scrollbar-track': { 
-                                    background: 'transparent'
-                                },
-                                '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: '#0088d7',
-                                    borderRadius: '3px',
-                                },
-                                scrollbarWidth: 'thin',
-                                scrollbarColor: '#0088d7 transparent'
-                            }}>
-                                        
-                            {/* determine which docs to show */}
-                            {(() => {
-                                // flatten all docs if 'All', else pick selected category
-                                // const key = selectedCategory === 'All'
-                                // ? null
-                                // : selectedCategory.toLowerCase()
-                                // let docs = []
-                                // if (key) {
-                                // docs = documentList[key] || []
-                                // } else {
-                                // docs = Object.values(documentList).flat()
-                                // }
-                                const docs = selectedDocs;
-                                // filter by search
-                                return (
-                                <List sx={{ px: 0 }}>
-                                    {docs
-                                    // .filter(name =>
-                                    //     name.toLowerCase().includes(searchTerm.toLowerCase())
-                                    // )
-                                    .map(name => {
-                                        //const isSelected = selectedDocs.includes(name);
-                                        return (
-                                        <ListItem
-                                        key={name}
-                                        disableGutters
-                                        sx={{
-                                            bgcolor: '#A9C7FF66',
-                                            borderRadius: 2,
-                                            mb: '4px',
-                                            p: 0.5,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            border: '0.5px solid #00000033',
-                                        }}
-                                        >
-                                            <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
-                                                    <IconButton
-                                                    size="small"
-                                                    // onClick={() => {
-                                                    // setSelectedDocs(prev =>
-                                                    //     prev.includes(name)
-                                                    //     ? prev.filter(n => n !== name)
-                                                    //     : [...prev, name]
-                                                    // );
-                                                    // }}
-                                                    >
-                                                    <CircleIcon
-                                                        sx={{
-                                                            fontSize: '0.8333vw',
-                                                            fill: '#081A33',
-                                                            stroke: '#515151',
-                                                            strokeWidth: 1.5,
-                                                            transition: 'all 0.2s ease'
-                                                        }}
-                                                        />
-                                                        
-                                                </IconButton> 
-                                                <Typography
-                                                    sx={{
-                                                        fontWeight: 600,
-                                                        color: '#515151',
-                                                        whiteSpace: 'nowrap',
-                                                        overflow: 'hidden',
-                                                        textOverflow: 'ellipsis',
-                                                        fontSize: '0.8333vw'
-                                                    }}
-                                                    >
-                                                    {(() => {
-                                                        const dotIdx = name.lastIndexOf('.');
-                                                        const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
-                                                        const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
-                                                        return base.length > 20
-                                                        ? `${base.slice(0,20)}...${ext}`
-                                                        : name;
-                                                    })()
-                                                }
-                                                </Typography>
-                                            </Box>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                <IconButton
-                                                size="small"
-                                                onClick={() => handleToggleVisibility(name)}
-                                                >
-                                                    {visibleDocs[name] ? (
-                                                        <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
-                                                    ) : (
-                                                        <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
-                                                    )}
-                                                </IconButton>
-                                                <IconButton 
-                                                size="small"
-                                                // onClick={e => {
-                                                //         e.stopPropagation();
-                                                //         setDialogDocName(name);
-                                                //         setOpenDeleteDialog(true);
-                                                //}}
-                                                >
-                                                    <Tooltip title='Delete' placement='bottom' arrow>
-                                                        <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
-                                                    </Tooltip>
-                                                </IconButton>
-                                            </Box>
-                                        </ListItem>
-                                    );
-                                    })}
-                                </List>
-                            )
-                            })()}
-                            </Box>
-                        </Box>
+                        })()} 
                     </Box>
                 </Box>
                 <Box sx={{
@@ -688,7 +467,7 @@ const GeneratePreview = ({
                         '&:hover': {bgcolor: '#FFCB42'}
                     }}
                     >
-                        Next
+                        Generate Report
                     </Button>
                 </Box>
             </Box>

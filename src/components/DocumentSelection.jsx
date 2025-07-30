@@ -528,6 +528,7 @@ const DocumentSelection = ({
                             <Box
                             sx={{
                                 flexGrow: 1,
+                                pr: 1,
                                 maxHeight: '50vh',
                                 overflowY: 'auto !important',
                                 overflow: 'hidden',
