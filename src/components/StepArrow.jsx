@@ -1,0 +1,61 @@
+// StepArrow.jsx
+import React from 'react'
+import PropTypes from 'prop-types'
+import Box from '@mui/material/Box'
+import { styled } from '@mui/system'
+import arrowMask from '../assets/arrow.png'
+
+// the masked arrow shape:
+export const ArrowShape = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'color'
+})(({ color }) => ({
+  position:       'absolute',
+  top:            0,
+  left:           0,
+  right:          0,
+  bottom:         0,
+  backgroundColor: color,
+  WebkitMaskImage:  `url(${arrowMask})`,
+  maskImage:        `url(${arrowMask})`,
+  WebkitMaskRepeat: 'no-repeat',
+  maskRepeat:       'no-repeat',
+  WebkitMaskSize:   '100% 100%',
+  maskSize:         '100% 100%',
+}))
+
+// the wrapper that positions the shape + text:
+export const StepArrow = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'bg' && prop !== 'fg'
+})(({ bg, fg }) => ({
+  position:        'relative',
+  display:         'inline-flex',
+  alignItems:      'center',
+ justifyContent:  'center',
+  padding:         '0.75rem 1.5rem',
+  fontWeight:      600,
+  fontSize:        '0.875rem',
+  backgroundColor: bg,
+  color:           fg,
+  WebkitMaskImage: `url(${arrowMask})`,
+  maskImage:       `url(${arrowMask})`,
+  WebkitMaskRepeat:'no-repeat',
+  maskRepeat:      'no-repeat',
+  WebkitMaskSize:  '100% 100%',
+  maskSize:        '100% 100%',
+border:          '1px solid #B9B9B9',
+  '&:not(:last-of-type)': {
+     borderRight: 'none',
+   },
+  '&:last-of-type': {
+    /* re-apply the proper arrow‐head on the right edge */
+    clipPath: 'polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%)',
+  }
+}))
+
+StepArrow.propTypes = {
+  bg: PropTypes.string.isRequired,
+  fg: PropTypes.string.isRequired,
+}
+
+// so that users can write:
+// <StepArrow bg="#081A33" fg="#FFF"><ArrowShape color="#081A33"/><span>Your label</span></StepArrow>

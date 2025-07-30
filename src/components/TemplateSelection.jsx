@@ -29,9 +29,12 @@ import {
     Chip,
     Stack,
     List,
-    ListItem
+    ListItem,
 } from '@mui/material'
 
+import { styled } from '@mui/system';
+
+import arrowMask from '../assets/arrow.png'
 import placeholder from '../assets/placeholder.png'
 import placeholder_2 from '../assets/placeholder_2.png'
 import placeholder_3 from '../assets/placeholder_3.png'
@@ -40,8 +43,11 @@ import {
     FindInPage,
     PlayArrow as PlayArrowIcon,
     Search as SearchIcon,
- } from '@mui/icons-material'
+} from '@mui/icons-material'
 import FindInPageIcon from '@mui/icons-material/FindInPage';
+
+const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
+import { StepArrow,ArrowShape } from './StepArrow' 
 
 const TemplateSelection = ({
     leftSidebarOpen,
@@ -119,6 +125,36 @@ const TemplateSelection = ({
         }
     }
 
+    
+
+const ArrowStepper = ({ activeStep }) => (
+  <Box display="flex" mt={2} mx={2}>
+    {steps.map((label, idx) => {
+      const isActive   = idx === activeStep
+      const isComplete = idx < activeStep
+
+      const bg = isActive
+        ? '#081A33'
+        : isComplete
+          ? '#FFD95C'
+          : '#FFFFFF'
+
+      // arrow border + inactive text color
+      const fg = isActive
+        ? '#FFFFFF'
+        : isComplete
+          ? '#081A33'
+          : '#B0B0B0'
+
+      return (
+        <StepArrow key={label} bg={bg} fg={fg}>
+          {label}
+        </StepArrow>
+      )
+    })}
+  </Box>
+)
+
 
   return (
     <Box
@@ -153,7 +189,7 @@ const TemplateSelection = ({
     >
         <Box sx={{
             p: 2.5,
-            pb: 0, mb: -2
+            pb: 0, mb: -3
         }}>
             <Typography
             variant="h6"
@@ -174,14 +210,8 @@ const TemplateSelection = ({
                 flexDirection: 'column', 
                 gap: 1
             }}>
-                <Box sx={{
-                    mx: 2,
-                    border: '1px solid black',
-                    borderRadius: 10,
-                    height: '40px'
-                }}>
-
-                </Box>
+                {/* ─── Timeline Stepper ─── */}
+                <ArrowStepper activeStep={0} />
                 <Box
                     sx={{
                     px: 2,

@@ -45,6 +45,9 @@ import {
     ModeEditOutlined as ModeEditOutlinedIcon,
  } from '@mui/icons-material'
 
+const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
+import { StepArrow,ArrowShape } from './StepArrow' 
+
 const GeneratePreview = ({
     leftSidebarOpen,
     selectedPreview,
@@ -159,6 +162,34 @@ const GeneratePreview = ({
 
     const panelRef = useRef<HTMLDivElement>(null);
 
+const ArrowStepper = ({ activeStep }) => (
+  <Box display="flex" mt={2} mx={2}>
+    {steps.map((label, idx) => {
+      const isActive   = idx === activeStep
+      const isComplete = idx < activeStep
+
+      const bg = isActive
+        ? '#081A33'
+        : isComplete
+          ? '#FFD95C'
+          : '#FFFFFF'
+
+      // arrow border + inactive text color
+      const fg = isActive
+        ? '#FFFFFF'
+        : isComplete
+          ? '#081A33'
+          : '#B0B0B0'
+
+            return (
+        <StepArrow key={label} bg={bg} fg={fg}>
+          {label}
+        </StepArrow>
+      )
+    })}
+  </Box>
+)
+
   return (
     <Box
         sx={{
@@ -192,7 +223,7 @@ const GeneratePreview = ({
     >
         <Box sx={{
             p: 2.5,
-            pb: 0, mb: -2
+            pb: 0, mb: -3
         }}>
             <Typography
             variant="h6"
@@ -214,15 +245,7 @@ const GeneratePreview = ({
                 flexDirection: 'column', 
                 gap: 1
             }}>
-                {/* Timeline */}
-                <Box sx={{
-                    mx: 2,
-                    border: '1px solid black',
-                    borderRadius: 10,
-                    height: '40px'
-                }}>
-
-                </Box>
+                <ArrowStepper activeStep={2} />
                 <Box
                     sx={{
                     px: 2,
