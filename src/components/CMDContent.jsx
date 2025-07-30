@@ -174,14 +174,18 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                 }}
             >
-                <Box>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1
+                }}>
                     <Typography variant="subtitle2" sx={{
-                        fontWeight: 600, fontSize: '20px', color: '#081A33'
+                        fontWeight: 600, fontSize: '1.0417vw', color: '#081A33'
                     }}>
                         Get started with report generation!
                     </Typography>
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '18px', color: '#081A33'
+                        fontSize: '0.9375vw', color: '#081A33'
                     }}>
                         Select a template, choose key documents, and let CMD Platform generate clear, insight-rich reports fast and structured.
                     </Typography>
@@ -199,14 +203,18 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 display: 'flex',
                 flexDirection: 'column', justifyContent: 'space-between'
             }}>
-                <Box>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1
+                }}>
                     <Typography variant="subtitle2" sx={{
-                        fontWeight: 600, fontSize: '20px', color: '#081A33'
+                        fontWeight: 600, fontSize: '1.0417vw', color: '#081A33'
                     }}>
                         Generate New Response
                     </Typography>
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '18px', color: '#081A33'
+                        fontSize: '0.9375vw', color: '#081A33'
                     }}>
                         Need a new version of an existing report or exploring a new angle? Generate custom responses with updated data, context, and formatting.
                     </Typography>
@@ -236,7 +244,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                         color: '#fff',
                         bgcolor: '#0087d6',
                         fontWeight: 550,
-                        fontSize: '15.61px',
+                        fontSize: '0.813vw',
                         px: '15.61px',
                         py: '6.83px',
                         boxShadow: '0px 4px 8px #15151540'
@@ -258,14 +266,18 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 display: 'flex',
                 flexDirection: 'column', justifyContent: 'space-between'
             }}>
-                <Box>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1
+                }}>
                     <Typography variant="subtitle2" sx={{
-                        fontWeight: 600, fontSize: '20px', color: '#081A33'
+                        fontWeight: 600, fontSize: '1.0417vw', color: '#081A33'
                     }}>
                         Resume from last session 
                     </Typography>
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '18px', color: '#081A33'
+                        fontSize: '0.9375vw', color: '#081A33'
                     }}>
                         Continue working where you left off. Your documents and settings are auto-saved so you can pick up seamlessly.
                     </Typography>
@@ -293,7 +305,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                         color: '#fff',
                         bgcolor: '#0087d6',
                         fontWeight: 550,
-                        fontSize: '15.61px',
+                        fontSize: '0.813vw',
                         px: '15.61px',
                         py: '6.83px',
                         boxShadow: '0px 4px 8px #15151540'
@@ -331,7 +343,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 }}>
                     <Typography sx={{
                         color: '#081A33',
-                        fontWeight: 700, fontSize: '20px'
+                        fontWeight: 700, fontSize: '1.-0417vw'
                     }}>
                         Latest Reports
                     </Typography>
@@ -373,7 +385,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 }}>
                     <Typography sx={{
                         color: '#081A33',
-                        fontWeight: 700, fontSize: '20px'
+                        fontWeight: 700, fontSize: '1.0417vw'
                     }}>
                         Reports Repository
                     </Typography>
@@ -409,7 +421,9 @@ const CMDContent = ({onNavigateToTemplate}) => {
                         ))}
                     </Box>
                 </Stack>
-                <Box>
+                <Box sx={{
+                    mt: 1,
+                }}>
                     <TextField
                         fullWidth
                         variant="outlined"
@@ -455,12 +469,12 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    p: 0.5
+                    px: 0.5
                 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.1417vw', color: '#081A33' }}>
                         All Reports
                     </Typography>
-                    <Typography variant="subtitle2" sx={{fontSize: '18px', color: '#081A33'}}>
+                    <Typography variant="subtitle2" sx={{fontSize: '0.9375vw', color: '#081A33'}}>
                         View All &gt;
                     </Typography>
                 </Box>
