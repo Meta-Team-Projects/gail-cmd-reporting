@@ -151,7 +151,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
         }}>
             <Typography
             variant="h6"
-            sx={{ fontWeight: 600, fontSize: '24px', color: '#081A33'}}>
+            sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
                 CMD Platform
             </Typography>
         </Box>

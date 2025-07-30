@@ -195,7 +195,7 @@ const DocumentSelection = ({
         }}>
             <Typography
             variant="h6"
-            sx={{ fontWeight: 600, fontSize: '24px', color: '#081A33'}}>
+            sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
                 CMD Platform
             </Typography>
         </Box>
@@ -243,7 +243,7 @@ const DocumentSelection = ({
                         Document Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '16.5px', color: '#081A33'
+                        fontSize: '0.8854vw', color: '#081A33'
                     }}>
                         Select one or multiple documents from the list, or upload your own files to update the report template. These documents will be used to customize and enrich the final report.
                     </Typography>
@@ -271,7 +271,7 @@ const DocumentSelection = ({
                         pb: 2,
                     }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                                 Documents Repository
                             </Typography>
                         </Box>
@@ -521,7 +521,7 @@ const DocumentSelection = ({
                             height: '70%',
                         }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
-                                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                                     Selected Documents
                                 </Typography>
                             </Box>
@@ -743,7 +743,7 @@ const DocumentSelection = ({
                                 objectFit: 'contain'
                             }}
                             />
-                            <Button
+                            {/* <Button
                             variant= "contained"
                             onClick={onNavigateToReport}
                             sx={{
@@ -758,7 +758,7 @@ const DocumentSelection = ({
                             }}
                             >
                                 Generate Report
-                            </Button>
+                            </Button> */}
                             </>
                         )}
                     </Box>

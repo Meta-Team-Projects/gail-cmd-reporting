@@ -157,7 +157,7 @@ const TemplateSelection = ({
         }}>
             <Typography
             variant="h6"
-            sx={{ fontWeight: 600, fontSize: '24px', color: '#081A33'}}>
+            sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
                 CMD Platform
             </Typography>
         </Box>
@@ -200,7 +200,7 @@ const TemplateSelection = ({
                         Template Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '16.5px', color: '#081A33'
+                        fontSize: '0.8854vw', color: '#081A33'
                     }}>
                         Choose a report template from the list or upload your own to get started. This helps tailor the report format to your specific needs.
                     </Typography>
@@ -223,7 +223,7 @@ const TemplateSelection = ({
                     bgcolor: '#F5FAFF'
                 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                             Reports Repository
                         </Typography>
                     </Box>
@@ -499,10 +499,10 @@ const TemplateSelection = ({
                             </>
                         ) : (
                             <>
-                                <FindInPageIcon sx={{ fontSize: '32px', color: '#081A33' }} /> 
+                                <FindInPageIcon sx={{ fontSize: '1.667vw', color: '#081A33', mb: 0.5 }} /> 
                     
                                 <Typography variant="subtitle2"
-                                sx={{ fontWeight: 600, fontSize: '20px',
+                                sx={{ fontWeight: 600, fontSize: '0.8854vw',
                                     color: '#081A33', opacity: 0.8
                                 }}>
                                     Select a template to preview
