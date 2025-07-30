@@ -380,9 +380,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     <AccessTimeIcon sx={{color: '#081A33'}}/>
                 </Box> 
                 <Stack direction="row" 
-                sx={{flexWrap: 'wrap', gap: '0.41vw'
-
-                }}>
+                sx={{flexWrap: 'wrap', gap: '0.41vw'}}>
                     <Box sx={{ 
                         display: 'flex', flexWrap: 'wrap',
                         gap: 1, flexGrow: 1
@@ -397,6 +395,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                                 sx={{
                                     px: '9px',
                                     py: '9px',
+                                    mb: 1,
                                     fontWeight: 500,
                                     fontSize: '0.7292vw',
                                     color: '#081A33',
@@ -455,7 +454,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    p: 0.5
+                    p: 0.5,
                 }}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
                         All Reports
