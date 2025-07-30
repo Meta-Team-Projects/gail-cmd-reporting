@@ -319,7 +319,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 borderRadius: '12px',
                 //border: '1px solid red',
                 bgcolor: '#F5FAFF',
-                px: 2, py: 1,
+                px: 2, pt: 1, pb: 2,
                 mb: 1,
                 display: 'flex',
                 flexDirection: 'column',

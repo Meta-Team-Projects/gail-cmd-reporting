@@ -31,6 +31,7 @@ import { v4 as uuidv4 } from 'uuid'
 import CMDContent from './components/CMDContent';
 import TemplateSelection from './components/TemplateSelection';
 import DocumentSelection from './components/DocumentSelection';
+import GeneratePreview from './components/GeneratePreview';
 import ReportGeneration from './components/ReportGeneration';
 
 const darkTheme = createTheme({
@@ -464,7 +465,16 @@ function App() {
             selectedDocs={selectedDocs}
             setSelectedDocs={setSelectedDocs}
             onNavigateToTemplate={() => setCurrentPage('template-select')}
-            onNavigateToReport={() => setCurrentPage('report-gen')}/>
+            onNavigateToReport={() => setCurrentPage('generate-preview')}/>
+          )}
+          {currentPage === 'generate-preview' && (
+            <GeneratePreview 
+            leftSidebarOpen={leftSidebarOpen}
+            selectedPreview={selectedPreview}
+            selectedDocs={selectedDocs}
+            onNavigateToDocument={() => setCurrentPage('doc-select')}
+            onNavigateToFinal={() => setCurrentPage('report-gen')}
+            />
           )}
           {currentPage === 'report-gen' && (
             <ReportGeneration
@@ -479,7 +489,6 @@ function App() {
             editDocuments={handleEditDocuments}
             />
           )}
-          
         </Box>
       </Box>
     </ThemeProvider>
