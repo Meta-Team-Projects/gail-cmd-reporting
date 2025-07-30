@@ -161,7 +161,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
             display: 'flex',
             justifyContent: 'space-between',
             mx: 2,
-            height: '300px'
+            height: '35vh'
         }}>
             <Box
                 sx={{
@@ -191,7 +191,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
             sx={{
                 width: '32.5%',
                 px: 2,
-                py: 1,
+                pt: 1,
                 background: 'linear-gradient(to right, #FFE56D, #FFD65A)',
                 borderRadius: 2,
                 border: '1px solid #CBD0DC',
@@ -250,7 +250,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
             sx={{
                 width: '32.5%',
                 px: 2,
-                py: 1,
+                pt: 1,
                 background: 'linear-gradient(to right, #E3F1FF1F, #D3E8F9)',
                 borderRadius: 2,
                 border: '1px solid #CBD0DC',
@@ -305,11 +305,13 @@ const CMDContent = ({onNavigateToTemplate}) => {
             </Box>
         </Box>
 
+        {/* Bottom Boxes */}
         <Box sx={{
             display: 'flex',
             gap: 1,
             mx: 2,
-            //border: '1px solid green'
+            //border: '1px solid green',
+            height: '50vh',
         }}>
             {/* Left Section */}
             <Box sx={{
