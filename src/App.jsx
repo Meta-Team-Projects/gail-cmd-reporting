@@ -444,6 +444,7 @@ function App() {
             leftSidebarOpen={leftSidebarOpen}
             selectedPreview={selectedPreview}
             setSelectedPreview={setSelectedPreview}
+            onNavigateToLandingPage={() => setCurrentPage('cmd')}
             onNavigateToDoc={() => {
               if (isEditingTemplate) {
                 setCurrentPage('report-gen');
@@ -452,7 +453,7 @@ function App() {
               else{
                 setCurrentPage('doc-select')
               }
-            }} 
+            }}
             isEditMode={isEditingTemplate}
             />
           )}
@@ -462,6 +463,7 @@ function App() {
             selectedPreview={selectedPreview}
             selectedDocs={selectedDocs}
             setSelectedDocs={setSelectedDocs}
+            onNavigateToTemplate={() => setCurrentPage('template-select')}
             onNavigateToReport={() => setCurrentPage('report-gen')}/>
           )}
           {currentPage === 'report-gen' && (

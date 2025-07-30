@@ -46,6 +46,7 @@ import {
 const DocumentSelection = ({
     leftSidebarOpen,
     selectedPreview,
+    onNavigateToTemplate,
     onNavigateToReport,
     selectedDocs,
     setSelectedDocs
@@ -201,14 +202,16 @@ const DocumentSelection = ({
         <Box sx={{
             //border: '1px solid black',
             display: 'flex',
+            height: '86vh'
         }}>
             {/* Left Section */}
             <Box sx={{
-                //border: '1px solid red',
-                maxWidth: leftSidebarOpen ? '1000px' : '1100px',
+                // border: '1px solid red',
+                maxWidth: leftSidebarOpen ? '800px' : '900px',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
-                flexDirection: 'column', gap: 1
+                flexDirection: 'column', 
+                gap: 1
             }}>
                 <Box sx={{
                     mx: 2,
@@ -244,299 +247,451 @@ const DocumentSelection = ({
                     }}>
                         Select one or multiple documents from the list, or upload your own files to update the report template. These documents will be used to customize and enrich the final report.
                     </Typography>
-                </Box> 
-                <Box sx={{
-                    border: '1px solid black',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flexGrow: 1,
-                    mx: 2,
-                }}>
-
                 </Box>
-                <Box
-                    sx={{
-                        border: '2px dashed #E6E6E6',
+
+                <Box sx={{
+                    //border: '1px solid black',
+                    display: 'flex',
+                    height: '65vh',
+                    mx: 2,
+                    gap: 1,
+
+                }}>
+                    {/* Left of Left */}
+                    <Box sx={{
+                        //border: '1px solid green',
+                        bgcolor: '#F5FAFF',
+                        overflow: 'hidden',
                         borderRadius: 2,
-                        p: 1,
-                        textAlign: 'center',
-                        bgcolor: '#FFD95C1A',   //later
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 0.5,
-                        mx: 2,
-                    }}
-                >
-
-                    {/* hidden file input + upload handler */}
-                    <input
-                    type="file"
-                    multiple
-                    hidden
-                    ref={fileInputRef}
-                    onChange={handleUploadFiles}
-                    />
-
-                    <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
-                    
-                    <Typography variant="caption" display="block" color="#515151"
-                    sx={{ fontWeight: 500, fontSize: '0.625vw'}}>
-                        Choose a file
-                    </Typography>
-                    <Typography variant="caption" display="block" color="#515151"
-                    sx={{ fontWeight: 500, fontSize: '0.625vw'}}>
-                        DOCX format, up to 10MB
-                    </Typography>
-                    
-                    <Button
-                        variant="contained"
-                        onClick={() => fileInputRef.current.click()}
-                        sx={{
-                        borderRadius: 2,
-                        bgcolor: '#FFD95C',
-                        color: '#515151',
-                        textTransform: 'none',
-                        px: 3,
+                        flex: 1.2,
+                        px: 2,
                         py: 0.5,
-                        fontWeight: 500,
-                        fontSize: '0.7292vw',
-                        mt: 1,
-                        mb:1,
-                        }}
-                    >
-                        Browse File
-                    </Button>
-                </Box>
-                <Box sx={{
-                    px: 2,
-                    py: 0.5,
-                    pb: 1,
-                    //mt: 1,
-                    ml:2, mr:2,
-                    overflow: 'hidden',
-                    borderRadius: 2,
-                    flexGrow: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: 0,
-                    border: '0.5px solid #00000033',
-                    transform: 'translateZ(0)',
-                    bgcolor: '#F5FAFF'
-                }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '20px', color: '#081A33' }}>
-                            Documents Repository
-                        </Typography>
+                        pb: 2,
+                    }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
+                                Documents Repository
+                            </Typography>
+                        </Box>
+                        <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
+                            <Box sx={{ 
+                                display: 'flex', flexWrap: 'wrap',
+                                gap: 1, flexGrow: 1 }}>
+                                {categories.map((category) => (
+                                    <Chip
+                                        key={category}
+                                        label={category}
+                                        variant="filled"
+                                        size="small"
+                                        onClick={() => setSelectedCategory(category)}
+                                        sx={{
+                                            px: '9px',
+                                            py: '9px',
+                                            fontWeight: 500,
+                                            fontSize: '0.7292vw',
+                                            color: '#081A33',
+                                            borderRadius: '16px',
+                                            bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
+                                            '&:hover': { bgcolor: '#FEC636' },
+                                            boxShadow: '0px 4px 8px #15151540'
+                                        }}
+                                    />
+                                ))}
+                            </Box>
+                        </Stack>
+                        <Box
+                        sx={{
+                            mt: 1, pr: 1,
+                            // flexGrow: 1,
+                            maxHeight: '65vh',
+                            overflowY: 'auto !important',
+                            overflow: 'hidden',
+                            '&::-webkit-scrollbar': { 
+                            
+                            width: '0.2083vw' 
+                            },
+                            '&::-webkit-scrollbar-track': { 
+                                background: 'transparent'
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#0088d7',
+                                borderRadius: '3px',
+                            },
+                            scrollbarWidth: 'thin',
+                            scrollbarColor: '#0088d7 transparent'
+                        }}>
+                                    
+                        {/* determine which docs to show */}
+                        {(() => {
+                            // flatten all docs if 'All', else pick selected category
+                            const key = selectedCategory === 'All'
+                            ? null
+                            : selectedCategory.toLowerCase()
+                            let docs = []
+                            if (key) {
+                            docs = documentList[key] || []
+                            } else {
+                            docs = Object.values(documentList).flat()
+                            }
+                            // filter by search
+                            return (
+                            <List sx={{ px: 0 }}>
+                                {docs
+                                // .filter(name =>
+                                //     name.toLowerCase().includes(searchTerm.toLowerCase())
+                                // )
+                                .map(name => {
+                                    const isSelected = selectedDocs.includes(name);
+                                    return (
+                                    <ListItem
+                                    key={name}
+                                    disableGutters
+                                    sx={{
+                                        bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
+                                        borderRadius: 2,
+                                        mb: '4px',
+                                        p: 0.5,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        border: '0.5px solid #00000033',
+                                    }}
+                                    >
+                                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                            <IconButton
+                                            size="small"
+                                            onClick={() => {
+                                                setSelectedDocs(prev =>
+                                                    prev.includes(name)
+                                                    ? prev.filter(n => n !== name)
+                                                    : [...prev, name]
+                                                );
+                                            }}
+                                            >   
+                                                {isSelected ? (
+                                                    <CircleIcon
+                                                    sx={{
+                                                        fontSize: '0.8333vw',
+                                                        fill: '#081A33',
+                                                        stroke: '#515151',
+                                                        strokeWidth: 1.5,
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                    />
+                                                ) : (
+                                                    <CircleOutlinedIcon sx={{ 
+                                                        fontSize: '0.8333vw',
+                                                        fill: '#FFD95C0A',
+                                                        stroke: '#515151',
+                                                        strokeWidth: 1.5,
+                                                        transition: 'all 0.2s ease',
+                                                    }}
+                                                    />
+                                                )}
+                                                    
+                                            </IconButton> 
+                                            <Typography
+                                                sx={{
+                                                    fontWeight: 600,
+                                                    color: '#515151',
+                                                    whiteSpace: 'nowrap',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    fontSize: '0.8333vw'
+                                                }}
+                                                >
+                                                {(() => {
+                                                    const dotIdx = name.lastIndexOf('.');
+                                                    const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
+                                                    const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
+                                                    return base.length > 20
+                                                    ? `${base.slice(0,20)}...${ext}`
+                                                    : name;
+                                                })()
+                                            }
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <IconButton
+                                            size="small"
+                                            onClick={() => handleToggleVisibility(name)}
+                                            >
+                                                {visibleDocs[name] ? (
+                                                    <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                                ) : (
+                                                    <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
+                                                )}
+                                            </IconButton>
+                                            <IconButton 
+                                            size="small"
+                                            // onClick={e => {
+                                            //         e.stopPropagation();
+                                            //         setDialogDocName(name);
+                                            //         setOpenDeleteDialog(true);
+                                            //}}
+                                            >
+                                                <Tooltip title='Delete' placement='bottom' arrow>
+                                                    <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                                                </Tooltip>
+                                            </IconButton>
+                                        </Box>
+                                    </ListItem>
+                                );
+                                })}
+                            </List>
+                        )
+                        })()}
+                        </Box>
                     </Box>
 
-                    <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
-                        <Box sx={{ 
-                            display: 'flex', flexWrap: 'wrap',
-                            gap: 1, flexGrow: 1 }}>
-                            {categories.map((category) => (
-                                <Chip
-                                    key={category}
-                                    label={category}
-                                    variant="filled"
-                                    size="small"
-                                    onClick={() => setSelectedCategory(category)}
-                                    sx={{
-                                        px: '9px',
-                                        py: '9px',
-                                        fontWeight: 500,
-                                        fontSize: '0.7292vw',
-                                        color: '#081A33',
-                                        borderRadius: '16px',
-                                        bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
-                                        '&:hover': { bgcolor: '#FEC636' },
-                                        boxShadow: '0px 4px 8px #15151540'
-                                    }}
-                                />
-                            ))}
-                        </Box>
-                    </Stack>
-                    <Box
-                    sx={{
-                        mt: 1,
-                        flexGrow: 1,
-                        // overflowY: 'auto !important',
-                        overflow: 'hidden',
-                        '&::-webkit-scrollbar': { 
-                        display: 'none',
-                        width: '0.2083vw' 
-                        },
-                        '&::-webkit-scrollbar-track': { 
-                            background: 'transparent'
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#0088d7',
-                            borderRadius: '3px',
-                        },
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: '#0088d7 transparent'
-                    }}>
-                                
-                    {/* determine which docs to show */}
-                    {(() => {
-                        // flatten all docs if 'All', else pick selected category
-                        const key = selectedCategory === 'All'
-                        ? null
-                        : selectedCategory.toLowerCase()
-                        let docs = []
-                        if (key) {
-                        docs = documentList[key] || []
-                        } else {
-                        docs = Object.values(documentList).flat()
-                        }
-                        // filter by search
-                        return (
-                        <List sx={{ px: 0 }}>
-                            {paginatedDocs
-                            // .filter(name =>
-                            //     name.toLowerCase().includes(searchTerm.toLowerCase())
-                            // )
-                            .map(name => {
-                                const isSelected = selectedDocs.includes(name);
-                                return (
-                                <ListItem
-                                key={name}
-                                disableGutters
-                                sx={{
-                                    bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
-                                    borderRadius: 2,
-                                    mb: '4px',
-                                    p: 0.5,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    border: '0.5px solid #00000033',
-                                }}
-                                >
-                                    <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
-                                         <IconButton
-                                         size="small"
-                                         onClick={() => {
-                                            setSelectedDocs(prev =>
-                                                prev.includes(name)
-                                                ? prev.filter(n => n !== name)
-                                                : [...prev, name]
-                                            );
-                                         }}
-                                         >   
-                                            {isSelected ? (
-                                                <CircleIcon
-                                                sx={{
-                                                    fontSize: '0.8333vw',
-                                                    fill: '#081A33',
-                                                    stroke: '#515151',
-                                                    strokeWidth: 1.5,
-                                                    transition: 'all 0.2s ease'
-                                                }}
-                                                />
-                                            ) : (
-                                                <CircleOutlinedIcon sx={{ 
-                                                    fontSize: '0.8333vw',
-                                                    fill: '#FFD95C0A',
-                                                    stroke: '#515151',
-                                                    strokeWidth: 1.5,
-                                                    transition: 'all 0.2s ease',
-                                                }}
-                                                />
-                                            )}
-                                                
-                                        </IconButton> 
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 600,
-                                                color: '#515151',
-                                                whiteSpace: 'nowrap',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                fontSize: '0.8333vw'
-                                            }}
-                                            >
-                                            {(() => {
-                                                const dotIdx = name.lastIndexOf('.');
-                                                const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
-                                                const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
-                                                return base.length > 20
-                                                ? `${base.slice(0,20)}...${ext}`
-                                                : name;
-                                            })()
-                                        }
-                                        </Typography>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        <IconButton
-                                        size="small"
-                                        onClick={() => handleToggleVisibility(name)}
-                                        >
-                                            {visibleDocs[name] ? (
-                                                <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
-                                            ) : (
-                                                <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
-                                            )}
-                                        </IconButton>
-                                        <IconButton 
-                                        size="small"
-                                        // onClick={e => {
-                                        //         e.stopPropagation();
-                                        //         setDialogDocName(name);
-                                        //         setOpenDeleteDialog(true);
-                                        //}}
-                                        >
-                                            <Tooltip title='Delete' placement='bottom' arrow>
-                                                <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
-                                            </Tooltip>
-                                        </IconButton>
-                                    </Box>
-                                </ListItem>
-                            );
-                            })}
-                        </List>
-                    )
-                    })()}
-                    </Box>
+                    {/* Right of Left */}
                     <Box sx={{
                         display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center', mb: -0.5
+                        flexDirection: 'column',
+                        flex: 1,
+                        gap: 1,
                     }}>
-                        {/* Left Arrow */}
-                        <IconButton 
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 0))}
-                        disabled={currentPage === 0}
-                        sx={{
-                            color: '#081A33',
-                            backgroundColor: '#FFD95C',
-                            borderRadius: '50%',
-                            '&:disabled': {opacity: 0.5},
-                            '&:hover': {backgroundColor: '#FFCB42'},
+                        {/* Browse File Box */}
+                        <Box sx={{
+                            border: '2px dashed #E6E6E6',
+                            borderRadius: 2,
+                            p: 1,
+                            textAlign: 'center',
+                            bgcolor: '#FFD95C1A',   //later
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            height: '30%',
                         }}>
-                            <PlayArrowIcon sx={{transform: 'scaleX(-1)'}}/>
-                        </IconButton>
-                        {/* Page Label */}
-                        <Typography variant="body2" 
-                        sx={{color: '#AEAEAE'}}>
-                            {currentPage + 1}/{totalPages || 1}
-                        </Typography>
-                        {/* Right Arrow */}
-                        <IconButton 
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages - 1))}
-                        disabled={currentPage >= totalPages - 1}
-                        sx={{
-                            color: '#081A33',
-                            backgroundColor: '#FFD95C',
-                            borderRadius: '50%',
-                            '&:disabled': {opacity: 0},
-                            '&:hover': {backgroundColor: '#FFCB42'},
+                            {/* hidden file input + upload handler */}
+                            <input
+                            type="file"
+                            multiple
+                            hidden
+                            ref={fileInputRef}
+                            onChange={handleUploadFiles}
+                            />
+
+                            <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
+                            
+                            <Typography variant="caption" display="block" color="#515151"
+                            sx={{ fontWeight: 500, fontSize: '0.78vw'}}>
+                                Choose a file
+                            </Typography>
+                            <Typography variant="caption" display="block" color="#515151"
+                            sx={{ fontWeight: 500, fontSize: '0.78vw'}}>
+                                DOCX format, up to 10MB
+                            </Typography>
+                            
+                            <Button
+                                variant="contained"
+                                onClick={() => fileInputRef.current.click()}
+                                sx={{
+                                borderRadius: 2,
+                                bgcolor: '#0088D6',
+                                color: '#ffffff',
+                                textTransform: 'none',
+                                px: 3,
+                                py: 0.5,
+                                fontWeight: 500,
+                                fontSize: '0.78vw',
+                                mt: 1,
+                                mb:1,
+                                }}
+                            >
+                                Browse File
+                            </Button>
+                        </Box>
+
+                        {/* Selected Documents Box */}
+                        <Box sx={{
+                            borderRadius: 2,
+                            px: 2,
+                            py: 0.5,
+                            pb: 2,
+                            textAlign: 'center',
+                            bgcolor: '#F5FAFF',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 0.5,
+                            height: '70%',
                         }}>
-                            <PlayArrowIcon sx={{color: '#081A33'}}/>
-                        </IconButton>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
+                                    Selected Documents
+                                </Typography>
+                            </Box>
+                            <Box
+                            sx={{
+                                flexGrow: 1,
+                                maxHeight: '50vh',
+                                overflowY: 'auto !important',
+                                overflow: 'hidden',
+                                '&::-webkit-scrollbar': { 
+                                    width: '0.2083vw'
+                                },
+                                '&::-webkit-scrollbar-track': { 
+                                    background: 'transparent'
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    backgroundColor: '#0088d7',
+                                    borderRadius: '3px',
+                                },
+                                scrollbarWidth: 'thin',
+                                scrollbarColor: '#0088d7 transparent'
+                            }}>
+                                        
+                            {/* determine which docs to show */}
+                            {(() => {
+                                // flatten all docs if 'All', else pick selected category
+                                // const key = selectedCategory === 'All'
+                                // ? null
+                                // : selectedCategory.toLowerCase()
+                                // let docs = []
+                                // if (key) {
+                                // docs = documentList[key] || []
+                                // } else {
+                                // docs = Object.values(documentList).flat()
+                                // }
+                                const docs = selectedDocs;
+                                // filter by search
+                                return (
+                                <List sx={{ px: 0 }}>
+                                    {docs
+                                    // .filter(name =>
+                                    //     name.toLowerCase().includes(searchTerm.toLowerCase())
+                                    // )
+                                    .map(name => {
+                                        //const isSelected = selectedDocs.includes(name);
+                                        return (
+                                        <ListItem
+                                        key={name}
+                                        disableGutters
+                                        sx={{
+                                            bgcolor: '#A9C7FF66',
+                                            borderRadius: 2,
+                                            mb: '4px',
+                                            p: 0.5,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            border: '0.5px solid #00000033',
+                                        }}
+                                        >
+                                            <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                                    <IconButton
+                                                    size="small"
+                                                    // onClick={() => {
+                                                    // setSelectedDocs(prev =>
+                                                    //     prev.includes(name)
+                                                    //     ? prev.filter(n => n !== name)
+                                                    //     : [...prev, name]
+                                                    // );
+                                                    // }}
+                                                    >
+                                                    <CircleIcon
+                                                        sx={{
+                                                            fontSize: '0.8333vw',
+                                                            fill: '#081A33',
+                                                            stroke: '#515151',
+                                                            strokeWidth: 1.5,
+                                                            transition: 'all 0.2s ease'
+                                                        }}
+                                                        />
+                                                        
+                                                </IconButton> 
+                                                <Typography
+                                                    sx={{
+                                                        fontWeight: 600,
+                                                        color: '#515151',
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        fontSize: '0.8333vw'
+                                                    }}
+                                                    >
+                                                    {(() => {
+                                                        const dotIdx = name.lastIndexOf('.');
+                                                        const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
+                                                        const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
+                                                        return base.length > 20
+                                                        ? `${base.slice(0,20)}...${ext}`
+                                                        : name;
+                                                    })()
+                                                }
+                                                </Typography>
+                                            </Box>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <IconButton
+                                                size="small"
+                                                onClick={() => handleToggleVisibility(name)}
+                                                >
+                                                    {visibleDocs[name] ? (
+                                                        <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                                    ) : (
+                                                        <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
+                                                    )}
+                                                </IconButton>
+                                                <IconButton 
+                                                size="small"
+                                                // onClick={e => {
+                                                //         e.stopPropagation();
+                                                //         setDialogDocName(name);
+                                                //         setOpenDeleteDialog(true);
+                                                //}}
+                                                >
+                                                    <Tooltip title='Delete' placement='bottom' arrow>
+                                                        <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                                                    </Tooltip>
+                                                </IconButton>
+                                            </Box>
+                                        </ListItem>
+                                    );
+                                    })}
+                                </List>
+                            )
+                            })()}
+                            </Box>
+                        </Box>
                     </Box>
-                </Box>    
+                </Box>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mx: 2
+                }}>
+                    <Button
+                    variant= "contained"
+                    onClick={onNavigateToTemplate}
+                    sx={{
+                        fontSize: '0.78vw ',
+                        fontWeight: 600,
+                        color: '#081A33',
+                        backgroundColor: '#FFD95C',
+                        '&:hover': {bgcolor: '#FFCB42'}
+                    }}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                    variant= "contained"
+                    onClick={onNavigateToReport}
+                    sx={{
+                        fontSize: '0.78vw',
+                        fontWeight: 600,
+                        color: '#081A33',
+                        backgroundColor: '#FFD95C',
+                        '&:hover': {bgcolor: '#FFCB42'}
+                    }}
+                    >
+                        Next
+                    </Button>
+                </Box>
             </Box>
             {/* Right Section */}
             <Box sx={{

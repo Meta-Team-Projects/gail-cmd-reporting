@@ -46,6 +46,7 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 const TemplateSelection = ({
     leftSidebarOpen,
     onNavigateToDoc,
+    onNavigateToLandingPage,
     selectedPreview,
     setSelectedPreview,
     isEditMode
@@ -420,6 +421,7 @@ const TemplateSelection = ({
                 }}>
                     <Button
                     variant= "contained"
+                    onClick={onNavigateToLandingPage}
                     sx={{
                         fontSize: '0.78vw ',
                         fontWeight: 600,
