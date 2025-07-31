@@ -373,6 +373,13 @@ const DocumentSelection = ({
                                     <ListItem
                                     key={name}
                                     disableGutters
+                                    onClick={() => {
+                                        setSelectedDocs(prev =>
+                                            prev.includes(name)
+                                                ? prev.filter(n => n !== name)
+                                                : [...prev, name]
+                                        );
+                                    }}
                                     sx={{
                                         bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
                                         borderRadius: 2,
@@ -382,12 +389,14 @@ const DocumentSelection = ({
                                         alignItems: 'center',
                                         justifyContent: 'space-between',
                                         border: '0.5px solid #00000033',
+                                        cursor: 'pointer',
                                     }}
                                     >
                                         <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
                                             <IconButton
                                             size="small"
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                e.stopPropagation();
                                                 setSelectedDocs(prev =>
                                                     prev.includes(name)
                                                     ? prev.filter(n => n !== name)
@@ -441,7 +450,10 @@ const DocumentSelection = ({
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <IconButton
                                             size="small"
-                                            onClick={() => handleToggleVisibility(name)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleToggleVisibility(name);
+                                            }}
                                             >
                                                 {visibleDocs[name] ? (
                                                     <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
@@ -451,11 +463,11 @@ const DocumentSelection = ({
                                             </IconButton>
                                             <IconButton 
                                             size="small"
-                                            // onClick={e => {
-                                            //         e.stopPropagation();
+                                            onClick={e => {
+                                                     e.stopPropagation();
                                             //         setDialogDocName(name);
                                             //         setOpenDeleteDialog(true);
-                                            //}}
+                                            }}
                                             >
                                                 <Tooltip title='Delete' placement='bottom' arrow>
                                                     <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
