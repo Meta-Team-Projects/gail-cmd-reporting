@@ -278,7 +278,7 @@ const GeneratePreview = ({
                     bgcolor: '#F5FAFF',
                     borderRadius: 2,
                     mx: 2,
-                    px: 2, pt: 0.5, pb: 1 
+                    px: 2, pt: 1, pb: 2
 
                 }}>
                     <Box sx={{
