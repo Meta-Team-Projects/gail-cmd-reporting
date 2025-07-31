@@ -233,7 +233,7 @@ const DocumentSelection = ({
         <Box sx={{
             //border: '1px solid black',
             display: 'flex',
-            height: '86vh'
+            height: '87vh'
         }}>
             {/* Left Section */}
             <Box sx={{
@@ -277,7 +277,7 @@ const DocumentSelection = ({
                 <Box sx={{
                     //border: '1px solid black',
                     display: 'flex',
-                    height: '65vh',
+                    height: '65.5vh',
                     mx: 2,
                     gap: 1,
 

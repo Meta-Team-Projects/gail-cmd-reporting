@@ -55,6 +55,7 @@ import side_by_side_icon from '../assets/side_by_side_icon.png'
 
 const ReportGeneration = ({
     leftSidebarOpen,
+    onNavigateToCMDContent,
     selectedPreview,
     selectedDocs,
     onEditTemplate,
@@ -236,7 +237,7 @@ const ReportGeneration = ({
         </Box>
         <Box sx={{
             //border: '1px solid black',
-            display: 'flex', height: '100%', pb: 1, gap: 1
+            display: 'flex', height: '87vh', gap: 1
         }}>
 
             {/* Left Section */}
@@ -738,6 +739,7 @@ const ReportGeneration = ({
                     </Button>
                     <Button
                         variant="contained"
+                        onClick={onNavigateToCMDContent}
                         sx={{
                         flex: '0 1 calc(33.333% - 0.5vw)',
                         height: '100px',

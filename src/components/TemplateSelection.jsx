@@ -201,6 +201,7 @@ const TemplateSelection = ({
         <Box sx={{
             //border: '1px solid black',
             display: 'flex',
+            height: '87vh'
         }}>
             {/* Left Section */}
             <Box sx={{
