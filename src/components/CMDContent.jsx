@@ -38,6 +38,7 @@ import {
 import {
     Search as SearchIcon,
     TrendingFlat as TrendingFlatIcon,
+    EditOutlined as EditOutlinedIcon,
     Delete
 } from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -45,6 +46,11 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import placeholder from '../assets/placeholder.png';
 import placeholder_2 from '../assets/placeholder_2.png';
 import placeholder_3 from '../assets/placeholder_3.png';
+import placeholder_4 from '../assets/placeholder_4.png';
+
+import download_report from '../assets/download_report_icon.png'
+import save_template from '../assets/save_template_icon.png'
+import generate_report from '../assets/generate_report_icon.png'
 
 const CMDContent = ({onNavigateToTemplate}) => {
     const categories = ['All', 'Pinned', 'Recently Viewed']
@@ -53,6 +59,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
     const [searchTerm, setSearchTerm] = useState('')
     const [stats, setStats] = useState(null)
     const [pinnedDocs, setPinnedDocs] = useState(new Set())
+    const [selectedReport, setSelectedReport] = useState(null);
 
     const togglePin = (docName) => {
         setPinnedDocs(prev => {
@@ -354,16 +361,33 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     justifyContent: 'space-between'
                 }}>
                     {/* Fill Later */}
-                    <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
-                    <img src={placeholder_2} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
+                    <img 
+                    src={placeholder} 
+                    alt="Placeholder" 
+                    style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 1')} />
+
+                    <img 
+                    src={placeholder_2}
+                    alt="Placeholder"
+                    style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 2')} />
                 </Box>
                 <Box sx={{ flex: 1,
                     display: 'flex',
                     justifyContent: 'space-between'
                 }}>
                     {/* Fill Later */}
-                    <img src={placeholder_3} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
-                    <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px'}}/>
+                    <img
+                    src={placeholder_3}
+                    alt="Placeholder"
+                    style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 3')} />
+                    <img
+                    src={placeholder}
+                    alt="Placeholder"
+                    style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 4')} />
                 </Box>
             </Box>
 
@@ -583,7 +607,154 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 </Box>
             </Box>
         </Box>
+    {selectedReport && (
+        <Box sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            bgcolor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }} 
+        onClick={() => setSelectedReport(null)}
+        >
+            <Box sx={{
+                width: '57.29vw',
+                height: '46.88vw',
+                bgcolor: '#F5FAFFD9',
+                borderRadius: 2,
+                boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                position: 'relative',
+            }}
+            onClick={(e) => e.stopPropagation()}
+            >
+                <Box
+                    sx={{
+                    backgroundColor: '#0088D6CC',
+                    height: '3.2vw',
+                    width: '100%',
+                    borderTopLeftRadius: 4,
+                    borderTopRightRadius: 4,
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    px: 1,
+                    }}
+                >
+                    <Typography sx={{
+                        color: '#ffffff',
+                        fontWeight: '15px',
+                        fontWeight: 700
+                    }}>
+                        {selectedReport}
+                    </Typography>
+                </Box>
+                <Box sx={{
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                    p: 2,
+                }}>
+                    <Box sx={{
+                        position: 'relative',
+                        maxWidth: '60%',
+                        maxHeight: '85%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Box
+                        component="img"
+                        src={placeholder_4}
+                        alt="Placeholder 4"
+                        sx={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '0vw',
+                            right: '-3.5vw',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1.5
+                        }}>
+                            <IconButton sx={{
+                                width: '3vw',
+                                height: '3vw',
+                                color: '#081A33',
+                                backgroundColor: '#FFD95CE5',
+                                borderRadius: '50%',
+                                '&:hover': {backgroundColor: '#FFCB42'},
+                            }}>
+                                <EditOutlinedIcon sx={{ fontSize: '20px' }} />
+                            </IconButton>
+                            <IconButton sx={{
+                                width: '3vw',
+                                height: '3vw',
+                                color: '#081A33',
+                                backgroundColor: '#FFD95CE5',
+                                borderRadius: '50%',
+                                '&:hover': {backgroundColor: '#FFCB42'},
+                            }}>
+                            <img
+                                src={download_report}
+                                style={{
+                                width: '20px',
+                                height: '20px',
+                                objectFit: 'contain',
+                                }}
+                            />
+                            </IconButton>
+                            <IconButton sx={{
+                                width: '3vw',
+                                height: '3vw',
+                                color: '#081A33',
+                                backgroundColor: '#FFD95CE5',
+                                borderRadius: '50%',
+                                '&:hover': {backgroundColor: '#FFCB42'},
+                            }}>
+                                <img
+                                src={save_template}
+                                style={{
+                                width: '20px',
+                                height: '20px',
+                                objectFit: 'contain',
+                                }}
+                            />
+                            </IconButton>
+                            <IconButton sx={{
+                                width: '3vw',
+                                height: '3vw',
+                                color: '#081A33',
+                                backgroundColor: '#FFD95CE5',
+                                borderRadius: '50%',
+                                '&:hover': {backgroundColor: '#FFCB42'},
+                            }}>
+                                <img
+                                src={generate_report}
+                                style={{
+                                width: '20px',
+                                height: '20px',
+                                objectFit: 'contain',
+                                }}
+                            />
+                            </IconButton>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
+    )}
     </Box>
+    
   )
 }
 

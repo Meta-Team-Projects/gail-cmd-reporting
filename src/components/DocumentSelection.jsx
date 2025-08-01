@@ -735,70 +735,74 @@ const DocumentSelection = ({
             {/* Right Section */}
             <Box sx={{
                 //border: '1px solid blue',
-                flexGrow: 1
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
             }}>
-                <Box
-                    sx={{
-                        border: '1px solid #D2D2D2',
-                        borderRadius: 2,
-                        textAlign: 'center',
-                        bgcolor: '#F5FAFF',   //later
-                        //boxShadow: '0px 2px 8px #76767640',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        ml: 1, mr: 2, 
-                        height: '100%',
-                        transition: 'all 0.3s ease',
-                        position: 'relative',
-                    }}
-                >
+                <Box sx={{ pt: 2, flexGrow: 1 }}>
                     <Box
                         sx={{
-                        backgroundColor: '#0088D6CC',
-                        height: '42px',
-                        width: '100%',
-                        borderTopLeftRadius: 4,
-                        borderTopRightRadius: 4,
+                            border: '1px solid #D2D2D2',
+                            borderRadius: 2,
+                            textAlign: 'center',
+                            bgcolor: '#F5FAFF',   //later
+                            //boxShadow: '0px 2px 8px #76767640',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            ml: 1, mr: 2, 
+                            height: '100%',
+                            transition: 'all 0.3s ease',
+                            position: 'relative',
                         }}
-                    />
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexGrow: 1,
-                        width: '100%'
-                    }}>
-                        {selectedPreview && (
-                            <>
-                            <Box 
-                            component="img"
-                            src={selectedPreview}
-                            alt="Selected Preview"
+                    >
+                        <Box
                             sx={{
-                                width: '100%',
-                                objectFit: 'contain'
+                            backgroundColor: '#0088D6CC',
+                            height: '2.3vw',
+                            width: '100%',
+                            borderTopLeftRadius: 4,
+                            borderTopRightRadius: 4,
                             }}
-                            />
-                            {/* <Button
-                            variant= "contained"
-                            onClick={onNavigateToReport}
-                            sx={{
-                                position: 'absolute',
-                                bottom: 15,
-                                right: 15,
-                                fontSize: '15px',
-                                fontWeight: 600,
-                                color: '#081A33',
-                                backgroundColor: '#FFD95C',
-                                '&:hover': {bgcolor: '#FFCB42'}
-                            }}
-                            >
-                                Generate Report
-                            </Button> */}
-                            </>
-                        )}
+                        />
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexGrow: 1,
+                            width: '100%'
+                        }}>
+                            {selectedPreview && (
+                                <>
+                                <Box 
+                                component="img"
+                                src={selectedPreview}
+                                alt="Selected Preview"
+                                sx={{
+                                    width: '100%',
+                                    objectFit: 'contain'
+                                }}
+                                />
+                                {/* <Button
+                                variant= "contained"
+                                onClick={onNavigateToReport}
+                                sx={{
+                                    position: 'absolute',
+                                    bottom: 15,
+                                    right: 15,
+                                    fontSize: '15px',
+                                    fontWeight: 600,
+                                    color: '#081A33',
+                                    backgroundColor: '#FFD95C',
+                                    '&:hover': {bgcolor: '#FFCB42'}
+                                }}
+                                >
+                                    Generate Report
+                                </Button> */}
+                                </>
+                            )}
+                        </Box>
                     </Box>
                 </Box>
             </Box>

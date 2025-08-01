@@ -271,7 +271,7 @@ const ReportGeneration = ({
                     <Box
                         sx={{
                         backgroundColor: '#0088D6CC',
-                        height: '42px',
+                        height: '2.3vw',
                         width: '100%',
                         borderTopLeftRadius: 4,
                         borderTopRightRadius: 4,
@@ -296,7 +296,7 @@ const ReportGeneration = ({
                     </Box>
                     <IconButton sx={{
                         position: 'absolute',
-                        top: 60,
+                        top: 50,
                         right: 10,
                         width: '45px', height: '45px',
                         color: '#081A33',
@@ -316,7 +316,7 @@ const ReportGeneration = ({
                     </IconButton>
                     <IconButton sx={{
                         position: 'absolute',
-                        top: 110,
+                        top: 100,
                         right: 10,
                         width: '45px', height: '45px',
                         color: '#081A33',
