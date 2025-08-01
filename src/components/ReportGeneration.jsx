@@ -41,6 +41,7 @@ import {
     PlayArrow as PlayArrowIcon,
     ZoomIn as ZoomInIcon,
     Delete,
+    RadioButtonCheckedOutlined as RadioButtonCheckedOutlinedIcon
 } from '@mui/icons-material'
 
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
@@ -510,12 +511,12 @@ const ReportGeneration = ({
                                                 // );
                                                 // }}
                                                 >
-                                                <CircleIcon
+                                                <RadioButtonCheckedOutlinedIcon
                                                     sx={{
                                                         fontSize: '0.8333vw',
                                                         fill: '#081A33',
-                                                        stroke: '#515151',
-                                                        strokeWidth: 1.5,
+                                                        //stroke: '#515151',
+                                                        strokeWidth: 1,
                                                         transition: 'all 0.2s ease'
                                                     }}
                                                     />
@@ -524,7 +525,7 @@ const ReportGeneration = ({
                                             <Typography
                                                 sx={{
                                                     fontWeight: 600,
-                                                    color: '#515151',
+                                                    color: '#1C1C1C',
                                                     whiteSpace: 'nowrap',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',

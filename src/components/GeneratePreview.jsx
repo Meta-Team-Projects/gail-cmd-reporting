@@ -30,8 +30,7 @@ import {
     ListItem
 } from '@mui/material'
 
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import CircleIcon from '@mui/icons-material/Circle';
+import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 // import placeholder from '../assets/placeholder.png'
@@ -397,12 +396,12 @@ const GeneratePreview = ({
                                                 // );
                                                 // }}
                                                 >
-                                                <CircleIcon
+                                                <RadioButtonCheckedOutlinedIcon
                                                     sx={{
                                                         fontSize: '0.8333vw',
                                                         fill: '#081A33',
-                                                        stroke: '#515151',
-                                                        strokeWidth: 1.5,
+                                                        //stroke: '#515151',
+                                                        strokeWidth: 1,
                                                         transition: 'all 0.2s ease'
                                                     }}
                                                     />
@@ -411,7 +410,7 @@ const GeneratePreview = ({
                                             <Typography
                                                 sx={{
                                                     fontWeight: 600,
-                                                    color: '#515151',
+                                                    color: '#1C1C1C',
                                                     whiteSpace: 'nowrap',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',

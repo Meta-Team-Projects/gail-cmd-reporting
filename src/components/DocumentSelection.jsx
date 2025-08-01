@@ -30,10 +30,10 @@ import {
     ListItem
 } from '@mui/material'
 
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import PanoramaFishEyeOutlinedIcon from '@mui/icons-material/PanoramaFishEyeOutlined';
+import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
 // import placeholder from '../assets/placeholder.png'
 // import placeholder_2 from '../assets/placeholder_2.png'
 // import placeholder_3 from '../assets/placeholder_3.png'
@@ -405,21 +405,22 @@ const DocumentSelection = ({
                                             }}
                                             >   
                                                 {isSelected ? (
-                                                    <CircleIcon
+                                                    <RadioButtonCheckedOutlinedIcon
                                                     sx={{
                                                         fontSize: '0.8333vw',
                                                         fill: '#081A33',
-                                                        stroke: '#515151',
-                                                        strokeWidth: 1.5,
+                                                        //stroke: '#515151',
+                                                        strokeWidth: 1,
                                                         transition: 'all 0.2s ease'
                                                     }}
                                                     />
                                                 ) : (
-                                                    <CircleOutlinedIcon sx={{ 
+                                                    <PanoramaFishEyeOutlinedIcon sx={{
                                                         fontSize: '0.8333vw',
-                                                        fill: '#FFD95C0A',
-                                                        stroke: '#515151',
-                                                        strokeWidth: 1.5,
+                                                        color: '#515151',
+                                                        //fill: '#FFD95C0A',
+                                                        //stroke: '#515151',
+                                                        //strokeWidth: 1.5,
                                                         transition: 'all 0.2s ease',
                                                     }}
                                                     />
@@ -429,7 +430,7 @@ const DocumentSelection = ({
                                             <Typography
                                                 sx={{
                                                     fontWeight: 600,
-                                                    color: '#515151',
+                                                    color: '#1C1C1C',
                                                     whiteSpace: 'nowrap',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -631,12 +632,12 @@ const DocumentSelection = ({
                                                     // );
                                                     // }}
                                                     >
-                                                    <CircleIcon
+                                                    <RadioButtonCheckedOutlinedIcon
                                                         sx={{
                                                             fontSize: '0.8333vw',
                                                             fill: '#081A33',
-                                                            stroke: '#515151',
-                                                            strokeWidth: 1.5,
+                                                            //stroke: '#515151',
+                                                            strokeWidth: 1,
                                                             transition: 'all 0.2s ease'
                                                         }}
                                                         />
@@ -645,7 +646,7 @@ const DocumentSelection = ({
                                                 <Typography
                                                     sx={{
                                                         fontWeight: 600,
-                                                        color: '#515151',
+                                                        color: '#1C1C1C',
                                                         whiteSpace: 'nowrap',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
