@@ -237,8 +237,8 @@ const GeneratePreview = ({
         }}>
             {/* Left Section */}
             <Box sx={{
-                // border: '1px solid red',
-                maxWidth: leftSidebarOpen ? '800px' : '900px',
+                //border: '1px solid red',
+                maxWidth: leftSidebarOpen ? '41.67vw' : '46.88vw',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
@@ -320,7 +320,7 @@ const GeneratePreview = ({
                     borderRadius: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: '65vh',
+                    flex: 1,
                     mx: 2,
                     px: 2,
                     py: 0.5,

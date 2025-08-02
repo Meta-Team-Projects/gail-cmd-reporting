@@ -244,7 +244,7 @@ const ReportGeneration = ({
             {/* Left Section */}
             <Box sx={{
                 //border: '1px solid blue',
-                width: leftSidebarOpen ? '700px' : '800px',
+                width: leftSidebarOpen ? '36.46vw' : '41.67vw',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
@@ -298,7 +298,7 @@ const ReportGeneration = ({
                         position: 'absolute',
                         top: 50,
                         right: 10,
-                        width: '45px', height: '45px',
+                        width: '2.3438vw', height: '2.3438vw',
                         color: '#081A33',
                         backgroundColor: '#FFD95CE5',
                         borderRadius: '50%',
@@ -307,8 +307,8 @@ const ReportGeneration = ({
                         <img
                             src={side_by_side_icon}
                             style={{
-                            width: '20px',
-                            height: '20px',
+                            width: '1.0417vw',
+                            height: '1.0417vw',
                             objectFit: 'contain',
                             }}
                         />
@@ -318,13 +318,13 @@ const ReportGeneration = ({
                         position: 'absolute',
                         top: 100,
                         right: 10,
-                        width: '45px', height: '45px',
+                        width: '2.3438vw', height: '2.3438vw',
                         color: '#081A33',
                         backgroundColor: '#FFD95CE5',
                         borderRadius: '50%',
                         '&:hover': {backgroundColor: '#FFCB42'},
                         }}>
-                        <ZoomInIcon sx={{fontSize: '20px'}}/>
+                        <ZoomInIcon sx={{fontSize: '1.0417vw'}}/>
                     </IconButton>
                     <Box sx={{
                         display: 'flex',
@@ -615,17 +615,14 @@ const ReportGeneration = ({
                 {/* Bottom Buttons */}
                 <Box sx={{
                     px: 2,
-                    py: 1, pb: 2,
+                    pt: 1.5,
                     //mt: 1,
                     mr:2,
                     overflow: 'hidden',
                     borderRadius: 2,
                     display: 'flex',
-                    flexDirection: 'column',
                     flex: 1,
-                    gap: 1,
-                    minHeight: 0,
-                    //border: '0.5px solid #00000033',
+                    //border: '2px solid #00000033',
                     transform: 'translateZ(0)',
                     bgcolor: '#F5FAFF'
                 }}>
@@ -637,128 +634,128 @@ const ReportGeneration = ({
                         justifyContent: 'space-between',
                     }}
                     >
-                    <Button
-                        variant="contained"
-                        sx={{
-                        flex: '0 1 calc(33.333% - 0.5vw)',
-                        height: '100px',
-                        borderRadius: '10px',
-                        //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
-                        //backgroundBlendMode: 'overlay',
-                        //background: 'linear-gradient(to right, #F5FAFF, #E6F0FA , #CCE5FF)',
-                        background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
-                        color: '#081A33',
-                        fontWeight: 600,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        gap: 0.5,
-                        }}
-                    >
-                        <img src={edit_report} style={{ width: '20px', height: '20px' }} />
-                        Edit Report
-                    </Button>
-                    <Button
-                        variant="contained"
-                        sx={{
-                        flex: '0 1 calc(33.333% - 0.5vw)',
-                        height: '100px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
-                        //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
-                        //backgroundBlendMode: 'overlay',
-                        color: '#081A33',
-                        fontWeight: 600,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        gap: 0.5,
-                        }}
-                    >
-                        <img src={save_template} style={{ width: '20px', height: '20px' }} />
-                        Save as template
-                    </Button>
-                    <Button
-                        variant="contained"
-                        sx={{
-                        flex: '0 1 calc(33.333% - 0.5vw)',
-                        height: '100px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
-                        //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
-                        //backgroundBlendMode: 'overlay',
-                        color: '#081A33',
-                        fontWeight: 600,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        gap: 0.5,
-                        }}
-                    >
-                        <img src={download_report} style={{ width: '20px', height: '20px' }} />
-                        Download Report
-                    </Button>
-                    <Button
-                        variant="contained"
-                        sx={{
-                        flex: '0 1 calc(33.333% - 0.5vw)',
-                        height: '100px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
-                        //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
-                        //backgroundBlendMode: 'overlay',
-                        color: '#081A33',
-                        fontWeight: 600,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        gap: 0.5,
-                        }}
-                    >
-                        <img src={ai_icon} style={{ width: '20px', height: '20px' }} />
-                        AI Analyser
-                    </Button>
-                    <Button
-                        variant="contained"
-                        sx={{
-                        flex: '0 1 calc(33.333% - 0.5vw)',
-                        height: '100px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
-                        //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
-                        //backgroundBlendMode: 'overlay',
-                        color: '#081A33',
-                        fontWeight: 600,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        gap: 0.5,
-                        }}
-                    >
-                        <img src={regenerate_response} style={{ width: '20px', height: '20px' }} />
-                        Regenerate Response
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={onNavigateToCMDContent}
-                        sx={{
-                        flex: '0 1 calc(33.333% - 0.5vw)',
-                        height: '100px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
-                        //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
-                        //backgroundBlendMode: 'overlay',
-                        color: '#081A33',
-                        fontWeight: 600,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        gap: 0.5,
-                        }}
-                    >
-                        <img src={generate_report} style={{ width: '20px', height: '20px' }} />
-                        Generate new Response
-                    </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                            flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '110px',
+                            borderRadius: '10px',
+                            //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
+                            //backgroundBlendMode: 'overlay',
+                            //background: 'linear-gradient(to right, #F5FAFF, #E6F0FA , #CCE5FF)',
+                            background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
+                            color: '#081A33',
+                            fontWeight: 600,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            }}
+                        >
+                            <img src={edit_report} style={{ width: '20px', height: '20px' }} />
+                            Edit Report
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                            flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '110px',
+                            borderRadius: '10px',
+                            background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
+                            //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
+                            //backgroundBlendMode: 'overlay',
+                            color: '#081A33',
+                            fontWeight: 600,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            }}
+                        >
+                            <img src={save_template} style={{ width: '20px', height: '20px' }} />
+                            Save as template
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                            flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '110px',
+                            borderRadius: '10px',
+                            background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
+                            //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
+                            //backgroundBlendMode: 'overlay',
+                            color: '#081A33',
+                            fontWeight: 600,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            }}
+                        >
+                            <img src={download_report} style={{ width: '20px', height: '20px' }} />
+                            Download Report
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                            flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '110px',
+                            borderRadius: '10px',
+                            background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
+                            //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
+                            //backgroundBlendMode: 'overlay',
+                            color: '#081A33',
+                            fontWeight: 600,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            }}
+                        >
+                            <img src={ai_icon} style={{ width: '20px', height: '20px' }} />
+                            AI Analyser
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                            flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '110px',
+                            borderRadius: '10px',
+                            background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
+                            //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
+                            //backgroundBlendMode: 'overlay',
+                            color: '#081A33',
+                            fontWeight: 600,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            }}
+                        >
+                            <img src={regenerate_response} style={{ width: '20px', height: '20px' }} />
+                            Regenerate Response
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={onNavigateToCMDContent}
+                            sx={{
+                            flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '110px',
+                            borderRadius: '10px',
+                            background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
+                            //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
+                            //backgroundBlendMode: 'overlay',
+                            color: '#081A33',
+                            fontWeight: 600,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            }}
+                        >
+                            <img src={generate_report} style={{ width: '20px', height: '20px' }} />
+                            Generate new Response
+                        </Button>
                     </Box>
 
                 </Box>

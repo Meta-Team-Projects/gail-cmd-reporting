@@ -238,7 +238,7 @@ const DocumentSelection = ({
             {/* Left Section */}
             <Box sx={{
                 //border: '1px solid red',
-                maxWidth: leftSidebarOpen ? '800px' : '900px',
+                maxWidth: leftSidebarOpen ? '41.67vw' : '46.88vw',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
@@ -250,9 +250,7 @@ const DocumentSelection = ({
                     sx={{
                     px: 2,
                     py:0.5,
-                    //mt: -1,
                     mx: 2,
-                    //mb: 1,
                     background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
                     borderRadius: 2,
                     //border: '1px solid #CBD0DC',
@@ -277,7 +275,7 @@ const DocumentSelection = ({
                 <Box sx={{
                     //border: '1px solid black',
                     display: 'flex',
-                    height: '65.5vh',
+                    //flex: 1,
                     mx: 2,
                     gap: 1,
 
@@ -556,7 +554,8 @@ const DocumentSelection = ({
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 0.5,
-                            height: '70%',
+                            flex: 1,
+                            //height: '70%',
                         }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>

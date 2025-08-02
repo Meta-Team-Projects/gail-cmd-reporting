@@ -235,7 +235,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 }}>
                     <Box sx={{
                         display: 'flex', gap: 1, alignItems: 'center'}}>
-                        <Typography>
+                        <Typography sx={{fontSize: '0.813vw'}}>
                             Start Now
                         </Typography>
                         <TrendingFlatIcon />
@@ -298,7 +298,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 }}>
                     <Box sx={{
                         display: 'flex', gap: 1, alignItems: 'center'}}>
-                        <Typography>
+                        <Typography sx={{fontSize: '0.813vw'}}>
                             Continue
                         </Typography>
                         <TrendingFlatIcon />
@@ -350,7 +350,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 }}>
                     <Typography sx={{
                         color: '#081A33',
-                        fontWeight: 700, fontSize: '1.-0417vw'
+                        fontWeight: 700, fontSize: '1.0417vw'
                     }}>
                         Latest Reports
                     </Typography>

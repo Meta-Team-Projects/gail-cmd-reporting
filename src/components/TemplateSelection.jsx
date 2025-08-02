@@ -206,7 +206,7 @@ const TemplateSelection = ({
             {/* Left Section */}
             <Box sx={{
                 //border: '1px solid red',
-                maxWidth: leftSidebarOpen ? '800px' : '900px',
+                maxWidth: leftSidebarOpen ? '41.67vw' : '46.88vw',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
@@ -241,9 +241,7 @@ const TemplateSelection = ({
                     px: 2,
                     py: 0.5,
                     pb: 1,
-                    //mt: 1,
                     mx:2,
-                    //mb: 1,
                     borderRadius: 2,
                     flexGrow: 1,
                     display: 'flex',
