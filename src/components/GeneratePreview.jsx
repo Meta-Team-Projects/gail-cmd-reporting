@@ -24,7 +24,6 @@ import {
     Tooltip,
     Link,
     Divider,
-    Chip,
     Stack,
     List,
     ListItem
@@ -422,7 +421,7 @@ const GeneratePreview = ({
                                             }
                                             </Typography>
                                         </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
                                             <IconButton
                                             size="small"
                                             onClick={() => handleToggleVisibility(name)}

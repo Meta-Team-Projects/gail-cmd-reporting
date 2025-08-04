@@ -441,7 +441,7 @@ const ReportGeneration = ({
                                         fontSize: '0.7292vw',
                                         color: '#081A33',
                                         borderRadius: '16px',
-                                        bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
+                                        bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                                         '&:hover': { bgcolor: '#FEC636' },
                                         boxShadow: '0px 4px 8px #15151540'
                                     }}
@@ -648,7 +648,7 @@ const ReportGeneration = ({
                             gap: 0.5,
                             }}
                         >
-                            <img src={edit_report} style={{ width: '20px', height: '20px' }} />
+                            <img src={edit_report} style={{ width: '1.823vw', height: '1.823vw' }} />
                             Edit Report
                         </Button>
                         <Button
@@ -668,7 +668,7 @@ const ReportGeneration = ({
                             gap: 0.5,
                             }}
                         >
-                            <img src={save_template} style={{ width: '20px', height: '20px' }} />
+                            <img src={save_template} style={{ width: '1.823vw', height: '1.823vw' }} />
                             Save as template
                         </Button>
                         <Button
@@ -688,7 +688,7 @@ const ReportGeneration = ({
                             gap: 0.5,
                             }}
                         >
-                            <img src={download_report} style={{ width: '20px', height: '20px' }} />
+                            <img src={download_report} style={{ width: '1.823vw', height: '1.823vw' }} />
                             Download Report
                         </Button>
                         <Button
@@ -708,7 +708,7 @@ const ReportGeneration = ({
                             gap: 0.5,
                             }}
                         >
-                            <img src={ai_icon} style={{ width: '20px', height: '20px' }} />
+                            <img src={ai_icon} style={{ width: '1.823vw', height: '1.823vw' }} />
                             AI Analyser
                         </Button>
                         <Button
@@ -728,7 +728,7 @@ const ReportGeneration = ({
                             gap: 0.5,
                             }}
                         >
-                            <img src={regenerate_response} style={{ width: '20px', height: '20px' }} />
+                            <img src={regenerate_response} style={{ width: '1.823vw', height: '1.823vw' }} />
                             Regenerate Response
                         </Button>
                         <Button
@@ -749,7 +749,7 @@ const ReportGeneration = ({
                             gap: 0.5,
                             }}
                         >
-                            <img src={generate_report} style={{ width: '20px', height: '20px' }} />
+                            <img src={generate_report} style={{ width: '1.823vw', height: '1.823vw' }} />
                             Generate new Response
                         </Button>
                     </Box>

@@ -311,7 +311,7 @@ const ArrowStepper = ({ activeStep }) => (
                                             fontSize: '0.7292vw',
                                             color: '#081A33',
                                             borderRadius: '16px',
-                                            bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
+                                            bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                                             '&:hover': { bgcolor: '#FEC636' },
                                             boxShadow: '0px 4px 8px #15151540'
                                         }}
@@ -441,7 +441,7 @@ const ArrowStepper = ({ activeStep }) => (
                                             }
                                             </Typography>
                                         </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
                                             <IconButton
                                             size="small"
                                             onClick={(e) => {
@@ -658,7 +658,7 @@ const ArrowStepper = ({ activeStep }) => (
                                                 }
                                                 </Typography>
                                             </Box>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
                                                 <IconButton
                                                 size="small"
                                                 onClick={() => handleToggleVisibility(name)}

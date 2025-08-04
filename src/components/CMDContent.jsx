@@ -184,10 +184,11 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1
+                    gap: 1,
+                    my: '1.25vw'
                 }}>
                     <Typography variant="subtitle2" sx={{
-                        fontWeight: 600, fontSize: '1.0417vw', color: '#081A33'
+                        fontWeight: 600, fontSize: '1.2vw', color: '#081A33'
                     }}>
                         Get started with report generation!
                     </Typography>
@@ -213,10 +214,11 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1
+                    gap: 1,
+                    my: '1.25vw'
                 }}>
                     <Typography variant="subtitle2" sx={{
-                        fontWeight: 600, fontSize: '1.0417vw', color: '#081A33'
+                        fontWeight: 600, fontSize: '1.2vw', color: '#081A33'
                     }}>
                         Generate New Response
                     </Typography>
@@ -276,10 +278,11 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1
+                    gap: 1,
+                    my: '1.25vw'
                 }}>
                     <Typography variant="subtitle2" sx={{
-                        fontWeight: 600, fontSize: '1.0417vw', color: '#081A33'
+                        fontWeight: 600, fontSize: '1.2vw', color: '#081A33'
                     }}>
                         Resume from last session 
                     </Typography>
@@ -401,7 +404,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 px: 2, py: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 1
+                gap: '0.7407vh'
             }}>
                 <Box sx={{
                     display: 'flex',
@@ -436,7 +439,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                                     fontSize: '0.7292vw',
                                     color: '#081A33',
                                     borderRadius: '16px',
-                                    bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
+                                    bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                                     '&:hover': { bgcolor: '#FEC636' },
                                     boxShadow: '0px 4px 8px #15151540'
                                 }}
@@ -445,8 +448,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     </Box>
                 </Stack>
                 <Box sx={{
-                    mt: 1,
-                }}>
+                    }}>
                     <TextField
                         fullWidth
                         variant="outlined"

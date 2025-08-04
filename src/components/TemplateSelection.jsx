@@ -238,7 +238,7 @@ const ArrowStepper = ({ activeStep }) => (
                     flexGrow: 1,
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1,
+                    gap: '0.7407vh',
                     minHeight: 0,
                     //border: '0.5px solid #00000033',
                     transform: 'translateZ(0)',
@@ -268,7 +268,7 @@ const ArrowStepper = ({ activeStep }) => (
                                         fontSize: '0.7292vw',
                                         color: '#081A33',
                                         borderRadius: '16px',
-                                        bgcolor: selectedCategory === category ? '#edcc09' : '#FFD95C',
+                                        bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                                         '&:hover': { bgcolor: '#FEC636' },
                                         boxShadow: '0px 4px 8px #15151540'
                                     }}
@@ -276,7 +276,7 @@ const ArrowStepper = ({ activeStep }) => (
                             ))}
                         </Box>
                     </Stack>
-                    <Box sx={{ mr: 4}}>
+                    <Box sx={{ mr: 4, mt: 1,}}>
                         <TextField
                             fullWidth
                             variant="outlined"
@@ -308,7 +308,7 @@ const ArrowStepper = ({ activeStep }) => (
                         flexWrap: 'wrap',
                         gap: '2%',
                         pr: 3,
-                        maxHeight: '250px',
+                        //maxHeight: '250px',
                         overflowY: 'auto',
                         overflowX: 'hidden',
                         '&::-webkit-scrollbar': { 
