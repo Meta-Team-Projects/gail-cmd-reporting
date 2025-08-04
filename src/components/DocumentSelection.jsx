@@ -275,7 +275,8 @@ const DocumentSelection = ({
                 <Box sx={{
                     //border: '1px solid black',
                     display: 'flex',
-                    //flex: 1,
+                    height: '67vh',
+                    flex: 1,
                     mx: 2,
                     gap: 1,
 

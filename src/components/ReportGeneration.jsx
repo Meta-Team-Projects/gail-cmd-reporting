@@ -244,7 +244,8 @@ const ReportGeneration = ({
             {/* Left Section */}
             <Box sx={{
                 //border: '1px solid blue',
-                width: leftSidebarOpen ? '36.46vw' : '41.67vw',
+                //width: leftSidebarOpen ? '36.46vw' : '41.67vw',
+                width: leftSidebarOpen ? '41.67vw' : '46.88vw',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
