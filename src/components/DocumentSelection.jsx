@@ -260,7 +260,7 @@ const ArrowStepper = ({ activeStep }) => (
                         Document Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '0.8854vw', color: '#081A33'
+                        fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
                         Select one or multiple documents from the list, or upload your own files to update the report template. These documents will be used to customize and enrich the final report.
                     </Typography>

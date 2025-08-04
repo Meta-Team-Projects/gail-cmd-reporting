@@ -224,7 +224,7 @@ const ArrowStepper = ({ activeStep }) => (
                         Template Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '0.8854vw', color: '#081A33'
+                        fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
                         Choose a report template from the list or upload your own to get started. This helps tailor the report format to your specific needs.
                     </Typography>

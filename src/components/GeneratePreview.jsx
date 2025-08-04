@@ -260,7 +260,7 @@ const GeneratePreview = ({
                         Document Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '0.8854vw', color: '#081A33'
+                        fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
                         Finalize your report template and selected documents before generating the report. Make sure you've chosen the relevant documents and template, as these will shape the content and layout of your final report.
                     </Typography>
