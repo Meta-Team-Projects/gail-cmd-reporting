@@ -126,7 +126,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
-            gap: 1,
+            gap: '0.417vw',
             maxWidth: {
                 xs: '90%',
                 sm: '94.5%',
@@ -153,8 +153,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
         }}
     >
         <Box sx={{
-            p: 2.5,
-            pb: 0
+            p: '1.042vw'
         }}>
             <Typography
             variant="h6"
@@ -167,14 +166,14 @@ const CMDContent = ({onNavigateToTemplate}) => {
         sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            mx: 2,
+            mx: '0.833vw',
             height: '35vh'
         }}>
             <Box
                 sx={{
                 width: '32.5%',
-                px: 2,
-                py: 1,
+                px: '0.833vw',
+                py: '0.417vw',
                 background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
                 borderRadius: 2,
                 border: '1px solid #CBD0DC',
@@ -184,7 +183,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1,
+                    gap: '0.417vw',
                     my: '1.25vw'
                 }}>
                     <Typography variant="subtitle2" sx={{
@@ -202,8 +201,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
             <Box
             sx={{
                 width: '32.5%',
-                px: 2,
-                pt: 1,
+                px: '0.833vw',
+                pt: '0.417vw',
                 background: 'linear-gradient(to right, #FFE56D, #FFD65A)',
                 borderRadius: 2,
                 border: '1px solid #CBD0DC',
@@ -214,7 +213,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1,
+                    gap: '0.417vw',
                     my: '1.25vw'
                 }}>
                     <Typography variant="subtitle2" sx={{
@@ -229,14 +228,14 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     </Typography>
                 </Box> 
                 <Box sx= {{
-                    py: 2,
+                    py: '0.833vw',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    gap: 2
+                    gap: '0.833vw'
                 }}>
                     <Box sx={{
-                        display: 'flex', gap: 1, alignItems: 'center'}}>
+                        display: 'flex', gap: '0.417vw', alignItems: 'center'}}>
                         <Typography sx={{fontSize: '0.813vw'}}>
                             Start Now
                         </Typography>
@@ -254,8 +253,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
                         bgcolor: '#0087d6',
                         fontWeight: 550,
                         fontSize: '0.813vw',
-                        px: '15.61px',
-                        py: '6.83px',
+                        px: '0.813vw',
+                        py: '0.3568vw',
                         boxShadow: '0px 4px 8px #15151540'
                     }}
                 >
@@ -266,8 +265,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
             <Box
             sx={{
                 width: '32.5%',
-                px: 2,
-                pt: 1,
+                px: '0.833vw',
+                pt: '0.417vw',
                 background: 'linear-gradient(to right, #E3F1FF1F, #D3E8F9)',
                 borderRadius: 2,
                 border: '1px solid #CBD0DC',
@@ -278,7 +277,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1,
+                    gap: '0.417vw',
                     my: '1.25vw'
                 }}>
                     <Typography variant="subtitle2" sx={{
@@ -293,14 +292,14 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     </Typography>
                 </Box> 
                 <Box sx= {{
-                    py: 2,
+                    py: '0.833vw',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    gap: 2
+                    gap: '0.833vw'
                 }}>
                     <Box sx={{
-                        display: 'flex', gap: 1, alignItems: 'center'}}>
+                        display: 'flex', gap: '0.417vw', alignItems: 'center'}}>
                         <Typography sx={{fontSize: '0.813vw'}}>
                             Continue
                         </Typography>
@@ -316,8 +315,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
                         bgcolor: '#0087d6',
                         fontWeight: 550,
                         fontSize: '0.813vw',
-                        px: '15.61px',
-                        py: '6.83px',
+                        px: '0.813vw',
+                        py: '0.3568vw',
                         boxShadow: '0px 4px 8px #15151540'
                     }}
                     >
@@ -330,8 +329,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
         {/* Bottom Boxes */}
         <Box sx={{
             display: 'flex',
-            gap: 1,
-            mx: 2,
+            gap: '0.417vw',
+            mx: '0.833vw',
             //border: '1px solid green',
             height: '50vh',
         }}>
@@ -341,11 +340,11 @@ const CMDContent = ({onNavigateToTemplate}) => {
                 borderRadius: '12px',
                 //border: '1px solid red',
                 bgcolor: '#F5FAFF',
-                px: 2, pt: 1, pb: 2,
-                mb: 1,
+                px: '0.833vw', pt: '0.417vw', pb: '0.833vw',
+                mb: '0.417vw',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 1
+                gap: '0.417vw'
             }}>
                 <Box sx={{
                     display: 'flex',
@@ -357,7 +356,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     }}>
                         Latest Reports
                     </Typography>
-                    <AccessTimeIcon sx={{color: '#081A33'}}/>
+                    <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.25vw'}}/>
                 </Box>
                 <Box sx={{ flex: 1,
                     display: 'flex',
@@ -398,10 +397,10 @@ const CMDContent = ({onNavigateToTemplate}) => {
             <Box sx={{
                 flex: 1,
                 borderRadius: '12px',
-                mb: 1,
+                mb: '0.417vw',
                 //border: '1px solid blue',
                 bgcolor: '#F5FAFF',
-                px: 2, py: 1,
+                px: '0.833vw', py: '0.417vw',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.7407vh'
@@ -416,13 +415,13 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     }}>
                         Reports Repository
                     </Typography>
-                    <AccessTimeIcon sx={{color: '#081A33'}}/>
+                    <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.25vw'}}/>
                 </Box> 
                 <Stack direction="row" 
                 sx={{flexWrap: 'wrap', gap: '0.41vw'}}>
                     <Box sx={{ 
                         display: 'flex', flexWrap: 'wrap',
-                        gap: 1, flexGrow: 1
+                        gap: '0.417vw', flexGrow: 1
                     }}>
                         {categories.map((category) => (
                             <Chip
@@ -432,9 +431,9 @@ const CMDContent = ({onNavigateToTemplate}) => {
                                 size="small"
                                 onClick={() => setSelectedCategory(category)}
                                 sx={{
-                                    px: '9px',
-                                    py: '9px',
-                                    mb: 1,
+                                    px: '0.469vw',
+                                    py: '0.469vw',
+                                    mb: '0.417vw',
                                     fontWeight: 500,
                                     fontSize: '0.7292vw',
                                     color: '#081A33',
@@ -460,15 +459,15 @@ const CMDContent = ({onNavigateToTemplate}) => {
                             '& .MuiOutlinedInput-root': {
                                 bgcolor: '#0088D61A', //later
                                 borderRadius: 10,
-                                height: '30px',
-                                fontSize: '16px',
+                                height: '1.5625vw',
+                                fontSize: '0.833vw',
                                 color: '#515151'
                             }
                         }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon sx={{ color: '#515151', fontSize: '20px' }} />
+                                    <SearchIcon sx={{ color: '#515151', fontSize: '1.042vw' }} />
                                 </InputAdornment>
                             )
                         }}
@@ -494,7 +493,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    px: 0.5
+                    px: '0.208vw'
                 }}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.1417vw', color: '#081A33' }}>
                         All Reports
@@ -535,7 +534,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     }
                     // filter by search
                     return (
-                    <List sx={{ px: 0, mb: 1 }}>
+                    <List sx={{ px: 0, mb: '0.417vw' }}>
                         {docs
                         // .filter(name =>
                         //     name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -548,14 +547,14 @@ const CMDContent = ({onNavigateToTemplate}) => {
                                 bgcolor: '#A9C7FF66',
                                 borderRadius: 2,
                                 mb: '0.2083vw',
-                                p: 0.5,
+                                p: '0.208vw',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 border: '0.5px solid #00000033',
                             }}
                             >
-                                <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
                                     <IconButton size="small" onClick={() => togglePin(name)}>
                                         <Tooltip title="Pin" placement='bottom' arrow>
                                             <PushPinIcon sx={{
@@ -648,12 +647,12 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    px: 1,
+                    px: '0.417vw',
                     }}
                 >
                     <Typography sx={{
                         color: '#ffffff',
-                        fontWeight: '15px',
+                        fontSize: '0.833vw',
                         fontWeight: 700
                     }}>
                         {selectedReport}
@@ -664,7 +663,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                     display: 'flex',
                     justifyContent: 'center',
                     width: '100%',
-                    p: 2,
+                    p: '0.833vw',
                 }}>
                     <Box sx={{
                         position: 'relative',
@@ -686,7 +685,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                             right: '-3.5vw',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 1.5
+                            gap: '0.625vw'
                         }}>
                             <IconButton sx={{
                                 width: '3vw',
@@ -696,7 +695,7 @@ const CMDContent = ({onNavigateToTemplate}) => {
                                 borderRadius: '50%',
                                 '&:hover': {backgroundColor: '#FFCB42'},
                             }}>
-                                <EditOutlinedIcon sx={{ fontSize: '20px' }} />
+                                <EditOutlinedIcon sx={{ fontSize: '1.042vw' }} />
                             </IconButton>
                             <IconButton sx={{
                                 width: '3vw',
@@ -709,8 +708,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
                             <img
                                 src={download_report}
                                 style={{
-                                width: '20px',
-                                height: '20px',
+                                width: '1.042vw',
+                                height: '1.042vw',
                                 objectFit: 'contain',
                                 }}
                             />
@@ -726,8 +725,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
                                 <img
                                 src={save_template}
                                 style={{
-                                width: '20px',
-                                height: '20px',
+                                width: '1.042vw',
+                                height: '1.042vw',
                                 objectFit: 'contain',
                                 }}
                             />
@@ -743,8 +742,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
                                 <img
                                 src={generate_report}
                                 style={{
-                                width: '20px',
-                                height: '20px',
+                                width: '1.042vw',
+                                height: '1.042vw',
                                 objectFit: 'contain',
                                 }}
                             />
