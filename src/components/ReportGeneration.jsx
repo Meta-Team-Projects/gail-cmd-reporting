@@ -167,7 +167,7 @@ const ReportGeneration = ({
     const panelRef = useRef<HTMLDivElement>(null);
 
     const ArrowStepper = ({ activeStep }) => (
-        <Box display="flex" justifyContent="center" mt={2} width="100%">
+        <Box display="flex" justifyContent="center" mt={'0.8333vw'} width="100%">
             <Box display="flex"  sx={{ position: 'relative' }}>
             {steps.map((label, idx) => {
                 const isActive = idx === activeStep;
@@ -209,7 +209,7 @@ const ReportGeneration = ({
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
+            gap: '0.8333vw',
             maxWidth: {
                 xs: '90%',
                 sm: '94.5%',
@@ -222,8 +222,8 @@ const ReportGeneration = ({
         }}
     >
         <Box sx={{
-            p: 2.5,
-            pb: 0, mb: -3
+            p: '1.042vw',
+            pb: 0, mb: '-1.25vw'
         }}>
             <Typography
             variant="h6"
@@ -233,7 +233,7 @@ const ReportGeneration = ({
         </Box>
         <Box sx={{
             //border: '1px solid black',
-            display: 'flex', height: '87vh', gap: 1
+            display: 'flex', height: '87vh', gap: '0.417vw'
         }}>
 
             {/* Left Section */}
@@ -244,7 +244,7 @@ const ReportGeneration = ({
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
-                gap: 1
+                gap: '0.417vw'
             }}>
                 {/* Timeline */}
                 <ArrowStepper activeStep={3} />
@@ -258,7 +258,7 @@ const ReportGeneration = ({
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        mx: 2,
+                        mx: '0.8333vw',
                         height: '100%',
                         transition: 'all 0.3s ease',
                         position: 'relative',
@@ -274,7 +274,7 @@ const ReportGeneration = ({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        px: 1,
+                        px: '0.417vw',
                         }}
                     >
                         <Typography sx={{
@@ -292,8 +292,8 @@ const ReportGeneration = ({
                     </Box>
                     <IconButton sx={{
                         position: 'absolute',
-                        top: 50,
-                        right: 10,
+                        top: '2.604vw',
+                        right: '0.521vw',
                         width: '2.3438vw', height: '2.3438vw',
                         color: '#081A33',
                         backgroundColor: '#FFD95CE5',
@@ -312,8 +312,8 @@ const ReportGeneration = ({
                     </IconButton>
                     <IconButton sx={{
                         position: 'absolute',
-                        top: 100,
-                        right: 10,
+                        top: '5.208vw',
+                        right: '0.521vw',
                         width: '2.3438vw', height: '2.3438vw',
                         color: '#081A33',
                         backgroundColor: '#FFD95CE5',
@@ -354,18 +354,18 @@ const ReportGeneration = ({
                 display: 'flex',
                 flexDirection: 'column',
                 flex: 1,
-                gap: 1,
+                gap: '0.417vw',
             }}>
                 <Box sx={{
                     bgcolor: '#F5FAFF',
                     borderRadius: 2,
-                    mr: 2,
-                    px: 2, pt: 0.5, pb: 1 
+                    mr: '0.8333vw',
+                    px: '0.8333vw', pt: '0.208vw', pb: '0.417vw'
 
                 }}>
                     <Box sx={{
                         display: 'flex', alignItems: 'center',
-                        justifyContent: 'space-between', p: 0.5
+                        justifyContent: 'space-between', p: '0.208vw'
                     }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                             Reports Template
@@ -374,7 +374,7 @@ const ReportGeneration = ({
                     </Box>
                     <Box sx={{
                         display: 'flex', alignItems: 'center',
-                        justifyContent: 'space-between', px: 2, py: 1,
+                        justifyContent: 'space-between', px: '0.8333vw', py: '0.417vw',
                         bgcolor: '#0088D61A', borderRadius: 2
                     }}>
                         <Typography variant="subtitle2"
@@ -396,21 +396,20 @@ const ReportGeneration = ({
 
                 {/* Documents Repository */}
                 <Box sx={{
-                    px: 2,
-                    py: 1, pb: 2,
+                    px: '0.8333vw',
+                    py: '0.417vw',
                     //mt: 1,
-                    mr:2,
+                    mr: '0.8333vw',
                     overflow: 'hidden',
                     borderRadius: 2,
-                    display: 'flex',
+                    display: 'flex', flex: 1,
                     flexDirection: 'column',
-                    gap: 1,
-                    minHeight: 0,
-                    //border: '0.5px solid #00000033',
+                    gap: '0.417vw',
+                    //border: '1px solid black',
                     transform: 'translateZ(0)',
                     bgcolor: '#F5FAFF'
                 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw' }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
                             Documents Repository
                         </Typography>
@@ -426,7 +425,7 @@ const ReportGeneration = ({
                     <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
                         <Box sx={{ 
                             display: 'flex', flexWrap: 'wrap',
-                            gap: 1, flexGrow: 1 }}>
+                            gap: '0.417vw', flexGrow: 1 }}>
                             {categories.map((category) => (
                                 <Chip
                                     key={category}
@@ -435,8 +434,8 @@ const ReportGeneration = ({
                                     size="small"
                                     onClick={() => setSelectedCategory(category)}
                                     sx={{
-                                        px: '9px',
-                                        py: '9px',
+                                        px: '0.469vw',
+                                        py: '0.469vw',
                                         fontWeight: 500,
                                         fontSize: '0.7292vw',
                                         color: '#081A33',
@@ -453,7 +452,7 @@ const ReportGeneration = ({
                     sx={{
                         flexGrow: 1,
                         pr: 1,
-                        height: '32vh',
+                        height: '28vh',
                         overflowY: 'auto !important',
                         overflow: 'hidden',
                         '&::-webkit-scrollbar': { 
@@ -488,15 +487,15 @@ const ReportGeneration = ({
                                     sx={{
                                         bgcolor: '#A9C7FF66',
                                         borderRadius: 2,
-                                        mb: '4px',
-                                        p: 0.5,
+                                        mb: '0.2083vw',
+                                        p: '0.208vw',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'space-between',
                                         border: '0.5px solid #00000033',
                                     }}
                                     >
-                                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
                                                 <IconButton
                                                 size="small"
                                                 // onClick={() => {
@@ -539,7 +538,7 @@ const ReportGeneration = ({
                                             }
                                             </Typography>
                                         </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
                                             <IconButton
                                             size="small"
                                             onClick={() => handleToggleVisibility(name)}
@@ -609,7 +608,7 @@ const ReportGeneration = ({
                 </Box> 
 
                 {/* Bottom Buttons */}
-                <Box sx={{
+                {/* <Box sx={{
                     px: 2,
                     pt: 1.5,
                     //mt: 1,
@@ -633,8 +632,8 @@ const ReportGeneration = ({
                         <Button
                             variant="contained"
                             sx={{
-                            flex: '0 1 calc(33.333% - 0.5vw)',
-                            height: '110px',
+                            // flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '8.5vw',
                             borderRadius: '10px',
                             //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
                             //backgroundBlendMode: 'overlay',
@@ -654,8 +653,8 @@ const ReportGeneration = ({
                         <Button
                             variant="contained"
                             sx={{
-                            flex: '0 1 calc(33.333% - 0.5vw)',
-                            height: '110px',
+                            //flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '8.5vw',
                             borderRadius: '10px',
                             background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                             //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
@@ -674,8 +673,8 @@ const ReportGeneration = ({
                         <Button
                             variant="contained"
                             sx={{
-                            flex: '0 1 calc(33.333% - 0.5vw)',
-                            height: '110px',
+                            //flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '8.5vw',
                             borderRadius: '10px',
                             background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                             //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
@@ -694,8 +693,8 @@ const ReportGeneration = ({
                         <Button
                             variant="contained"
                             sx={{
-                            flex: '0 1 calc(33.333% - 0.5vw)',
-                            height: '110px',
+                            //flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '8.5vw',
                             borderRadius: '10px',
                             background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                             //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
@@ -714,8 +713,8 @@ const ReportGeneration = ({
                         <Button
                             variant="contained"
                             sx={{
-                            flex: '0 1 calc(33.333% - 0.5vw)',
-                            height: '110px',
+                            //flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '8.5vw',
                             borderRadius: '10px',
                             background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                             //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
@@ -735,8 +734,8 @@ const ReportGeneration = ({
                             variant="contained"
                             onClick={onNavigateToCMDContent}
                             sx={{
-                            flex: '0 1 calc(33.333% - 0.5vw)',
-                            height: '110px',
+                            //flex: '0 1 calc(33.333% - 0.5vw)',
+                            height: '8.5vw',
                             borderRadius: '10px',
                             background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                             //background: 'linear-gradient(to right, #F5FAFF, #939699), linear-gradient(to bottom, #E6F0FA, #CCE5FF)',
@@ -754,7 +753,52 @@ const ReportGeneration = ({
                         </Button>
                     </Box>
 
+                </Box> */}
+                <Box
+                sx={{
+                    display: 'grid',
+                    bgcolor: '#F5FAFF',
+                    borderRadius: 2,
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: '1.2vw', // spacing between buttons, scalable
+                    mr: '0.8333vw', p: '0.8333vw',
+                    justifyItems: 'center',
+                }} 
+                >
+                {[edit_report, save_template, download_report, ai_icon, regenerate_response, generate_report].map((icon, index) => (
+                    <Button
+                    key={index}
+                    variant="contained"
+                    onClick={index === 5 ? onNavigateToCMDContent : undefined}
+                    sx={{
+                        height: '8.5vw',
+                        width: '100%', // full width of grid column
+                        maxWidth: '20vw', // limit width for very large screens
+                        borderRadius: '10px',
+                        background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
+                        color: '#081A33',
+                        fontWeight: 600,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '0.208vw',
+                        textAlign: 'center',
+                    }}
+                    >
+                    <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />
+                    {[
+                        'Edit Report',
+                        'Save as template',
+                        'Download Report',
+                        'AI Analyser',
+                        'Regenerate Response',
+                        'Generate new Response',
+                    ][index]}
+                    </Button>
+                ))}
                 </Box>
+
             </Box>
         </Box>
     </Box>
