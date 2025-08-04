@@ -162,32 +162,26 @@ const GeneratePreview = ({
     const panelRef = useRef<HTMLDivElement>(null);
 
     const ArrowStepper = ({ activeStep }) => (
-        <Box display="flex" mt={2} mx={2}>
-            {steps.map((label, idx) => {
-            const isActive   = idx === activeStep
-            const isComplete = idx < activeStep
-
-            const bg = isActive
-                ? '#081A33'
-                : isComplete
-                ? '#FFD95C'
-                : '#FFFFFF'
-
-            // arrow border + inactive text color
-            const fg = isActive
-                ? '#FFFFFF'
-                : isComplete
-                ? '#081A33'
-                : '#B0B0B0'
-
+            <Box display="flex" justifyContent="center" mt={2} width="100%">
+                <Box display="flex"  sx={{ position: 'relative' }}>
+                {steps.map((label, idx) => {
+                    const isActive = idx === activeStep;
+                    const isComplete = idx < activeStep;
+    
+                    const bg = isActive ? '#081A33' : isComplete ? '#FFD95C' : '#FFFFFF';
+                    const fg = isActive ? '#FFFFFF' : isComplete ? '#081A33' : '#B0B0B0';
+    
                     return (
-                <StepArrow key={label} bg={bg} fg={fg}>
-                {label}
-                </StepArrow>
-            )
-            })}
-        </Box>
-    )
+                    <Box key={label} sx={{ minWidth: 'max-content' }}>
+                        <StepArrow bg={bg} fg={fg}>
+                        {label}
+                        </StepArrow>
+                    </Box>
+                    );
+                })}
+                </Box>
+            </Box>
+        );
 
   return (
     <Box

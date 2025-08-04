@@ -31,7 +31,7 @@ export const StepArrow = styled(Box, {
     justifyContent:  'center',
     padding:         '0.75rem 1.5rem',
     fontWeight:      600,
-    fontSize:        '0.875rem',
+    fontSize:        '0.75rem',
     backgroundColor: bg,
     color:           fg,
     border: ({ bg }) => bg === '#FFFFFF'
