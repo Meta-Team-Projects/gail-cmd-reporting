@@ -168,7 +168,7 @@ const ArrowStepper = ({ activeStep }) => (
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
+            gap: '0.8333vw',
             maxWidth: {
                 xs: '90%',
                 sm: '94.5%',
@@ -181,8 +181,8 @@ const ArrowStepper = ({ activeStep }) => (
         }}
     >
         <Box sx={{
-            p: 2.5,
-            pb: 0, mb: -3
+            p: '1.042vw',
+            pb: 0, mb: '-1.25vw'
         }}>
             <Typography
             variant="h6"
@@ -202,15 +202,15 @@ const ArrowStepper = ({ activeStep }) => (
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
-                gap: 1
+                gap: '0.417vw'
             }}>
                 {/* ─── Timeline Stepper ─── */}
                 <ArrowStepper activeStep={0} />
                 <Box
                     sx={{
-                    px: 2,
-                    py:0.5,
-                    mx: 2,
+                    px: '0.8333vw',
+                    py:'0.208vw',
+                    mx: '0.8333vw',
                     background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                     borderRadius: 2,
                     //border: '1px solid #CBD0DC',
@@ -230,15 +230,15 @@ const ArrowStepper = ({ activeStep }) => (
                     </Typography>
                 </Box>
                 <Box sx={{
-                    px: 2,
-                    py: 0.5,
-                    pb: 1,
-                    mx:2,
+                    px: '0.8333vw',
+                    py: '0.208vw',
+                    pb: '0.417vw',
+                    mx: '0.8333vw',
                     borderRadius: 2,
                     flexGrow: 1,
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '0.7407vh',
+                    gap: '0.417vw',
                     minHeight: 0,
                     //border: '0.5px solid #00000033',
                     transform: 'translateZ(0)',
@@ -253,7 +253,7 @@ const ArrowStepper = ({ activeStep }) => (
                     <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
                         <Box sx={{ 
                             display: 'flex', flexWrap: 'wrap',
-                            gap: 1, flexGrow: 1 }}>
+                            gap: '0.417vw', flexGrow: 1 }}>
                             {categories.map((category) => (
                                 <Chip
                                     key={category}
@@ -262,8 +262,8 @@ const ArrowStepper = ({ activeStep }) => (
                                     size="small"
                                     onClick={() => setSelectedCategory(category)}
                                     sx={{
-                                        px: '9px',
-                                        py: '9px',
+                                        px: '0.469vw',
+                                        py: '0.469vw',
                                         fontWeight: 500,
                                         fontSize: '0.7292vw',
                                         color: '#081A33',
@@ -276,7 +276,7 @@ const ArrowStepper = ({ activeStep }) => (
                             ))}
                         </Box>
                     </Stack>
-                    <Box sx={{ mr: 4, mt: 1,}}>
+                    <Box sx={{ mr: '1.667vw', mt: '0.417vw',}}>
                         <TextField
                             fullWidth
                             variant="outlined"
@@ -288,26 +288,26 @@ const ArrowStepper = ({ activeStep }) => (
                                 '& .MuiOutlinedInput-root': {
                                     bgcolor: '#0088D61A', //later
                                     borderRadius: 10,
-                                    height: '30px',
-                                    fontSize: '16px',
+                                    height: '1.563vw',
+                                    fontSize: '0.833vw',
                                     color: '#515151',
                                 }
                             }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon sx={{ color: '#515151', fontSize: '20px' }} />
+                                        <SearchIcon sx={{ color: '#515151', fontSize: '1.042vw' }} />
                                     </InputAdornment>
                                 )
                             }}
                         />
                     </Box>
                     <Box sx={{
-                        mt: 1,
+                        mt: '0.417vw',
                         display:'flex',
                         flexWrap: 'wrap',
                         gap: '2%',
-                        pr: 3,
+                        pr: '1.25vw',
                         //maxHeight: '250px',
                         overflowY: 'auto',
                         overflowX: 'hidden',
@@ -333,7 +333,7 @@ const ArrowStepper = ({ activeStep }) => (
                                 onClick={() => setSelectedPreview(src)}
                                 sx={{
                                     width: '32%',
-                                    mb: 1.5,
+                                    mb: '0.625vw',
                                     borderRadius: '5px',
                                     objectFit: 'cover',
                                     cursor: 'pointer',
@@ -387,14 +387,14 @@ const ArrowStepper = ({ activeStep }) => (
                     sx={{
                         border: '2px dashed #E6E6E6',
                         borderRadius: 2,
-                        p: 1,
+                        p: '0.417vw',
                         textAlign: 'center',
                         bgcolor: '#FFD95C1A',   //later
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: 0.5,
-                        mx: 2
+                        gap: '0.208vw',
+                        mx: '0.8333vw',
                     }}
                 >
                     {/* hidden file input + upload handler */}
@@ -409,11 +409,11 @@ const ArrowStepper = ({ activeStep }) => (
                     <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
                     
                     <Typography variant="caption" display="block" color="#515151"
-                    sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -0.5}}>
+                    sx={{ fontWeight: 500, fontSize: '0.625vw', mt: '-0.208vw'}}>
                         Choose a file
                     </Typography>
                     <Typography variant="caption" display="block" color="#515151"
-                    sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -1}}>
+                    sx={{ fontWeight: 500, fontSize: '0.625vw', mt: '-0.208vw'}}>
                         DOCX format, up to 10MB
                     </Typography>
                     
@@ -425,11 +425,11 @@ const ArrowStepper = ({ activeStep }) => (
                         bgcolor: '#0088D6',
                         color: '#ffffff',
                         textTransform: 'none',
-                        px: 3,
-                        py: 0.5,
+                        px: '1.25vw',
+                        py: '0.208vw',
                         fontWeight: 500,
                         fontSize: '0.7292vw',
-                        my:1,
+                        my: '0.417vw',
                         }}
                     >
                         Browse Reports
@@ -439,7 +439,7 @@ const ArrowStepper = ({ activeStep }) => (
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    mx: 2
+                    mx: '0.8333vw'
                 }}>
                     <Button
                     variant= "contained"
@@ -476,7 +476,7 @@ const ArrowStepper = ({ activeStep }) => (
                 display: 'flex',
                 flexDirection: 'column',
             }}>
-                <Box sx={{ pt: 2, flexGrow: 1 }}>
+                <Box sx={{ pt: '0.8333vw', flexGrow: 1 }}>
                     <Box
                         sx={{
                             border: '1px solid #D2D2D2',
@@ -487,7 +487,7 @@ const ArrowStepper = ({ activeStep }) => (
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            ml: 1, mr: 2, 
+                            ml: '0.417vw', mr: '0.8333vw', 
                             height: '100%',
                             transition: 'all 0.3s ease',
                             position: 'relative',
@@ -524,8 +524,8 @@ const ArrowStepper = ({ activeStep }) => (
                                 </>
                             ) : (
                                 <>
-                                    <FindInPageIcon sx={{ fontSize: '1.667vw', color: '#081A33', mb: 0.5 }} /> 
-                        
+                                    <FindInPageIcon sx={{ fontSize: '1.667vw', color: '#081A33', mb: '0.208vw' }} /> 
+
                                     <Typography variant="subtitle2"
                                     sx={{ fontWeight: 600, fontSize: '0.8854vw',
                                         color: '#081A33', opacity: 0.8
