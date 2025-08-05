@@ -167,7 +167,8 @@ const CMDContent = ({onNavigateToTemplate}) => {
             display: 'flex',
             justifyContent: 'space-between',
             mx: '0.833vw',
-            height: '35vh'
+            height: '35vh',
+            mb: '0.417vw',
         }}>
             <Box
                 sx={{
