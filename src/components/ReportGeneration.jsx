@@ -175,7 +175,7 @@ const ReportGeneration = ({
 
 
     const ArrowStepper = ({ activeStep }) => (
-    <Box display="flex" justifyContent="center" mt={2} width="100%" sx={{ px: 2 }}>
+    <Box display="flex" justifyContent="center" mt={'0.8333vw'} width="100%" sx={{ px: '0.8333vw' }}>
         <Box display="flex" width="100%">
         {steps.map((label, idx) => {
             const isActive = idx === activeStep;
@@ -201,7 +201,7 @@ const ReportGeneration = ({
                 sx={{
                 flex: 1,
                 position: 'relative',
-                marginLeft: idx !== 0 ? '-12px' : 0, // overlap by 20px
+                marginLeft: idx !== 0 ? '-0.625vw' : 0, // overlap by 20px
                 }}
             >
                 <StepArrow fg={textColor}>
@@ -212,7 +212,7 @@ const ReportGeneration = ({
                     backgroundSize: '100% 100%',
                     }}
                 />
-                <ArrowLabel fg={textColor} variant="body2">{label}</ArrowLabel>
+                <ArrowLabel fg={textColor} variant="body2" sx={{ fontSize: '0.7292vw'}}>{label}</ArrowLabel>
                 </StepArrow>
             </Box>
             );
@@ -814,7 +814,7 @@ const ReportGeneration = ({
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: '0.208vw',
-                        textAlign: 'center',
+                        textAlign: 'center', fontSize: '0.7292vw'
                     }}
                     >
                     <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />

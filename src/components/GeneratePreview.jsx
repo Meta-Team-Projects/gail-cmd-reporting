@@ -205,7 +205,7 @@ const GeneratePreview = ({
                     backgroundSize: '100% 100%',
                     }}
                 />
-                <ArrowLabel fg={textColor} variant="body2">{label}</ArrowLabel>
+                <ArrowLabel fg={textColor} variant="body2" sx={{ fontSize: '0.7292vw'}}>{label}</ArrowLabel>
                 </StepArrow>
             </Box>
             );
