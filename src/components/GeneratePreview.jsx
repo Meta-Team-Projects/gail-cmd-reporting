@@ -168,7 +168,7 @@ const GeneratePreview = ({
     const panelRef = useRef<HTMLDivElement>(null);
 
     const ArrowStepper = ({ activeStep }) => (
-    <Box display="flex" justifyContent="center" mt={2} width="100%" sx={{ px: 2 }}>
+    <Box display="flex" justifyContent="center" mt={'0.8333vw'} width="100%" sx={{ px: '0.8333vw' }}>
         <Box display="flex" width="100%">
         {steps.map((label, idx) => {
             const isActive = idx === activeStep;
@@ -194,7 +194,7 @@ const GeneratePreview = ({
                 sx={{
                 flex: 1,
                 position: 'relative',
-                marginLeft: idx !== 0 ? '-12px' : 0, // overlap by 20px
+                marginLeft: idx !== 0 ? '-0.625vw' : 0, // overlap by 20px
                 }}
             >
                 <StepArrow fg={textColor}>
@@ -234,7 +234,7 @@ const GeneratePreview = ({
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
+            gap: '0.8333vw',
             maxWidth: {
                 xs: '90%',
                 sm: '94.5%',
@@ -247,8 +247,8 @@ const GeneratePreview = ({
         }}
     >
         <Box sx={{
-            p: 2.5,
-            pb: 0, mb: -3
+            p: '1.042vw',
+            pb: 0, mb: '-1.25vw'
         }}>
             <Typography
             variant="h6"
@@ -268,15 +268,15 @@ const GeneratePreview = ({
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
-                gap: 1
+                gap: '0.417vw'
             }}>
                 <ArrowStepper activeStep={2} />
                 <Box
                     sx={{
-                    px: 2,
-                    py:0.5,
+                    px: '0.8333vw',
+                    py:'0.208vw',
                     //mt: -1,
-                    mx: 2,
+                    mx: '0.8333vw',
                     //mb: 1,
                     background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
                     borderRadius: 2,
@@ -302,13 +302,13 @@ const GeneratePreview = ({
                 <Box sx={{
                     bgcolor: '#F5FAFF',
                     borderRadius: 2,
-                    mx: 2,
-                    px: 2, pt: 1, pb: 2
+                    mx: '0.8333vw',
+                    px: '0.8333vw', pt: '0.417vw', pb: '0.8333vw'
 
                 }}>
                     <Box sx={{
                         display: 'flex', alignItems: 'center',
-                        justifyContent: 'space-between', p: 0.5, pr: 0
+                        justifyContent: 'space-between', p: '0.208vw',
                     }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                             Reports Template
@@ -324,7 +324,7 @@ const GeneratePreview = ({
                     </Box>
                     <Box sx={{
                         display: 'flex', alignItems: 'center',
-                        justifyContent: 'space-between', px: 2, py: 1,
+                        justifyContent: 'space-between', px: '0.8333vw', py: '0.417vw',
                         bgcolor: '#0088D61A', borderRadius: 2
                     }}>
                         <Typography variant="subtitle2"
@@ -347,12 +347,12 @@ const GeneratePreview = ({
                     display: 'flex',
                     flexDirection: 'column',
                     flex: 1,
-                    mx: 2,
-                    px: 2,
-                    py: 0.5,
-                    pb: 2,
+                    mx: '0.8333vw',
+                    px: '0.8333vw',
+                    py: '0.208vw',
+                    pb: '0.8333vw',
                 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 0.5, pr: 0 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw'}}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
                             Selected Documents
                         </Typography>
@@ -367,7 +367,7 @@ const GeneratePreview = ({
                     <Box
                     sx={{
                         flexGrow: 1,
-                        pr: 1,
+                        pr: '0.417vw',
                         maxHeight: '50vh',
                         overflowY: 'auto !important',
                         overflow: 'hidden',
@@ -403,15 +403,15 @@ const GeneratePreview = ({
                                     sx={{
                                         bgcolor: '#A9C7FF66',
                                         borderRadius: 2,
-                                        mb: '4px',
-                                        p: 0.5,
+                                        mb: '0.208vw',
+                                        p: '0.208vw',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'space-between',
                                         border: '0.5px solid #00000033',
                                     }}
                                     >
-                                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: 1}}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
                                                 <IconButton
                                                 size="small"
                                                 // onClick={() => {
@@ -490,7 +490,7 @@ const GeneratePreview = ({
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    mx: 2
+                    mx: '0.8333vw'
                 }}>
                     <Button
                     variant= "contained"
@@ -527,7 +527,7 @@ const GeneratePreview = ({
                 display: 'flex',
                 flexDirection: 'column',
             }}>
-                <Box sx={{ pt: 2, flexGrow: 1 }}>
+                <Box sx={{ pt: '0.8333vw', flexGrow: 1 }}>
                     <Box
                         sx={{
                             border: '1px solid #D2D2D2',
@@ -538,7 +538,7 @@ const GeneratePreview = ({
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            ml: 1, mr: 2, 
+                            ml: '0.417vw', mr: '0.8333vw',
                             height: '100%',
                             transition: 'all 0.3s ease',
                             position: 'relative',
