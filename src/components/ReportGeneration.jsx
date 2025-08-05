@@ -45,7 +45,7 @@ import {
 } from '@mui/icons-material'
 
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
-import { StepArrow,ArrowShape } from './StepArrow' 
+import { StepArrow,ArrowShape, ArrowLabel } from './StepArrow' 
 import edit_report from '../assets/edit_report_icon.png'
 import save_template from '../assets/save_template_icon.png'
 import download_report from '../assets/download_report_icon.png'
@@ -53,6 +53,13 @@ import ai_icon from '../assets/ai_icon.png'
 import regenerate_response from '../assets/regenerate_response_icon.png'
 import generate_report from '../assets/generate_report_icon.png'
 import side_by_side_icon from '../assets/side_by_side_icon.png'
+import arrowMask from '../assets/arrow.png';
+import previousArrow from '../assets/previousarrow.png';
+import currentArrow from '../assets/currentarrow.png';
+import nextArrow from '../assets/nextarrow.png';
+import templateArrowBlack from '../assets/templatearrow-black.png';
+import templateArrowYellow from '../assets/templatearrow-yellow.png';
+
 
 const ReportGeneration = ({
     leftSidebarOpen,
@@ -166,29 +173,53 @@ const ReportGeneration = ({
 
     const panelRef = useRef<HTMLDivElement>(null);
 
+
     const ArrowStepper = ({ activeStep }) => (
-        <Box display="flex" justifyContent="center" mt={'0.8333vw'} width="100%">
-            <Box display="flex"  sx={{ position: 'relative' }}>
-            {steps.map((label, idx) => {
-                const isActive = idx === activeStep;
-                const isComplete = idx < activeStep;
+    <Box display="flex" justifyContent="center" mt={2} width="100%" sx={{ px: 2 }}>
+        <Box display="flex" width="100%">
+        {steps.map((label, idx) => {
+            const isActive = idx === activeStep;
+            const isComplete = idx < activeStep;
 
-                const bg = isActive ? '#081A33' : isComplete ? '#FFD95C' : '#FFFFFF';
-                const fg = isActive ? '#FFFFFF' : isComplete ? '#081A33' : '#B0B0B0';
-
-                return (
-                <Box key={label} sx={{ minWidth: 'max-content' }}>
-                    <StepArrow bg={bg} fg={fg}>
-                    {label}
-                    </StepArrow>
-                </Box>
-                );
-            })}
+            let arrowImage;
+            if (idx === 0) {
+            if (isActive) arrowImage = templateArrowYellow;
+            else if (isComplete) arrowImage = templateArrowBlack;
+            else arrowImage = nextArrow;
+            } else {
+            if (isActive) arrowImage = currentArrow;
+            else if (isComplete) arrowImage = previousArrow;
+            else arrowImage = nextArrow;
+            }
+            let textColor;
+            if (isActive) textColor = '#fff';        
+            else if (isComplete) textColor = '#081A33'; 
+            else textColor = '#B9B9B9';
+            return (
+            <Box
+                key={label}
+                sx={{
+                flex: 1,
+                position: 'relative',
+                marginLeft: idx !== 0 ? '-12px' : 0, // overlap by 20px
+                }}
+            >
+                <StepArrow fg={textColor}>
+                <ArrowShape
+                    sx={{
+                    backgroundImage: `url(${arrowImage})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '100% 100%',
+                    }}
+                />
+                <ArrowLabel fg={textColor} variant="body2">{label}</ArrowLabel>
+                </StepArrow>
             </Box>
+            );
+        })}
         </Box>
+    </Box>
     );
-
-
 
   return (
     <Box

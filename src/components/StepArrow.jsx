@@ -1,48 +1,42 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Box from '@mui/material/Box'
-import { styled } from '@mui/system'
-import arrowMask from '../assets/arrow.png'
+import React from 'react';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/system';
 
-export const ArrowShape = styled(Box, {
-    shouldForwardProp: (prop) => prop !== 'color'
-    })(({ color }) => ({
-    position:       'absolute',
-    top:            0,
-    left:           0,
-    right:          0,
-    bottom:         0,
-    backgroundColor: color,
-    WebkitMaskImage:  `url(${arrowMask})`,
-    maskImage:        `url(${arrowMask})`,
-    WebkitMaskRepeat: 'no-repeat',
-    maskRepeat:       'no-repeat',
-    WebkitMaskSize:   '100% 100%',
-    maskSize:         '100% 100%',
-}))
+export const ArrowShape = styled(Box)({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '100% 100%',
+});
 
+export const StepArrow = styled(Box)(({ fg = '#fff' }) => ({
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '0.5rem 1.5rem',
+    fontWeight: 600,
+    fontSize: '0.75rem',
+    color: fg,
+    overflow: 'hidden',
+    flex: 1,
+}));
 
-export const StepArrow = styled(Box, {
-    shouldForwardProp: (prop) => prop !== 'bg' && prop !== 'fg'
-    })(({ bg, fg }) => ({
-    position:        'relative',
-    display:         'inline-flex',
-    alignItems:      'center',
-    justifyContent:  'center',
-    padding:         '0.75rem 1.5rem',
-    fontWeight:      600,
-    fontSize:        '0.75rem',
-    backgroundColor: bg,
-    color:           fg,
-    border: ({ bg }) => bg === '#FFFFFF'
-        ? '1px solid #B9B9B9'
-        : 'none',
-    '&:not(:last-of-type)': {
-        borderRight: 'none',
-    },
-}))
+export const ArrowLabel = styled(Typography)(({ fg = 'inherit' }) => ({
+    position: 'relative',
+    zIndex: 1,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    color: fg,
+}));
 
 StepArrow.propTypes = {
-    bg: PropTypes.string.isRequired,
-    fg: PropTypes.string.isRequired,
-}
+    bg: PropTypes.string,
+    fg: PropTypes.string,
+};
