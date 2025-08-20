@@ -64,6 +64,7 @@ import templateArrowYellow from '../assets/templatearrow-yellow.png';
 const ReportGeneration = ({
     leftSidebarOpen,
     onNavigateToCMDContent,
+    onNavigateToTemplate,
     selectedPreview,
     selectedDocs,
     onEditTemplate,
@@ -790,17 +791,22 @@ const ReportGeneration = ({
                     display: 'grid',
                     bgcolor: '#F5FAFF',
                     borderRadius: 2,
-                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gridTemplateColumns: 'repeat(2, 1fr)',
                     gap: '1.2vw', // spacing between buttons, scalable
                     mr: '0.8333vw', p: '0.8333vw',
                     justifyItems: 'center',
                 }} 
                 >
-                {[edit_report, save_template, download_report, ai_icon, regenerate_response, generate_report].map((icon, index) => (
+                {[ save_template, download_report, regenerate_response, generate_report].map((icon, index) => (
                     <Button
                     key={index}
                     variant="contained"
-                    onClick={index === 5 ? onNavigateToCMDContent : undefined}
+                    onClick={
+                        index === 2
+                        ? onNavigateToTemplate
+                        : index === 3 
+                        ? onNavigateToCMDContent 
+                        : undefined}
                     sx={{
                         height: '8.5vw',
                         width: '100%', // full width of grid column
@@ -819,10 +825,10 @@ const ReportGeneration = ({
                     >
                     <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />
                     {[
-                        'Edit Report',
+                        // 'Edit Report',
                         'Save as template',
                         'Download Report',
-                        'AI Analyser',
+                        // 'AI Analyser',
                         'Regenerate Response',
                         'Generate new Response',
                     ][index]}

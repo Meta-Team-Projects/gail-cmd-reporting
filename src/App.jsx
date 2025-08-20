@@ -481,6 +481,7 @@ function App() {
             leftSidebarOpen={leftSidebarOpen}
             selectedPreview={selectedPreview}
             selectedDocs={selectedDocs}
+            onNavigateToTemplate={() => setCurrentPage('template-select')}
             onNavigateToCMDContent={() => setCurrentPage('cmd')}
             onEditTemplate={() => {
               setIsEditingTemplate(true);

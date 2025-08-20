@@ -72,9 +72,9 @@ const TemplateSelection = ({
     const imageOptions = [placeholder, placeholder_2, placeholder_3]
     //const allImages = [...Array(18)].map((_, idx) => imageOptions[idx % imageOptions.length])
     const allImages = [
-        ...Array(6).fill(placeholder),
-        ...Array(6).fill(placeholder_2),
-        ...Array(6).fill(placeholder_3),
+        ...Array(2).fill(placeholder),
+        ...Array(2).fill(placeholder_2),
+        ...Array(2).fill(placeholder_3),
     ]
     const imagesPerPage = 6
     const [page, setPage] = useState(0)
@@ -363,7 +363,7 @@ const TemplateSelection = ({
                                 alt={`Placeholder ${idx + 1}`}
                                 onClick={() => setSelectedPreview(src)}
                                 sx={{
-                                    width: '32%',
+                                    width: '48%',
                                     mb: '0.625vw',
                                     borderRadius: '5px',
                                     objectFit: 'cover',
