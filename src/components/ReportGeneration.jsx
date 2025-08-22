@@ -27,7 +27,9 @@ import {
     Chip,
     Stack,
     List,
-    ListItem
+    ListItem,
+    LinearProgress,
+    Tooltip as MuiTooltip
 } from '@mui/material'
 
 import {
@@ -69,23 +71,30 @@ const ReportGeneration = ({
     selectedDocs,
     onEditTemplate,
     onGenerateNewResponse,
-    editDocuments
+    editDocuments,
+    selectedTemplateDocxFile,
+    selectedTemplateName
     }) => {
-    const categories = ['All', 'Pinned', 'Recently Viewed']
+    const categories = ['All', 'Reference PDFs', 'Uploaded']
     const [selectedCategory, setSelectedCategory] = useState('All');
-    const [documentList, setDocumentList] = useState({})
+    const [documentList, setDocumentList] = useState({}) // uploaded
+    const [referencePdfs, setReferencePdfs] = useState([]);
+
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
-    //const [selectedDocs, setSelectedDocs] = useState([])
+
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
 
-    const key = selectedCategory === 'All' ? null : selectedCategory.toLowerCase();
-    let docs = selectedDocs.length > 0 
-    ? selectedDocs 
-    : (key 
-        ? (documentList[key] || []) 
-        : Object.values(documentList).flat());
+    const key = selectedCategory.toLowerCase();
+    const uploadedNames = Object.values(documentList).flat();
+    const referenceNames = referencePdfs.map(f => f.name);
+    let docs =
+        key === 'reference pdfs'
+        ? referenceNames
+        : key === 'uploaded'
+        ? uploadedNames
+        : [...referenceNames, ...uploadedNames];
     // Apply search filter if needed here
     const paginatedDocs = docs.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
     const totalPages = Math.ceil(docs.length / itemsPerPage);
@@ -106,6 +115,110 @@ const ReportGeneration = ({
             [docName]: !prev[docName]
         }));
     };
+
+    // Generate Report (.docx) states 
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [etaText, setEtaText] = useState('~--s');
+    const [finalDocUrl, setFinalDocUrl] = useState(null);
+    const [finalDocName, setFinalDocName] = useState('Final_Report.docx');
+    const [genError, setGenError] = useState('');
+    const progressTimerRef = useRef(null);
+    const genStartRef = useRef(0);
+    const estimatedMsRef = useRef(90000); // 90s optimistic ETA; tweak as needed
+
+    const resetGenerationState = () => {
+        if (progressTimerRef.current) clearInterval(progressTimerRef.current);
+        progressTimerRef.current = null;
+        setIsGenerating(false);
+        setProgress(0);
+        setEtaText('~--s');
+        setGenError('');
+        };
+
+        const startFakeProgress = () => {
+        genStartRef.current = Date.now();
+        if (progressTimerRef.current) clearInterval(progressTimerRef.current);
+        progressTimerRef.current = setInterval(() => {
+            const elapsed = Date.now() - genStartRef.current;
+            const est = estimatedMsRef.current;
+            const pct = Math.min(95, Math.floor((elapsed / est) * 100));
+            const remaining = Math.max(0, est - elapsed);
+            const mm = Math.floor(remaining / 60000);
+            const ss = Math.floor((remaining % 60000) / 1000);
+            setProgress(pct);
+            setEtaText(`${mm}:${ss.toString().padStart(2, '0')} remaining`);
+        }, 250);
+        };
+
+        const downloadFinal = () => {
+        if (!finalDocUrl) return;
+        const a = document.createElement('a');
+        a.href = finalDocUrl;
+        a.download = finalDocName || 'Final_Report.docx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        };
+
+        const startGenerate = async () => {
+        setGenError('');
+        if (!selectedTemplateDocxFile) {
+            setGenError('Template .docx not provided from Template Selection.');
+            return;
+        }
+        // revoke previous blob if any
+        if (finalDocUrl) {
+            try { URL.revokeObjectURL(finalDocUrl); } catch {}
+        }
+        setFinalDocUrl(null);
+        setFinalDocName(
+            (selectedTemplateDocxFile?.name || selectedTemplateName || 'CMD Template_1')
+            .replace(/\.docx$/i, '') + '_Report.docx'
+        );
+        setIsGenerating(true);
+        setProgress(1);
+        setEtaText('~1:30 remaining');
+        startFakeProgress();
+        try {
+            const fd = new FormData();
+            // IMPORTANT: backend expects the file field to be named "file"
+            fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
+            const res = await axios.post(
+            `${import.meta.env.VITE_CHAT_API_URL}/generate-report`,
+            fd,
+            { responseType: 'blob' } // returns a .docx file
+            );
+            // If server sends filename in headers, prefer it
+            const cd = res?.headers?.['content-disposition'] || '';
+            const match = cd.match(/filename="?([^"]+)"?/i);
+            const serverName = match?.[1];
+            if (serverName) setFinalDocName(serverName);
+            const blob = res.data;
+            const url = URL.createObjectURL(blob);
+            setFinalDocUrl(url);
+            setProgress(100);
+            setEtaText('0:00 remaining');
+        } catch (e) {
+            console.error('Failed to generate report', e);
+            setGenError('Failed to generate report. Please try again.');
+        } finally {
+            if (progressTimerRef.current) {
+            clearInterval(progressTimerRef.current);
+            progressTimerRef.current = null;
+            }
+            setIsGenerating(false);
+        }
+        };
+
+        useEffect(() => {
+        return () => {
+            if (progressTimerRef.current) clearInterval(progressTimerRef.current);
+            if (finalDocUrl) {
+            try { URL.revokeObjectURL(finalDocUrl); } catch {}
+            }
+        };
+    }, []);
 
     const handleUploadFiles = async (e) => {
         const files = Array.from(e.target.files)
@@ -156,6 +269,20 @@ const ReportGeneration = ({
             console.error('Error loading documents', err)
         }
     }
+
+    const fetchReferencePdfs = async () => {
+        try {
+            const url = `${import.meta.env.VITE_CHAT_API_URL}/get_reference_pdfs?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
+            const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
+            const mapped = (Array.isArray(data) ? data : []).map((f) => ({
+                name: f?.name || 'Document.pdf'
+            }));
+            setReferencePdfs(mapped);
+        } catch (err) {
+            console.error('Error loading reference PDFs', err);
+        }
+    };
+
     const collectStats = async () => {
     try {
         const { data } = await axios.get(
@@ -169,6 +296,7 @@ const ReportGeneration = ({
 
     useEffect(() => {
         fetchDocuments();
+        fetchReferencePdfs();
         collectStats();
     }, []);
 
@@ -354,25 +482,60 @@ const ReportGeneration = ({
                         }}>
                         <ZoomInIcon sx={{fontSize: '1.0417vw'}}/>
                     </IconButton>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexGrow: 1,
-                        width: '100%'
-                    }}>
-                        {selectedPreview && (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '0.625vw',
+                            flexGrow: 1,
+                            width: '100%',
+                            px: '1rem',
+                            textAlign: 'center'
+                        }}
+                        >
+                        {/* PREVIEW AREA FOR FINAL DOCX */}
+                        {isGenerating ? (
                             <>
-                            <Box 
-                            component="img"
-                            src={selectedPreview}
-                            alt="Selected Preview"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain'
-                            }}
+                            <Typography sx={{ fontWeight: 700, color: '#081A33' }}>
+                                Generating report…
+                            </Typography>
+                            <LinearProgress
+                                variant="determinate"
+                                value={progress}
+                                sx={{ width: '80%' }}
                             />
+                            <Typography sx={{ color: '#081A33' }}>
+                                {progress}% completed • ETA {etaText}
+                            </Typography>
+                            </>
+                        ) : finalDocUrl ? (
+                            <>
+                            <Typography sx={{ color: '#b00020', whiteSpace: 'pre-wrap' }}>
+                                Failed to load DOCX preview.
+                                {'\n'}
+                                This file can’t render inline here.
+                            </Typography>
+                            <Button
+                                variant="text"
+                                href={finalDocUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Open in new tab
+                            </Button>
+                            <Typography sx={{ fontSize: '0.78vw', opacity: 0.7 }}>
+                                {finalDocName}
+                            </Typography>
+                            </>
+                        ) : genError ? (
+                            <Typography sx={{ color: '#b00020' }}>{genError}</Typography>
+                        ) : (
+                            <>
+                            <Typography sx={{ opacity: 0.75 }}>
+                                Click “Generate new Response” to create the final report.
+                            </Typography>
                             </>
                         )}
                     </Box>
@@ -414,7 +577,7 @@ const ReportGeneration = ({
                             fontWeight: 550, fontSize: '0.9375vw',
                             color: '#081A33'
                         }}>
-                            Daily Pipeline Operations Report
+                            {(selectedTemplateName || 'CMD Template_1').replace(/\.docx$/i, '')}
                         </Typography>
                         <IconButton 
                         onClick={onEditTemplate}
@@ -802,11 +965,14 @@ const ReportGeneration = ({
                     key={index}
                     variant="contained"
                     onClick={
-                        index === 2
-                        ? onNavigateToTemplate
-                        : index === 3 
-                        ? onNavigateToCMDContent 
-                        : undefined}
+                        index === 1
+                            ? downloadFinal
+                            : index === 2
+                            ? startGenerate
+                            : index === 3
+                            ? startGenerate
+                            : undefined
+                    }
                     sx={{
                         height: '8.5vw',
                         width: '100%', // full width of grid column
@@ -822,6 +988,7 @@ const ReportGeneration = ({
                         gap: '0.208vw',
                         textAlign: 'center', fontSize: '0.7292vw'
                     }}
+                        disabled={(index === 1 && !finalDocUrl) || (index >= 2 && isGenerating)}
                     >
                     <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />
                     {[
@@ -835,11 +1002,11 @@ const ReportGeneration = ({
                     </Button>
                 ))}
                 </Box>
-
+                    
             </Box>
         </Box>
     </Box>
-  )
+    )   
 }
 
 export default ReportGeneration

@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo  } from 'react'
 
 import { Document, Page, pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+import pdfWorkerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+pdfjs.disableWorker = true;
 
 import {
     Box,
@@ -33,6 +34,7 @@ import {
 } from '@mui/material'
 
 import { styled } from '@mui/system';
+import axios from 'axios';
 
 import arrowMask from '../assets/arrow.png'
 import previousArrow from '../assets/previousarrow.png';
@@ -63,6 +65,13 @@ const TemplateSelection = ({
     setSelectedPreview,
     isEditMode
     }) => {
+        const [templates, setTemplates] = useState([]); // [{ name, displayName, url }]
+        const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+        const [pdfError, setPdfError] = useState(null);
+        const previewBoxRef = useRef(null);
+        const [previewWidth, setPreviewWidth] = useState(800);
+        const pdfUrlRef = useRef(null); // track current blob URL for cleanup
+
     const categories = ['All', 'Pinned', 'Recently Viewed']
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [stats, setStats] = useState(null);
@@ -91,6 +100,78 @@ const TemplateSelection = ({
         page * imagesPerPage,
         page * imagesPerPage + imagesPerPage
     )
+
+    // to convert base64 (from API) → blob URL for react-pdf 
+    const base64ToPdfUrl = (b64) => {
+    // Convert Base64 string to a Blob URL
+    if (!b64) return null;
+    // strip data URL prefix, whitespace; normalize URL-safe chars
+    let clean = b64.replace(/^data:application\/pdf;base64,/i, '').replace(/\s+/g, '');
+    clean = clean.replace(/-/g, '+').replace(/_/g, '/');
+    let byteChars;
+    try {
+        byteChars = atob(clean);
+    } catch (e) {
+        console.error('Invalid base64 for PDF:', e);
+        return null;
+    }
+    const byteNumbers = new Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) {
+        byteNumbers[i] = byteChars.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    return URL.createObjectURL(blob);
+    };
+
+    //  fetch templates from backend on mount 
+    useEffect(() => {
+    const fetchTemplates = async () => {
+        try {
+        const url = `${import.meta.env.VITE_CHAT_API_URL}/get_templates?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
+        const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
+        // data is an array of { name: "CMD Template_1.pdf", file_b64, ... }
+        const mapped = (Array.isArray(data) ? data : []).map((t) => {
+            const displayName = t?.name?.replace(/\.pdf$/i, '') || 'CMD Template_1';
+            const url = base64ToPdfUrl(t.file_b64);
+        return { name: t.name, displayName, url };
+        });
+        setTemplates(mapped);
+        
+        } catch (e) {
+        console.error('Failed to fetch templates:', e);
+        }
+    };
+    fetchTemplates();
+    // cleanup on unmount: revoke any created object URLs
+    return () => {
+        try {
+        templates.forEach(t => URL.revokeObjectURL(t.url));
+        if (pdfPreviewUrl) URL.revokeObjectURL(pdfPreviewUrl);
+        } catch {}
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // keep PDF Page width responsive to container
+    useEffect(() => {
+    const update = () => {
+        setPreviewWidth(Math.max(320, (previewBoxRef.current?.clientWidth || 800) - 32));
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+    }, []);
+    // synthesize list names (only _1 clickable for now)
+    const pseudoTemplateNames = useMemo(
+    () => Array.from({ length: 6 }, (_, i) => `CMD Template_${i + 1}`),
+    []
+    );
+    const availableByName = useMemo(
+    () => Object.fromEntries(templates.map(t => [t.displayName, t.url])),
+    [templates]
+    );
+
 
     const handleUploadFiles = async (e) => {
         const files = Array.from(e.target.files)
@@ -355,22 +436,63 @@ const TemplateSelection = ({
                         scrollbarWidth: 'thin',
                         scrollbarColor: '#0088d7 transparent'
                     }}>
-                        {allImages.map((src, idx) => (
+                        {pseudoTemplateNames.map((label, idx) => {
+                        const src = allImages[idx % allImages.length]; // keep your nice placeholders
+                        const isAvailable = Boolean(availableByName[label]);
+                        // Only CMD Template_1 is clickable for now (and only if actually fetched)
+                        const isClickable = label === 'CMD Template_1' && isAvailable;
+                        return (
+                            <Tooltip
+                            key={label}
+                            title={isClickable ? 'Click to preview' : 'Coming soon'}
+                            placement="top"
+                            >
                             <Box
-                                key={idx}
+                                onClick={() => {
+                                if (!isClickable) return;
+                                const url = availableByName[label];
+                                if (url) {
+                                    setPdfError(null);
+                                    setPdfPreviewUrl(url);
+                                    setSelectedPreview?.(null); // prefer PDF preview
+                                }
+                                }}
+                                sx={{
+                                position: 'relative',
+                                width: '48%',
+                                mb: '0.625vw',
+                                borderRadius: '6px',
+                                overflow: 'hidden',
+                                cursor: isClickable ? 'pointer' : 'not-allowed',
+                                opacity: isClickable ? 1 : 0.6,
+                                boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                                }}
+                            >
+                                <Box
                                 component="img"
                                 src={src}
-                                alt={`Placeholder ${idx + 1}`}
-                                onClick={() => setSelectedPreview(src)}
+                                alt={label}
+                                sx={{ width: '100%', objectFit: 'cover', display: 'block' }}
+                                />
+                                <Box
                                 sx={{
-                                    width: '48%',
-                                    mb: '0.625vw',
-                                    borderRadius: '5px',
-                                    objectFit: 'cover',
-                                    cursor: 'pointer',
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bgcolor: 'rgba(0,0,0,0.6)',
+                                    color: '#fff',
+                                    px: '0.625vw',
+                                    py: '0.365vw',
+                                    fontSize: '0.7292vw',
                                 }}
-                            />
-                        ))}
+                                >
+                                {label}
+                                </Box>
+                            </Box>
+                            </Tooltip>
+                        );
+                        })}
                     </Box>
                     {/* <Box sx={{
                         display: 'flex',
@@ -533,7 +655,7 @@ const TemplateSelection = ({
                             borderTopRightRadius: 4,
                             }}
                         />
-                        <Box sx={{
+                        <Box ref={previewBoxRef}  sx={{
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
@@ -541,7 +663,45 @@ const TemplateSelection = ({
                             flexGrow: 1,
                             width: '100%'
                         }}>
-                            {selectedPreview ? (
+                            {pdfPreviewUrl ? (
+                                <>
+                                <Document
+                                    file={pdfPreviewUrl}
+                                    loading={<Typography sx={{ mt: 2 }}>Loading template…</Typography>}
+                                    onLoadError={(err) => {
+                                        console.error('PDF load error:', err);
+                                        setPdfError(err);
+                                        }}
+                                        onSourceError={(err) => {
+                                        console.error('PDF source error:', err);
+                                        setPdfError(err);
+                                    }}
+                                >
+                                    <Page
+                                    pageNumber={1}
+                                    width={previewWidth}
+                                    renderTextLayer={false}
+                                    renderAnnotationLayer={false}
+                                    />
+                                </Document>
+                                {pdfError && (
+                                    <Box sx={{ mt: 1 }}>
+                                        <Typography color="error" sx={{ fontSize: '0.8rem' }}>
+                                        Failed to load preview: {String(pdfError?.message || '')}
+                                        </Typography>
+                                        <Button
+                                        variant="text"
+                                        href={pdfPreviewUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        sx={{ mt: 0.5 }}
+                                        >
+                                        Open PDF in new tab
+                                        </Button>
+                                    </Box>
+                                )}
+                                </>
+                            ) : selectedPreview ? (
                                 <>
                                 <Box 
                                 component="img"

@@ -61,19 +61,38 @@ const DocumentSelection = ({
     selectedDocs,
     setSelectedDocs
     }) => {
-    const categories = ['All', 'Pinned', 'Recently Viewed']
-    const [selectedCategory, setSelectedCategory] = useState('All');
+    const categories = ['Reference PDFs', 'Uploaded']
+    const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
     const [documentList, setDocumentList] = useState({})
+    const [referencePdfs, setReferencePdfs] = useState([]); // [{ name, url }]
+    const [templatePdfUrl, setTemplatePdfUrl] = useState(null); // selected template blob URL for right preview
+    const [previewErrorText, setPreviewErrorText] = useState(
+        'Failed to load PDF file.\nFailed to load preview: Setting up fake worker failed: "Failed to fetch dynamically imported module: http://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.3.31/pdf.worker.min.js?import".'
+    );
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
 
-    const key = selectedCategory === 'All' ? null : selectedCategory.toLowerCase();
-    let docs = key ? (documentList[key] || []) : Object.values(documentList).flat();
-    // Apply search filter if needed here
-    const paginatedDocs = docs.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
-    const totalPages = Math.ceil(docs.length / itemsPerPage);
+    const b64ToBlobUrl = (b64, mime = 'application/pdf') => {
+        if (!b64) return null;
+        let clean = b64.replace(/^data:[^;]+;base64,/i, '').replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+        let bytes;
+        try { bytes = atob(clean); } catch { return null; }
+        const arr = new Uint8Array(bytes.length);
+        for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+        const blob = new Blob([arr], { type: mime });
+        return URL.createObjectURL(blob);
+        };
+
+        // Dynamic docs list based on category
+        const key = selectedCategory.toLowerCase();
+        let docs =
+        key === 'reference pdfs'
+            ? referencePdfs.map(f => f.name)
+            : Object.values(documentList).flat();
+        const paginatedDocs = docs.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+        const totalPages = Math.ceil(docs.length / itemsPerPage);
 
 
     const handleToggle = (name) => {
@@ -150,6 +169,33 @@ const DocumentSelection = ({
             console.error('Error loading documents', err)
         }
     }
+    const fetchReferencePdfs = async () => {
+        try {
+            const url = `${import.meta.env.VITE_CHAT_API_URL}/get_reference_pdfs?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
+            const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
+            const mapped = (Array.isArray(data) ? data : []).map((f) => ({
+                name: f?.name || 'Document.pdf',
+                url: b64ToBlobUrl(f?.file_b64, 'application/pdf')
+            }));
+            setReferencePdfs(mapped);
+        } catch (err) {
+            console.error('Error loading reference PDFs', err);
+        }
+    };
+    const fetchTemplateForPreview = async () => {
+        try {
+            const url = `${import.meta.env.VITE_CHAT_API_URL}/get_templates?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
+            const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
+            const arr = Array.isArray(data) ? data : [];
+            const t1 = arr.find(t => (t?.name || '').toLowerCase().startsWith('cmd template_1')) || arr[0];
+            if (t1?.file_b64) {
+                const blobUrl = b64ToBlobUrl(t1.file_b64, 'application/pdf');
+                setTemplatePdfUrl(blobUrl);
+            }
+        } catch (err) {
+            console.error('Error fetching template for preview', err);
+        }
+    };
     const collectStats = async () => {
     try {
         const { data } = await axios.get(
@@ -163,6 +209,8 @@ const DocumentSelection = ({
 
     useEffect(() => {
         fetchDocuments();
+        fetchReferencePdfs();
+        fetchTemplateForPreview();
         collectStats();
     }, []);
 
@@ -374,16 +422,10 @@ const DocumentSelection = ({
                                     
                         {/* determine which docs to show */}
                         {(() => {
-                            // flatten all docs if 'All', else pick selected category
-                            const key = selectedCategory === 'All'
-                            ? null
-                            : selectedCategory.toLowerCase()
-                            let docs = []
-                            if (key) {
-                            docs = documentList[key] || []
-                            } else {
-                            docs = Object.values(documentList).flat()
-                            }
+                            const key = selectedCategory.toLowerCase();
+                            let docs = key === 'reference pdfs'
+                                ? referencePdfs.map(f => f.name)
+                                : Object.values(documentList).flat();
                             // filter by search
                             return (
                             <List sx={{ px: 0 }}>
@@ -744,7 +786,20 @@ const DocumentSelection = ({
                     </Button>
                     <Button
                     variant= "contained"
-                    onClick={onNavigateToReport}
+                    onClick={async () => {
+                        try {
+                          // POST selected file names (both ref + uploaded—backend can accept/ignore as needed)
+                                const body = { filenames: selectedDocs };
+                                const url = `${import.meta.env.VITE_CHAT_API_URL}/selecting_reference_files`;
+                                const { data } = await axios.post(url, body, {
+                                headers: { 'Content-Type': 'application/json', accept: 'application/json' }
+                            });
+                        } catch (err) {
+                            console.error('Error submitting selected files', err);
+                        } finally {
+                            onNavigateToReport();
+                        }
+                    }}
                     sx={{
                         fontSize: '0.78vw',
                         fontWeight: 600,
@@ -798,34 +853,25 @@ const DocumentSelection = ({
                             flexGrow: 1,
                             width: '100%'
                         }}>
-                            {selectedPreview && (
+                            {templatePdfUrl ? (
                                 <>
-                                <Box 
-                                component="img"
-                                src={selectedPreview}
-                                alt="Selected Preview"
-                                sx={{
-                                    width: '100%',
-                                    objectFit: 'contain'
-                                }}
-                                />
-                                {/* <Button
-                                variant= "contained"
-                                onClick={onNavigateToReport}
-                                sx={{
-                                    position: 'absolute',
-                                    bottom: 15,
-                                    right: 15,
-                                    fontSize: '15px',
-                                    fontWeight: 600,
-                                    color: '#081A33',
-                                    backgroundColor: '#FFD95C',
-                                    '&:hover': {bgcolor: '#FFCB42'}
-                                }}
-                                >
-                                    Generate Report
-                                </Button> */}
+                                    <Typography sx={{ whiteSpace: 'pre-wrap', textAlign: 'center', color: '#b00020', px: '1rem' }}>
+                                    {previewErrorText}
+                                    </Typography>
+                                    <Button
+                                    variant="text"
+                                    href={templatePdfUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    sx={{ mt: 1 }}
+                                    >
+                                    Open in new tab
+                                    </Button>
                                 </>
+                                ) : (
+                                <Typography sx={{ opacity: 0.7, px: '1rem' }}>
+                                    Loading template preview…
+                                </Typography>
                             )}
                         </Box>
                     </Box>

@@ -63,6 +63,12 @@ const GeneratePreview = ({
     const categories = ['All', 'Pinned', 'Recently Viewed']
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [documentList, setDocumentList] = useState({})
+    const [templatePdfUrl, setTemplatePdfUrl] = useState(null); // blob URL for right-side preview
+    const [templateName, setTemplateName] = useState('CMD Template_1'); // display name (from API)
+    const [previewErrorText, setPreviewErrorText] = useState(
+        'Failed to load PDF file.\nFailed to load preview: Setting up fake worker failed: "Failed to fetch dynamically imported module: http://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.3.31/pdf.worker.min.js?import".'
+    );
+
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
     const [currentPage, setCurrentPage] = useState(0)
@@ -73,6 +79,21 @@ const GeneratePreview = ({
     // Apply search filter if needed here
     const paginatedDocs = docs.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
     const totalPages = Math.ceil(docs.length / itemsPerPage);
+
+    const b64ToBlobUrl = (b64, mime = 'application/pdf') => {
+        if (!b64) return null;
+        let clean = b64
+            .replace(/^data:[^;]+;base64,/i, '')
+            .replace(/\s+/g, '')
+        .replace(/-/g, '+')
+            .replace(/_/g, '/');
+        let bytes;
+        try { bytes = atob(clean); } catch { return null; }
+        const arr = new Uint8Array(bytes.length);
+        for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+        const blob = new Blob([arr], { type: mime });
+        return URL.createObjectURL(blob);
+    };
 
 
     // const handleToggle = (name) => {
@@ -160,10 +181,35 @@ const GeneratePreview = ({
     }
     };
 
+    // Fetch selected template
+    const fetchTemplateForPreview = async () => {
+        try {
+            const url = `${import.meta.env.VITE_CHAT_API_URL}/get_templates?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
+            const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
+            const arr = Array.isArray(data) ? data : [];
+            const t1 = arr.find(t => (t?.name || '').toLowerCase().startsWith('cmd template_1')) || arr[0];
+            if (t1?.file_b64) {
+            const blobUrl = b64ToBlobUrl(t1.file_b64, 'application/pdf');
+            setTemplatePdfUrl(blobUrl);
+            setTemplateName((t1?.name || 'CMD Template_1').replace(/\.pdf$/i, ''));
+            }
+        } catch (err) {
+            console.error('Error fetching template for preview', err);
+        }
+    };
+
     useEffect(() => {
         fetchDocuments();
         collectStats();
+        fetchTemplateForPreview();
     }, []);
+
+    // Revoke blob URL on change/unmount
+    useEffect(() => {
+        return () => {
+            if (templatePdfUrl) URL.revokeObjectURL(templatePdfUrl);
+        };
+    }, [templatePdfUrl]);
 
     const panelRef = useRef<HTMLDivElement>(null);
 
@@ -332,7 +378,7 @@ const GeneratePreview = ({
                             fontWeight: 550, fontSize: '0.9375vw',
                             color: '#081A33'
                         }}>
-                            Daily Pipeline Operations Report
+                            {templateName}
                         </Typography>
                     </Box>
                 </Box>
@@ -553,26 +599,42 @@ const GeneratePreview = ({
                             borderTopRightRadius: 4,
                             }}
                         />
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexGrow: 1,
-                            width: '100%'
-                        }}>
-                            {selectedPreview && (
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexGrow: 1,
+                                width: '100%'
+                            }}
+                            >
+                            {templatePdfUrl ? (
                                 <>
-                                <Box 
-                                component="img"
-                                src={selectedPreview}
-                                alt="Selected Preview"
-                                sx={{
-                                    width: '100%',
-                                    objectFit: 'contain'
-                                }}
-                                />
+                                <Typography
+                                    sx={{
+                                    whiteSpace: 'pre-wrap',
+                                    textAlign: 'center',
+                                    color: '#b00020',
+                                    px: '1rem'
+                                    }}
+                                >
+                                    {previewErrorText}
+                                </Typography>
+                                <Button
+                                    variant="text"
+                                    href={templatePdfUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    sx={{ mt: 1 }}
+                                >
+                                    Open in new tab
+                                </Button>
                                 </>
+                            ) : (
+                                <Typography sx={{ opacity: 0.7, px: '1rem' }}>
+                                Loading template preview…
+                                </Typography>
                             )}
                         </Box>
                     </Box>
