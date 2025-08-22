@@ -308,7 +308,7 @@ const ReportGeneration = ({
 
 const disabledGradientSx = {
     '&.Mui-disabled': {
-    background: 'linear-gradient(to right, #F0F5FD, #DFEBFF)',
+    filter: 'grayscale(0.1) contrast(0.9) brightness(0.9)',
     color: '#081A33',         
     opacity: 1,               
     cursor: 'not-allowed',    
@@ -1003,11 +1003,11 @@ const disabledYellowSx = {
                     <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />
                     {[
                         // 'Edit Report',
-                        'Save as template',
+                        'Save As template',
                         'Download Report',
                         // 'AI Analyser',
                         'Regenerate Report',
-                        'Generate new Report',
+                        'Generate New Report',
                     ][index]}
                     </Button>
                 ))}
