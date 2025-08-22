@@ -16,7 +16,7 @@ import {
 import Sidebar from './components/Sidebar'
 import { getNextSessionName } from './components/utils';
 import MainContent from './components/MainContent'
-import DocumentIngestion from './components/DocumentIngestion'
+//import DocumentIngestion from './components/DocumentIngestion'
 import AIConfiguration from './components/AIConfiguration'
 import FAQs from './components/FAQs'
 import SavedNotes from './components/SavedNotes'
