@@ -308,14 +308,13 @@ const ReportGeneration = ({
 
 const disabledGradientSx = {
     '&.Mui-disabled': {
-    background: 'linear-gradient(to right, #F0F5FD, #DFEBFF)',
+    filter: 'grayscale(0.1) contrast(0.9) brightness(0.9)',
     color: '#081A33',         
     opacity: 1,               
     cursor: 'not-allowed',    
     pointerEvents: 'auto',    
     },
     '&.Mui-disabled:hover': {
-        background: 'linear-gradient(to right, #F0F5FD, #DFEBFF)',
         cursor: 'not-allowed',
     },
 };

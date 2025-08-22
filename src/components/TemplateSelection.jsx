@@ -112,7 +112,7 @@ const TemplateSelection = ({
 
     const [cardsLoading, setCardsLoading] = useState(true);
     useEffect(() => {
-        const timer = setTimeout(() => setCardsLoading(false), 12000); // 12s
+        const timer = setTimeout(() => setCardsLoading(false), 6000); // 6s
         return () => clearTimeout(timer);
     }, []);
 
@@ -315,7 +315,8 @@ const TemplateSelection = ({
             <Box sx={{
                 //border: '1px solid red',
                 maxWidth: leftSidebarOpen ? '41.67vw' : '46.88vw',
-                transition: 'max-width 0.3s ease',
+                flex: `0 0 ${leftSidebarOpen ? '41.67vw' : '46.88vw'}`,
+                transition: 'width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
                 gap: '0.417vw'
