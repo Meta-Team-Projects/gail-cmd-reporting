@@ -612,7 +612,7 @@ const GeneratePreview = ({
                             }}
                         >
                             <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9375vw' }}>
-                            Preview
+                            {templateName ? `Previewing Template: ${templateName}` : 'Preview'}
                             </Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
                             <Button

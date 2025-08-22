@@ -67,6 +67,7 @@ const TemplateSelection = ({
     }) => {
     const [templates, setTemplates] = useState([]); // [{ name, displayName, url }]
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+    const [previewingTemplateName, setPreviewingTemplateName] = useState(null);
     const previewBoxRef = useRef(null);
     const [previewWidth, setPreviewWidth] = useState(800);
     const pdfUrlRef = useRef(null);               // currently selected preview URL
@@ -473,7 +474,8 @@ const TemplateSelection = ({
                                 if (url) {
                                     pdfUrlRef.current = url;
                                     setPdfPreviewUrl(url);
-                                    setSelectedPreview?.(null); // prefer PDF preview
+                                    setSelectedPreview?.(null); 
+                                    setPreviewingTemplateName(label);
                                 }
                                 }}
                                 sx={{
@@ -685,7 +687,11 @@ const TemplateSelection = ({
                         <Typography
                             sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9375vw' }}
                         >
-                            Preview
+                            {
+                                previewingTemplateName
+                                    ? `Previewing Template: ${previewingTemplateName}`
+                                    : 'Preview'
+                            }
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
                             <Button
