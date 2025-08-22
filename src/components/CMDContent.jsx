@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { Document, Page, pdfjs } from 'react-pdf';
 
-// Set up worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 import {
 Box,
