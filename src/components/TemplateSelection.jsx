@@ -67,12 +67,18 @@ const TemplateSelection = ({
     setSelectedPreview,
     isEditMode
     }) => {
-        const [templates, setTemplates] = useState([]); // [{ name, displayName, url }]
-        const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
-        const previewBoxRef = useRef(null);
-        const [previewWidth, setPreviewWidth] = useState(800);
-        const pdfUrlRef = useRef(null);               // currently selected preview URL
-        const createdUrlsRef = useRef(new Set());     // track ALL blob URLs to revoke on unmount
+    const [templates, setTemplates] = useState([]); // [{ name, displayName, url }]
+    const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+    const previewBoxRef = useRef(null);
+    const [previewWidth, setPreviewWidth] = useState(800);
+    const pdfUrlRef = useRef(null);               // currently selected preview URL
+    const createdUrlsRef = useRef(new Set());     // track ALL blob URLs to revoke on unmount
+    
+    const addZoomParam = (url, zoom = 50) => {
+            if (!url) return undefined;
+            return url.includes('#') ? `${url}&zoom=${zoom}` : `${url}#zoom=${zoom}`;
+};
+
 
     const categories = ['All', 'Pinned', 'Recently Viewed']
     const [selectedCategory, setSelectedCategory] = useState('All');
@@ -670,7 +676,7 @@ const TemplateSelection = ({
                             size="small"
                             variant="outlined"
                             component="a"
-                            href={pdfPreviewUrl || undefined}
+                            href={addZoomParam(pdfPreviewUrl)|| undefined}
                             target={pdfPreviewUrl ? '_blank' : undefined}
                             rel={pdfPreviewUrl ? 'noreferrer' : undefined}
                             disabled={!pdfPreviewUrl}
@@ -719,7 +725,7 @@ const TemplateSelection = ({
                                 <Box sx={{ flexGrow: 1, width: '100%', p: '0.833vw', boxSizing: 'border-box' }}>
                                 <Box
                                     component="iframe"
-                                    src={pdfPreviewUrl}
+                                    src={addZoomParam(pdfPreviewUrl)}
                                     title="Template preview"
                                     sx={{
                                         display: 'block',
