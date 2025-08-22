@@ -325,7 +325,7 @@ const TemplateSelection = ({
                 <Box
                     sx={{
                     px: '0.8333vw',
-                    py:'0.208vw',
+                    py:'0.3vw',
                     mx: '0.8333vw',
                     background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                     borderRadius: 2,
@@ -334,15 +334,10 @@ const TemplateSelection = ({
                     transition: 'all 0.3s ease',
                     }}
                 >
-                    {/* <Typography variant="subtitle2" sx={{
-                        fontWeight: 600, fontSize: '20px', color: '#081A33'
-                    }}>
-                        Template Selection
-                    </Typography> */}
                     <Typography variant="subtitle2" sx={{
                         fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
-                        Choose a report template from the list or upload your own to get started. This helps tailor the report format to your specific needs.
+                        Select an existing template or upload a new one for your CMD report.
                     </Typography>
                 </Box>
                 <Box sx={{

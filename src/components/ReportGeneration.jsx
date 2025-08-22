@@ -571,9 +571,16 @@ const disabledYellowSx = {
                         display: 'flex', alignItems: 'center',
                         justifyContent: 'space-between', p: '0.208vw'
                     }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
                             Reports Template
                         </Typography>
+                        <IconButton 
+                        onClick={onEditTemplate}
+                        sx={{
+                            color: '#081A33'
+                        }}>
+                            <ModeEditOutlinedIcon sx={{fontSize: '1.14vw'}}/>
+                        </IconButton>
                         {/* <Widgets sx={{color: '#081A33', width: '20px', height: '20px'}}/> */}
                     </Box>
                     <Box sx={{
@@ -588,13 +595,6 @@ const disabledYellowSx = {
                         }}>
                             {(selectedTemplateName || 'CMD Template_1').replace(/\.docx$/i, '')}
                         </Typography>
-                        <IconButton 
-                        onClick={onEditTemplate}
-                        sx={{
-                            color: '#081A33'
-                        }}>
-                            <ModeEditOutlinedIcon sx={{fontSize: '1.14vw'}}/>
-                        </IconButton>
                     </Box>
                 </Box>
 
@@ -613,14 +613,14 @@ const disabledYellowSx = {
                     transform: 'translateZ(0)',
                     bgcolor: '#F5FAFF'
                 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw' }}>
+                    <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw' }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
                             Documents Repository
                         </Typography>
                         <IconButton
                         size="small"
                         sx={{
-                            color: '#081A33'
+                            color: '#081A33', pr: '0.5vw'
                         }}>
                             <ModeEditOutlinedIcon sx={{fontSize: '1.14vw'}}/>
                         </IconButton>
@@ -743,7 +743,7 @@ const disabledYellowSx = {
                                             </Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
-                                            <IconButton
+                                            {/* <IconButton
                                             size="small"
                                             onClick={() => handleToggleVisibility(name)}
                                             >
@@ -752,7 +752,7 @@ const disabledYellowSx = {
                                                 ) : (
                                                     <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
                                                 )}
-                                            </IconButton>
+                                            </IconButton> */}
                                             <IconButton 
                                             size="small"
                                             // onClick={e => {

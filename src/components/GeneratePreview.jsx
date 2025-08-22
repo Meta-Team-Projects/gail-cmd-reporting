@@ -317,7 +317,7 @@ const GeneratePreview = ({
             {/* Left Section */}
             <Box sx={{
                 //border: '1px solid red',
-                maxWidth: leftSidebarOpen ? '41.67vw' : '46.88vw',
+                width: leftSidebarOpen ? '41.67vw' : '46.88vw',
                 transition: 'max-width 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column', 
@@ -327,7 +327,7 @@ const GeneratePreview = ({
                 <Box
                     sx={{
                     px: '0.8333vw',
-                    py:'0.208vw',
+                    py:'0.3vw',
                     //mt: -1,
                     mx: '0.8333vw',
                     //mb: 1,
@@ -336,7 +336,7 @@ const GeneratePreview = ({
                     //border: '1px solid #CBD0DC',
                     boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                     //height: '100px',
-                    transition: 'all 0.3s ease',
+                    transition: 'all 0.3s ease', width: 'calc(100% - 1.666vw)',
                     }}
                 >
                     
@@ -348,8 +348,8 @@ const GeneratePreview = ({
                     <Typography variant="subtitle2" sx={{
                         fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
-                        Finalize your report template and selected documents before generating the report. Make sure you've chosen the relevant documents and template, as these will shape the content and layout of your final report.
-                    </Typography>
+                        Review the template and files to be used for generating the new CMD report.
+                        </Typography>
                 </Box>
 
                 <Box sx={{
@@ -508,7 +508,7 @@ const GeneratePreview = ({
                                             </Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                                            <IconButton
+                                            {/* <IconButton
                                             size="small"
                                             onClick={() => handleToggleVisibility(name)}
                                             >
@@ -517,7 +517,7 @@ const GeneratePreview = ({
                                                 ) : (
                                                     <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
                                                 )}
-                                            </IconButton>
+                                            </IconButton> */}
                                             <IconButton 
                                             size="small"
                                             // onClick={e => {

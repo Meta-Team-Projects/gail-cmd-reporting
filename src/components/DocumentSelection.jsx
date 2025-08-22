@@ -386,8 +386,7 @@ const DocumentSelection = ({
                     <Typography variant="subtitle2" sx={{
                         fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
-                        Select one or multiple documents from the list, or upload your own files to update the report template. These documents will be used to customize and enrich the final report.
-                    </Typography>
+                        Select files from the repository and/or upload new files for updating the contents of the CMD report.                    </Typography>
                 </Box>
 
                 <Box sx={{
@@ -397,7 +396,6 @@ const DocumentSelection = ({
                     flex: 1,
                     mx: '0.8333vw',
                     gap: '0.417vw',
-
                 }}>
                     {/* Left of Left */}
                     <Box sx={{
@@ -499,11 +497,7 @@ const DocumentSelection = ({
                                                     key={name}
                                                     disableGutters
                                                     onClick={() => {
-                                                        setSelectedDocs(prev =>
-                                                            prev.includes(name)
-                                                                ? prev.filter(n => n !== name)
-                                                                : [...prev, name]
-                                                        );
+                                                        handleToggleVisibility(name);
                                                     }}
                                                     sx={{
                                                         bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
@@ -513,7 +507,7 @@ const DocumentSelection = ({
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'space-between',
-                                                        border: '0.5px solid #00000033',
+                                                        border: visibleDocs[name] ? '1px solid #0b2c5bff' : '0.5px solid #00000033',
                                                         cursor: 'pointer',
                                                     }}
                                                 >
@@ -560,7 +554,7 @@ const DocumentSelection = ({
                                                         </Typography>
                                                     </Box>
                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                                                        <IconButton
+                                                        {/* <IconButton
                                                             size="small"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -572,7 +566,7 @@ const DocumentSelection = ({
                                                             ) : (
                                                                 <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
                                                             )}
-                                                        </IconButton>
+                                                        </IconButton> */}
                                                         <IconButton size="small" onClick={(e) => { e.stopPropagation(); }}>
                                                             <Tooltip title='Delete' placement='bottom' arrow>
                                                                 <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
@@ -716,6 +710,9 @@ const DocumentSelection = ({
                                         <ListItem
                                         key={name}
                                         disableGutters
+                                        onClick={() => {
+                                            handleToggleVisibility(name);
+                                        }}
                                         sx={{
                                             bgcolor: '#A9C7FF66',
                                             borderRadius: 2,
@@ -724,7 +721,8 @@ const DocumentSelection = ({
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'space-between',
-                                            border: '0.5px solid #00000033',
+                                            border: visibleDocs[name] ? '1px solid #0b2c5bff' : '0.5px solid #00000033',
+                                            cursor: 'pointer'
                                         }}
                                         >
                                             <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
@@ -771,7 +769,7 @@ const DocumentSelection = ({
                                                 </Typography>
                                             </Box>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                                                <IconButton
+                                                {/* <IconButton
                                                 size="small"
                                                 onClick={() => handleToggleVisibility(name)}
                                                 >
@@ -780,7 +778,7 @@ const DocumentSelection = ({
                                                     ) : (
                                                         <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
                                                     )}
-                                                </IconButton>
+                                                </IconButton> */}
                                                 <IconButton 
                                                 size="small"
                                                 // onClick={e => {
