@@ -81,6 +81,8 @@ const TemplateSelection = ({
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
+    const [uploading, setUploading] = useState(false);
+    const uploadSource = 'template-selection';
     const [searchTerm, setSearchTerm] = useState('')
 
     const imageOptions = [placeholder, placeholder_2, placeholder_3]
@@ -189,28 +191,20 @@ const TemplateSelection = ({
 
         const startMs = Date.now();
         try {
-            setUploadStatus('loading')
-            setUploadSnackOpen(true)
-            setUploadProgressKey(prev => prev + 1) // reset progress bar animation
-
+            setUploading(true);
             await axios.post(
                 `${import.meta.env.VITE_CHAT_API_URL}/upload-docs`,
                 formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } }
             )
 
-            const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
-            setUploadDuration(elapsed);
-
-            await fetchDocuments()
-            setUploadStatus('success')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
+            console.info('Upload finished in', Math.round((Date.now() - startMs)/1000), 's');
         } catch (err) {
             console.error('Error uploading files', err)
-            setUploadStatus('error')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
+            alert('Upload failed. Please try again.');
         } finally {
-        e.target.value = null
+            setUploading(false);
+            e.target.value = null;
         }
     }
 
@@ -575,6 +569,7 @@ const TemplateSelection = ({
                     <Button
                         variant="contained"
                         onClick={() => fileInputRef.current.click()}
+                        disabled={uploading}
                         sx={{
                         borderRadius: 2,
                         bgcolor: '#0088D6',
@@ -587,7 +582,7 @@ const TemplateSelection = ({
                         my: '0.417vw',
                         }}
                     >
-                        Browse Reports
+                        {uploading ? 'Uploading…' : 'Browse Reports'}
                     </Button>
                 </Box>
                 <Box sx={{

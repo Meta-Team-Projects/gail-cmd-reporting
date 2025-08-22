@@ -163,40 +163,35 @@ const ReportGeneration = ({
 
         const startGenerate = async () => {
         setGenError('');
-        if (!selectedTemplateDocxFile) {
-            setGenError('Template .docx not provided from Template Selection.');
-            return;
-        }
         // revoke previous blob if any
         if (finalDocUrl) {
             try { URL.revokeObjectURL(finalDocUrl); } catch {}
         }
         setFinalDocUrl(null);
-        setFinalDocName(
-            (selectedTemplateDocxFile?.name || selectedTemplateName || 'CMD Template_1')
-            .replace(/\.docx$/i, '') + '_Report.docx'
-        );
+        ((selectedTemplateDocxFile?.name || selectedTemplateName || 'Report')
+                .replace(/\.docx$/i, '')) + '_Report.docx'
         setIsGenerating(true);
         setProgress(1);
         setEtaText('~1:30 remaining');
         startFakeProgress();
         try {
-            const fd = new FormData();
-            // IMPORTANT: backend expects the file field to be named "file"
-            fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
-            const res = await axios.post(
-            `${import.meta.env.VITE_CHAT_API_URL}/generate-report`,
-            fd,
-            { responseType: 'blob' } // returns a .docx file
-            );
+            const endpoint = `${import.meta.env.VITE_CHAT_API_URL}/generate-report`;
+                let res;
+                if (selectedTemplateDocxFile) {
+                const fd = new FormData();
+                fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
+                res = await axios.post(endpoint, fd, { responseType: 'blob' });
+                } else {
+                res = await axios.post(endpoint, {}, { responseType: 'blob' });
+            }
             // If server sends filename in headers, prefer it
             const cd = res?.headers?.['content-disposition'] || '';
             const match = cd.match(/filename="?([^"]+)"?/i);
             const serverName = match?.[1];
             if (serverName) setFinalDocName(serverName);
             const blob = res.data;
-            const url = URL.createObjectURL(blob);
-            setFinalDocUrl(url);
+            const blobUrl = URL.createObjectURL(blob);
+            setFinalDocUrl(blobUrl);
             setProgress(100);
             setEtaText('0:00 remaining');
         } catch (e) {
@@ -219,45 +214,6 @@ const ReportGeneration = ({
             }
         };
     }, []);
-
-    const handleUploadFiles = async (e) => {
-        const files = Array.from(e.target.files)
-        const tooBig = files.filter(f => f.size > 10 * 1024 * 1024)
-        if (tooBig.length) {
-            alert(`These file(s) exceed 10 MB and won’t be uploaded:\n${tooBig.map(f=>f.name).join('\n')}`)
-            e.target.value = null
-            return
-        }
-        const formData = new FormData()
-        files.forEach(f => formData.append('files', f))
-        formData.append('source', uploadSource)
-
-        const startMs = Date.now();
-        try {
-            setUploadStatus('loading')
-            setUploadSnackOpen(true)
-            setUploadProgressKey(prev => prev + 1) // reset progress bar animation
-
-            await axios.post(
-                `${import.meta.env.VITE_CHAT_API_URL}/upload-docs`,
-                formData,
-                { headers: { 'Content-Type': 'multipart/form-data' } }
-            )
-
-            const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
-            setUploadDuration(elapsed);
-
-            await fetchDocuments()
-            setUploadStatus('success')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
-        } catch (err) {
-            console.error('Error uploading files', err)
-            setUploadStatus('error')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
-        } finally {
-        e.target.value = null
-        }
-    }
 
     const fetchDocuments = async () => {
         try {
@@ -300,7 +256,7 @@ const ReportGeneration = ({
         collectStats();
     }, []);
 
-    const panelRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef(null);
 
 
     const ArrowStepper = ({ activeStep }) => (
@@ -528,6 +484,15 @@ const ReportGeneration = ({
                             <Typography sx={{ fontSize: '0.78vw', opacity: 0.7 }}>
                                 {finalDocName}
                             </Typography>
+                            <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
+                                <Button
+                                    variant="contained"
+                                    onClick={downloadFinal}
+                                    sx={{ bgcolor:'#0088D6', color:'#fff', '&:hover':{ bgcolor:'#0074BA' } }}
+                                >
+                                Download Final
+                                </Button>
+                            </Box>
                             </>
                         ) : genError ? (
                             <Typography sx={{ color: '#b00020' }}>{genError}</Typography>
@@ -536,6 +501,16 @@ const ReportGeneration = ({
                             <Typography sx={{ opacity: 0.75 }}>
                                 Click “Generate new Response” to create the final report.
                             </Typography>
+                            <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
+                            <Button
+                                variant="contained"
+                                onClick={startGenerate}
+                                disabled={isGenerating}
+                            sx={{ bgcolor:'#FFD95C', color:'#081A33', fontWeight:600, '&:hover':{ bgcolor:'#FFCB42' } }}
+                            >
+                                Generate New Response
+                            </Button>
+                            </Box>
                             </>
                         )}
                     </Box>
