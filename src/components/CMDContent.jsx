@@ -30,6 +30,7 @@ import placeholder_1 from '../assets/placeholder_1.png';
 import placeholder_2 from '../assets/placeholder_2.png';
 import placeholder_3 from '../assets/placeholder_3.png';
 import placeholder_4 from '../assets/placeholder_4.png';
+import placeholder_5 from '../assets/placeholder_5.png';
 
 import download_report from '../assets/download_report_icon.png'
 import save_template from '../assets/save_template_icon.png'
@@ -78,9 +79,9 @@ const onDocumentLoadSuccess = ({ numPages }) => setNumPages(numPages);
 
 const allImages = [
     ...Array(2).fill(placeholder_1),
-    ...Array(2).fill(placeholder_2),
-    ...Array(2).fill(placeholder),
-    ...Array(2).fill(placeholder_2),
+    ...Array(2).fill(placeholder_5),
+    ...Array(2).fill(placeholder_5),
+    ...Array(2).fill(placeholder_5),
 ]
 
 const togglePin = (docName) => {
@@ -393,6 +394,7 @@ return (
                 scrollbarColor: '#0088d7 transparent'
             }}>
                 {allImages.map((src, idx) => (
+                    <Box sx={{borderRadius: '6px', width: '48%', position: 'relative'}}>
                     <Box
                         key={idx}
                         component="img"
@@ -400,13 +402,32 @@ return (
                         alt={`Report ${idx + 1}`}
                         onClick={() => setSelectedReport(src)}
                         sx={{
-                            width: '48%',
+                            width: '100%',
                             // mb: '0.625vw',
-                            borderRadius: '5px', border: '1px solid black',
+                            borderRadius: '6px',
+                            border: '1px solid black',
                             objectFit: 'cover',
                             cursor: 'pointer',
                         }}
                     />
+                    <Box
+                    sx={{
+                        position: 'absolute',
+                        bottom: 6,
+                        left: 0,
+                        right: 0,
+                        width: '100%',
+                        bgcolor: 'rgba(0,0,0,0.6)',
+                        color: '#fff',
+                        px: '0.625vw',
+                        py: '0.365vw',
+                        fontSize: '0.7292vw',
+                        borderRadius: '0px 0px 6px 6px'
+                    }}
+                    >
+                        {`Report ${idx + 1}`}
+                    </Box>
+                    </Box>
                 ))}
             </Box>
                     {/* <Box
