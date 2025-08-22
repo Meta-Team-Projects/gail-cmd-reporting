@@ -469,11 +469,11 @@ const ReportGeneration = ({
                         ) : finalDocUrl ? (
                             <>
                             <Typography sx={{ color: '#b00020', whiteSpace: 'pre-wrap' }}>
-                                Failed to load DOCX preview.
+                                Failed to load {finalDocName} preview.
                                 {'\n'}
                                 This file can’t render inline here.
                             </Typography>
-                            <Button
+                            {/* <Button
                                 variant="text"
                                 href={finalDocUrl}
                                 target="_blank"
@@ -483,8 +483,8 @@ const ReportGeneration = ({
                             </Button>
                             <Typography sx={{ fontSize: '0.78vw', opacity: 0.7 }}>
                                 {finalDocName}
-                            </Typography>
-                            <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
+                            </Typography> */}
+                            {/* <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
                                 <Button
                                     variant="contained"
                                     onClick={downloadFinal}
@@ -492,7 +492,7 @@ const ReportGeneration = ({
                                 >
                                 Download Final
                                 </Button>
-                            </Box>
+                            </Box> */}
                             </>
                         ) : genError ? (
                             <Typography sx={{ color: '#b00020' }}>{genError}</Typography>
