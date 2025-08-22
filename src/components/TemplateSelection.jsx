@@ -53,6 +53,8 @@ import {
     Search as SearchIcon,
 } from '@mui/icons-material'
 import FindInPageIcon from '@mui/icons-material/FindInPage';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
 import { StepArrow,ArrowShape,ArrowLabel } from './StepArrow' 
@@ -67,10 +69,10 @@ const TemplateSelection = ({
     }) => {
         const [templates, setTemplates] = useState([]); // [{ name, displayName, url }]
         const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
-        const [pdfError, setPdfError] = useState(null);
         const previewBoxRef = useRef(null);
         const [previewWidth, setPreviewWidth] = useState(800);
-        const pdfUrlRef = useRef(null); // track current blob URL for cleanup
+        const pdfUrlRef = useRef(null);               // currently selected preview URL
+        const createdUrlsRef = useRef(new Set());     // track ALL blob URLs to revoke on unmount
 
     const categories = ['All', 'Pinned', 'Recently Viewed']
     const [selectedCategory, setSelectedCategory] = useState('All');
@@ -101,27 +103,24 @@ const TemplateSelection = ({
         page * imagesPerPage + imagesPerPage
     )
 
-    // to convert base64 (from API) → blob URL for react-pdf 
+    // Convert base64 (with or without data-URL prefix / URL-safe chars) → Blob URL
     const base64ToPdfUrl = (b64) => {
-    // Convert Base64 string to a Blob URL
-    if (!b64) return null;
-    // strip data URL prefix, whitespace; normalize URL-safe chars
-    let clean = b64.replace(/^data:application\/pdf;base64,/i, '').replace(/\s+/g, '');
-    clean = clean.replace(/-/g, '+').replace(/_/g, '/');
-    let byteChars;
+        if (!b64) return null;
+        let clean = b64.replace(/^data:application\/pdf;base64,/i, '').replace(/\s+/g, '');
+        clean = clean.replace(/-/g, '+').replace(/_/g, '/');
+        let byteChars;
     try {
         byteChars = atob(clean);
     } catch (e) {
         console.error('Invalid base64 for PDF:', e);
         return null;
     }
-    const byteNumbers = new Array(byteChars.length);
-    for (let i = 0; i < byteChars.length; i++) {
-        byteNumbers[i] = byteChars.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    return URL.createObjectURL(blob);
+    const bytes = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    createdUrlsRef.current.add(url);
+    return url;
     };
 
     //  fetch templates from backend on mount 
@@ -146,9 +145,9 @@ const TemplateSelection = ({
     // cleanup on unmount: revoke any created object URLs
     return () => {
         try {
-        templates.forEach(t => URL.revokeObjectURL(t.url));
-        if (pdfPreviewUrl) URL.revokeObjectURL(pdfPreviewUrl);
-        } catch {}
+        createdUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
+        createdUrlsRef.current.clear();
+    } catch {}
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -452,7 +451,7 @@ const TemplateSelection = ({
                                 if (!isClickable) return;
                                 const url = availableByName[label];
                                 if (url) {
-                                    setPdfError(null);
+                                    pdfUrlRef.current = url;
                                     setPdfPreviewUrl(url);
                                     setSelectedPreview?.(null); // prefer PDF preview
                                 }
@@ -647,61 +646,93 @@ const TemplateSelection = ({
                         }}
                     >
                         <Box
-                            sx={{
-                            backgroundColor: '#0088D6CC',
+                        sx={{
+                            background: '#0088D6CC',
                             height: '2.3vw',
                             width: '100%',
                             borderTopLeftRadius: 4,
                             borderTopRightRadius: 4,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            px: '0.625vw',
+                            py: '0.625vw',
+                            // gap: '0.625vw'
+                        }}
+                        >
+                        <Typography
+                            sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9375vw' }}
+                        >
+                            Preview
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
+                            <Button
+                            size="small"
+                            variant="outlined"
+                            component="a"
+                            href={pdfPreviewUrl || undefined}
+                            target={pdfPreviewUrl ? '_blank' : undefined}
+                            rel={pdfPreviewUrl ? 'noreferrer' : undefined}
+                            disabled={!pdfPreviewUrl}
+                            sx={{
+                                color: '#fff',
+                                borderColor: 'rgba(255,255,255,0.7)',
+                                textTransform: 'none',
+                                '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
+                                fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
                             }}
-                        />
+                            >
+                            <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
+                            Open in new tab
+                            </Button>
+                            <Button
+                            size="small"
+                            variant="outlined"
+                            component="a"
+                            href={pdfPreviewUrl || undefined}
+                            download={pdfPreviewUrl ? 'template.pdf' : undefined}
+                            disabled={!pdfPreviewUrl}
+                            sx={{
+                                color: '#fff',
+                                borderColor: 'rgba(255,255,255,0.7)',
+                                textTransform: 'none',
+                                '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
+                                fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
+                            }}
+                            >
+                            <FileDownloadOutlinedIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
+                            Download
+                            </Button>
+                        </Box>
+                        </Box>
                         <Box ref={previewBoxRef}  sx={{
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexGrow: 1,
-                            width: '100%'
+                            width: '100%',
                         }}>
                             {pdfPreviewUrl ? (
-                                <>
-                                <Document
-                                    file={pdfPreviewUrl}
-                                    loading={<Typography sx={{ mt: 2 }}>Loading template…</Typography>}
-                                    onLoadError={(err) => {
-                                        console.error('PDF load error:', err);
-                                        setPdfError(err);
-                                        }}
-                                        onSourceError={(err) => {
-                                        console.error('PDF source error:', err);
-                                        setPdfError(err);
+                            <>
+                                {/* Blob preview via iframe */}
+                                <Box sx={{ flexGrow: 1, width: '100%', p: '0.833vw', boxSizing: 'border-box' }}>
+                                <Box
+                                    component="iframe"
+                                    src={pdfPreviewUrl}
+                                    title="Template preview"
+                                    sx={{
+                                        display: 'block',
+                                        width: '100%',
+                                        height: '100%',
+                                        border: 0,
+                                        boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                                        backgroundColor: '#fff',
+                                        borderRadius: 1,
                                     }}
-                                >
-                                    <Page
-                                    pageNumber={1}
-                                    width={previewWidth}
-                                    renderTextLayer={false}
-                                    renderAnnotationLayer={false}
-                                    />
-                                </Document>
-                                {pdfError && (
-                                    <Box sx={{ mt: 1 }}>
-                                        <Typography color="error" sx={{ fontSize: '0.8rem' }}>
-                                        Failed to load preview: {String(pdfError?.message || '')}
-                                        </Typography>
-                                        <Button
-                                        variant="text"
-                                        href={pdfPreviewUrl}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        sx={{ mt: 0.5 }}
-                                        >
-                                        Open PDF in new tab
-                                        </Button>
-                                    </Box>
-                                )}
-                                </>
-                            ) : selectedPreview ? (
+                                />
+                                </Box>
+                            </>) : selectedPreview ? (
                                 <>
                                 <Box 
                                 component="img"
