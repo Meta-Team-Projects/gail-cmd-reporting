@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef, useMemo  } from 'react'
 
-import { Document, Page, pdfjs } from 'react-pdf';
-import pdfWorkerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
-pdfjs.disableWorker = true;
 
 import {
     Box,

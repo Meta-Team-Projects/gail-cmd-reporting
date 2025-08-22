@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { Document, Page, pdfjs } from 'react-pdf';
 
-
 import {
 Box,
 TextField,
