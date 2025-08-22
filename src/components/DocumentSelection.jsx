@@ -559,7 +559,7 @@ const DocumentSelection = ({
                                             <IconButton 
                                             size="small"
                                             onClick={e => {
-                                                     e.stopPropagation();
+                                                    e.stopPropagation();
                                             //         setDialogDocName(name);
                                             //         setOpenDeleteDialog(true);
                                             }}
