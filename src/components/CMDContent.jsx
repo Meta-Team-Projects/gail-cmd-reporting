@@ -153,8 +153,8 @@ const visibleTemplates = (() => {
     return arr;
 })();
 
-const createdUrlsRef = useRef(new Set());  // track all blob URLs
-const prevUrlRef = useRef(null);           // last blob URL in use
+const createdUrlsRef = useRef(new Set());  
+const prevUrlRef = useRef(null);           
 
 const addZoomParam = (url, zoom = 36) => {
     if (!url) return undefined;

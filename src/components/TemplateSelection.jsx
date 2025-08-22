@@ -112,7 +112,7 @@ const TemplateSelection = ({
 
     const [cardsLoading, setCardsLoading] = useState(true);
     useEffect(() => {
-        const timer = setTimeout(() => setCardsLoading(false), 12000); // 12s
+        const timer = setTimeout(() => setCardsLoading(false), 6000); // 6s
         return () => clearTimeout(timer);
     }, []);
 

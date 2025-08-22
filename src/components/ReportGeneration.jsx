@@ -315,7 +315,6 @@ const disabledGradientSx = {
     pointerEvents: 'auto',    
     },
     '&.Mui-disabled:hover': {
-        background: 'linear-gradient(to right, #F0F5FD, #DFEBFF)',
         cursor: 'not-allowed',
     },
 };
