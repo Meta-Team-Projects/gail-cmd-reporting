@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import axios from 'axios'
 
 import {
@@ -41,8 +41,11 @@ import {
     CloudUpload,
     PlayArrow as PlayArrowIcon,
     Delete,
- } from '@mui/icons-material'
- 
+} from '@mui/icons-material'
+
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
 import { StepArrow,ArrowShape, ArrowLabel } from './StepArrow' 
 import arrowMask from '../assets/arrow.png';
@@ -65,14 +68,18 @@ const DocumentSelection = ({
     const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
     const [documentList, setDocumentList] = useState({})
     const [referencePdfs, setReferencePdfs] = useState([]); // [{ name, url }]
-    const [templatePdfUrl, setTemplatePdfUrl] = useState(null); // selected template blob URL for right preview
-    const [previewErrorText, setPreviewErrorText] = useState(
-        'Failed to load PDF file.\nFailed to load preview: Setting up fake worker failed: "Failed to fetch dynamically imported module: http://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.3.31/pdf.worker.min.js?import".'
-    );
+    const [templatePdfUrl, setTemplatePdfUrl] = useState(null); // fallback preview (same as TemplateSelection)
+    const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
+    const createdUrlsRef = useRef(new Set());
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
+
+    const addZoomParam = (url, zoom = 50) => {
+        if (!url) return undefined;
+        return url.includes('#') ? `${url}&zoom=${zoom}` : `${url}#zoom=${zoom}`;
+    };
 
     const b64ToBlobUrl = (b64, mime = 'application/pdf') => {
         if (!b64) return null;
@@ -82,7 +89,9 @@ const DocumentSelection = ({
         const arr = new Uint8Array(bytes.length);
         for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
         const blob = new Blob([arr], { type: mime });
-        return URL.createObjectURL(blob);
+        const url = URL.createObjectURL(blob);
+        createdUrlsRef.current.add(url);
+        return url;
         };
 
         // Dynamic docs list based on category
@@ -209,12 +218,23 @@ const DocumentSelection = ({
 
     useEffect(() => {
         fetchDocuments();
-        fetchReferencePdfs();
-        fetchTemplateForPreview();
-        collectStats();
+            fetchReferencePdfs();
+            fetchTemplateForPreview();
+            collectStats();
+            // cleanup blob URLs on unmount
+            return () => {
+                try {
+                    createdUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
+                    createdUrlsRef.current.clear();
+                } catch {}
+            };
     }, []);
 
-    const panelRef = useRef<HTMLDivElement>(null);
+
+    const refUrlByName = useMemo(
+        () => Object.fromEntries(referencePdfs.map(f => [f.name, f.url])),
+        [referencePdfs]
+    );
 
     const ArrowStepper = ({ activeStep }) => (
     <Box display="flex" justifyContent="center" mt={'0.8333vw'} width="100%" sx={{ px: '0.8333vw' }}>
@@ -440,11 +460,17 @@ const DocumentSelection = ({
                                     key={name}
                                     disableGutters
                                     onClick={() => {
+                                        // toggle selection
                                         setSelectedDocs(prev =>
                                             prev.includes(name)
                                                 ? prev.filter(n => n !== name)
                                                 : [...prev, name]
                                         );
+                                        // if this is a Reference PDF, also show its preview like TemplateSelection
+                                        if (selectedCategory.toLowerCase() === 'reference pdfs') {
+                                            const url = refUrlByName[name];
+                                            if (url) setPdfPreviewUrl(url);
+                                        }
                                     }}
                                     sx={{
                                         bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
@@ -520,6 +546,18 @@ const DocumentSelection = ({
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleToggleVisibility(name);
+                                                // also set/clear preview when toggling visibility for Reference PDFs
+                                                if (selectedCategory.toLowerCase() === 'reference pdfs') {
+                                                    const url = refUrlByName[name];
+                                                    if (url) {
+                                                        // if turning visible, show it; if hiding and it's the current, clear to fallback
+                                                        if (!visibleDocs[name]) {
+                                                            setPdfPreviewUrl(url);
+                                                        } else if (pdfPreviewUrl === url) {
+                                                            setPdfPreviewUrl(null);
+                                                        }
+                                                    }
+                                                }
                                             }}
                                             >
                                                 {visibleDocs[name] ? (
@@ -836,41 +874,91 @@ const DocumentSelection = ({
                             position: 'relative',
                         }}
                     >
+                        {/* Header bar + actions (matches TemplateSelection) */}
                         <Box
                             sx={{
-                            backgroundColor: '#0088D6CC',
-                            height: '2.3vw',
-                            width: '100%',
-                            borderTopLeftRadius: 4,
-                            borderTopRightRadius: 4,
-                            }}
-                        />
-                        <Box sx={{
+                                background: '#0088D6CC',
+                                height: '2.3vw',
+                                width: '100%',
+                                borderTopLeftRadius: 4,
+                                borderTopRightRadius: 4,
                             display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
                             alignItems: 'center',
-                            flexGrow: 1,
-                            width: '100%'
-                        }}>
-                            {templatePdfUrl ? (
-                                <>
-                                    <Typography sx={{ whiteSpace: 'pre-wrap', textAlign: 'center', color: '#b00020', px: '1rem' }}>
-                                    {previewErrorText}
-                                    </Typography>
-                                    <Button
-                                    variant="text"
-                                    href={templatePdfUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    sx={{ mt: 1 }}
-                                    >
-                                    Open in new tab
-                                    </Button>
-                                </>
-                                ) : (
-                                <Typography sx={{ opacity: 0.7, px: '1rem' }}>
-                                    Loading template preview…
+                            justifyContent: 'space-between',
+                            px: '0.625vw',
+                            py: '0.625vw',
+                            }}
+                            >
+                            <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9375vw' }}>
+                                Preview
+                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
+                                <Button
+                                size="small"
+                                variant="outlined"
+                                component="a"
+                                href={addZoomParam(pdfPreviewUrl || templatePdfUrl)}
+                                target={pdfPreviewUrl || templatePdfUrl ? '_blank' : undefined}
+                                rel={pdfPreviewUrl || templatePdfUrl ? 'noreferrer' : undefined}
+                                disabled={!pdfPreviewUrl && !templatePdfUrl}
+                                sx={{
+                                    color: '#fff',
+                                    borderColor: 'rgba(255,255,255,0.7)',
+                                    textTransform: 'none',
+                                    '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
+                                    fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
+                                }}
+                                >
+                                <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
+                                Open in new tab
+                                </Button>
+                                <Button
+                                size="small"
+                                variant="outlined"
+                                component="a"
+                                href={(pdfPreviewUrl || templatePdfUrl) || undefined}
+                                download={pdfPreviewUrl || templatePdfUrl ? 'document.pdf' : undefined}
+                                disabled={!pdfPreviewUrl && !templatePdfUrl}
+                                sx={{
+                                    color: '#fff',
+                                    borderColor: 'rgba(255,255,255,0.7)',
+                                    textTransform: 'none',
+                                    '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
+                                    fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
+                                }}
+                                >
+                                <FileDownloadOutlinedIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
+                                Download
+                                </Button>
+                            </Box>
+                            </Box>
+                            {/* iframe preview area */}
+                            <Box
+                            sx={{
+                                flexGrow: 1,
+                                width: '100%',
+                                p: '0.833vw',
+                                boxSizing: 'border-box'
+                            }}
+                            >
+                            {pdfPreviewUrl || templatePdfUrl ? (
+                                <Box
+                                component="iframe"
+                                src={addZoomParam(pdfPreviewUrl || templatePdfUrl)}
+                                title="Document preview"
+                                sx={{
+                                    display: 'block',
+                                    width: '100%',
+                                    height: '100%',
+                                    border: 0,
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                                    backgroundColor: '#fff',
+                                    borderRadius: 1
+                                }}
+                                />
+                            ) : (
+                                <Typography sx={{ opacity: 0.7, px: '1rem', textAlign: 'center' }}>
+                                Select a document to preview
                                 </Typography>
                             )}
                         </Box>

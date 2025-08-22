@@ -41,7 +41,9 @@ import {
     Delete,
     Widgets,
     ModeEditOutlined as ModeEditOutlinedIcon,
- } from '@mui/icons-material'
+} from '@mui/icons-material'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
 import { StepArrow,ArrowShape, ArrowLabel } from './StepArrow' 
@@ -73,6 +75,11 @@ const GeneratePreview = ({
     const fileInputRef = useRef(null)
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
+
+    const addZoomParam = (url, zoom = 50) => {
+        if (!url) return undefined;
+        return url.includes('#') ? `${url}&zoom=${zoom}` : `${url}#zoom=${zoom}`;
+    };
 
     const key = selectedCategory === 'All' ? null : selectedCategory.toLowerCase();
     let docs = key ? (documentList[key] || []) : Object.values(documentList).flat();
@@ -211,7 +218,7 @@ const GeneratePreview = ({
         };
     }, [templatePdfUrl]);
 
-    const panelRef = useRef<HTMLDivElement>(null);
+    // const panelRef = useRef<HTMLDivElement>(null);
 
     const ArrowStepper = ({ activeStep }) => (
     <Box display="flex" justifyContent="center" mt={'0.8333vw'} width="100%" sx={{ px: '0.8333vw' }}>
@@ -579,62 +586,95 @@ const GeneratePreview = ({
                             border: '1px solid #D2D2D2',
                             borderRadius: 2,
                             textAlign: 'center',
-                            bgcolor: '#F5FAFF',   //later
-                            //boxShadow: '0px 2px 8px #76767640',
-                            display: 'flex',
-                            flexDirection: 'column',
+                            bgcolor: '#F5FAFF',
+                        display: 'flex',
+                        flexDirection: 'column',
                             alignItems: 'center',
                             ml: '0.417vw', mr: '0.8333vw',
                             height: '100%',
                             transition: 'all 0.3s ease',
                             position: 'relative',
                         }}
-                    >
+                        >
+                        {/* Header bar + actions */}
                         <Box
                             sx={{
-                            backgroundColor: '#0088D6CC',
+                            background: '#0088D6CC',
                             height: '2.3vw',
                             width: '100%',
                             borderTopLeftRadius: 4,
                             borderTopRightRadius: 4,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            px: '0.625vw',
+                            py: '0.625vw',
                             }}
-                        />
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexGrow: 1,
-                                width: '100%'
-                            }}
+                        >
+                            <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9375vw' }}>
+                            Preview
+                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
+                            <Button
+                            size="small"
+                                variant="outlined"
+                                component="a"
+                            href={addZoomParam(templatePdfUrl)}
+                                target={templatePdfUrl ? '_blank' : undefined}
+                                rel={templatePdfUrl ? 'noreferrer' : undefined}
+                                disabled={!templatePdfUrl}
+                                sx={{
+                                color: '#fff',
+                                borderColor: 'rgba(255,255,255,0.7)',
+                                textTransform: 'none',
+                                '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
+                                fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
+                                }}
                             >
+                                <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
+                            Open in new tab
+                            </Button>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                component="a"
+                                href={templatePdfUrl || undefined}   
+                                download={templatePdfUrl ? 'report-preview.pdf' : undefined}
+                                disabled={!templatePdfUrl}
+                                sx={{
+                                color: '#fff',
+                                borderColor: 'rgba(255,255,255,0.7)',
+                                textTransform: 'none',
+                                '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
+                                fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
+                                }}
+                            >
+                                <FileDownloadOutlinedIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
+                                Download
+                            </Button>
+                        </Box>
+                        </Box>
+                        {/* iframe preview area */}
+                        <Box sx={{ flexGrow: 1, width: '100%', p: '0.833vw', boxSizing: 'border-box' }}>
                             {templatePdfUrl ? (
-                                <>
-                                <Typography
-                                    sx={{
-                                    whiteSpace: 'pre-wrap',
-                                    textAlign: 'center',
-                                    color: '#b00020',
-                                    px: '1rem'
-                                    }}
-                                >
-                                    {previewErrorText}
-                                </Typography>
-                                <Button
-                                    variant="text"
-                                    href={templatePdfUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    sx={{ mt: 1 }}
-                                >
-                                    Open in new tab
-                                </Button>
-                                </>
-                            ) : (
-                                <Typography sx={{ opacity: 0.7, px: '1rem' }}>
+                            <Box
+                                component="iframe"
+                                src={addZoomParam(templatePdfUrl)}
+                                title="Template preview"
+                                sx={{
+                                display: 'block',
+                                width: '100%',
+                                height: '100%',
+                                border: 0,
+                                boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                                backgroundColor: '#fff',
+                                borderRadius: 1,
+                                }}
+                            />
+                        ) : (
+                            <Typography sx={{ opacity: 0.7, px: '1rem' }}>
                                 Loading template preview…
-                                </Typography>
+                            </Typography>
                             )}
                         </Box>
                     </Box>
