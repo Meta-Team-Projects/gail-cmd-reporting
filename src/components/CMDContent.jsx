@@ -26,6 +26,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PushPinIcon from '@mui/icons-material/PushPin';
 
 import placeholder from '../assets/placeholder.png';
+import placeholder_1 from '../assets/placeholder_1.png';
 import placeholder_2 from '../assets/placeholder_2.png';
 import placeholder_3 from '../assets/placeholder_3.png';
 import placeholder_4 from '../assets/placeholder_4.png';
@@ -76,7 +77,7 @@ const [numPages, setNumPages] = useState(null);
 const onDocumentLoadSuccess = ({ numPages }) => setNumPages(numPages);
 
 const allImages = [
-    ...Array(2).fill(placeholder),
+    ...Array(2).fill(placeholder_1),
     ...Array(2).fill(placeholder_2),
     ...Array(2).fill(placeholder),
     ...Array(2).fill(placeholder_2),
@@ -401,7 +402,7 @@ return (
                         sx={{
                             width: '48%',
                             // mb: '0.625vw',
-                            borderRadius: '5px',
+                            borderRadius: '5px', border: '1px solid black',
                             objectFit: 'cover',
                             cursor: 'pointer',
                         }}
