@@ -356,7 +356,7 @@ return (
         flex: 1,
         borderRadius: '12px',
         bgcolor: '#F5FAFF',
-        px: '0.833vw', pt: '0.417vw', pb: '0.833vw',
+        px: '0.833vw', pt: '0.7vw', pb: '0.833vw',
         mb: '0.417vw',
         display: 'flex',
         flexDirection: 'column',
@@ -366,11 +366,11 @@ return (
                 <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
                 Latest Reports
                 </Typography>
-                <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.25vw'}}/>
+                <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
             </Box>
 
             <Box sx={{
-                mt: '0.417vw',
+                mt: '0.5vw',
                 display:'flex',
                 flexWrap: 'wrap',
                 gap: '2%',
@@ -471,7 +471,7 @@ return (
         borderRadius: '12px',
         mb: '0.417vw',
         bgcolor: '#F5FAFF',
-        px: '0.833vw', py: '0.417vw',
+        px: '0.833vw', pt: '0.7vw',
         display: 'flex',
         flexDirection: 'column',
         gap: '0.7407vh'
@@ -480,12 +480,12 @@ return (
             <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
             Reports Repository
             </Typography>
-            <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.25vw'}}/>
+            <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
         </Box>
 
         {/* Category chips (kept) */}
         <Stack direction="row" sx={{flexWrap: 'wrap', gap: '0.41vw'}}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '0.417vw', flexGrow: 1 }}>
+            <Box sx={{ mt: '0.4vw', display: 'flex', flexWrap: 'wrap', gap: '0.417vw', flexGrow: 1 }}>
             {categories.map((category) => (
                 <Chip
                 key={category}
@@ -503,7 +503,7 @@ return (
                     borderRadius: '16px',
                     bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                     '&:hover': { bgcolor: '#FEC636' },
-                    boxShadow: '0px 4px 8px #15151540'
+                    //boxShadow: '0px 4px 8px #15151540'
                 }}
                 />
             ))}

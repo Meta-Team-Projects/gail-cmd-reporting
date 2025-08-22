@@ -327,7 +327,7 @@ const GeneratePreview = ({
                 <Box
                     sx={{
                     px: '0.8333vw',
-                    py:'0.3vw',
+                    py:'0.7vw',
                     //mt: -1,
                     mx: '0.8333vw',
                     //mb: 1,
@@ -346,7 +346,7 @@ const GeneratePreview = ({
                         Document Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
+                        fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
                         Review the template and files to be used for generating the new CMD report.
                         </Typography>
@@ -634,7 +634,7 @@ const GeneratePreview = ({
                                 <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
                             Open in new tab
                             </Button>
-                            <Button
+                            {/* <Button
                                 size="small"
                                 variant="outlined"
                                 component="a"
@@ -651,7 +651,7 @@ const GeneratePreview = ({
                             >
                                 <FileDownloadOutlinedIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
                                 Download
-                            </Button>
+                            </Button> */}
                         </Box>
                         </Box>
                         {/* iframe preview area */}

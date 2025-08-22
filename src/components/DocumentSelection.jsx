@@ -367,7 +367,7 @@ const DocumentSelection = ({
                 <Box
                     sx={{
                     px: '0.8333vw',
-                    py:'0.208vw',
+                    py:'0.7vw',
                     mx: '0.8333vw',
                     background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
                     borderRadius: 2,
@@ -384,7 +384,7 @@ const DocumentSelection = ({
                         Document Selection
                     </Typography> */}
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
+                        fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
                         Select files from the repository and/or upload new files for updating the contents of the CMD report.                    </Typography>
                 </Box>
@@ -435,7 +435,7 @@ const DocumentSelection = ({
                                             borderRadius: '16px',
                                             bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                                             '&:hover': { bgcolor: '#FEC636' },
-                                            boxShadow: '0px 4px 8px #15151540'
+                                            //boxShadow: '0px 4px 8px #15151540'
                                         }}
                                     />
                                 ))}
@@ -915,7 +915,7 @@ const DocumentSelection = ({
                                 <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
                                 Open in new tab
                                 </Button>
-                                <Button
+                                {/* <Button
                                 size="small"
                                 variant="outlined"
                                 component="a"
@@ -932,7 +932,7 @@ const DocumentSelection = ({
                                 >
                                 <FileDownloadOutlinedIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
                                 Download
-                                </Button>
+                                </Button> */}
                             </Box>
                             </Box>
                             {/* iframe preview area */}

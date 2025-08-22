@@ -44,6 +44,7 @@ import templateArrowYellow from '../assets/templatearrow-yellow.png';
 import placeholder_1 from '../assets/placeholder_1.png'
 import placeholder_2 from '../assets/placeholder_2.png'
 import placeholder_3 from '../assets/placeholder_3.png'
+import placeholder_5 from '../assets/placeholder_5.png'
 import {
     CloudUpload,
     FindInPage,
@@ -87,12 +88,11 @@ const TemplateSelection = ({
     const uploadSource = 'template-selection';
     const [searchTerm, setSearchTerm] = useState('')
 
-    const imageOptions = [placeholder_1, placeholder_2, placeholder_3]
     //const allImages = [...Array(18)].map((_, idx) => imageOptions[idx % imageOptions.length])
     const allImages = [
         ...Array(2).fill(placeholder_1),
-        ...Array(2).fill(placeholder_2),
-        ...Array(2).fill(placeholder_3),
+        ...Array(2).fill(placeholder_5),
+        ...Array(2).fill(placeholder_5),
     ]
     const imagesPerPage = 6
     const [page, setPage] = useState(0)
@@ -381,7 +381,7 @@ const TemplateSelection = ({
                                         borderRadius: '16px',
                                         bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                                         '&:hover': { bgcolor: '#FEC636' },
-                                        boxShadow: '0px 4px 8px #15151540'
+                                        //boxShadow: '0px 4px 8px #15151540'
                                     }}
                                 />
                             ))}
@@ -503,7 +503,7 @@ const TemplateSelection = ({
                                     fontSize: '0.7292vw',
                                 }}
                                 >
-                                {label}
+                                    {label}
                                 </Box>
                             </Box>
                             </Tooltip>
@@ -708,7 +708,7 @@ const TemplateSelection = ({
                             <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
                             Open in new tab
                             </Button>
-                            <Button
+                            {/* <Button
                             size="small"
                             variant="outlined"
                             component="a"
@@ -725,7 +725,7 @@ const TemplateSelection = ({
                             >
                             <FileDownloadOutlinedIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
                             Download
-                            </Button>
+                            </Button> */}
                         </Box>
                         </Box>
                         <Box ref={previewBoxRef}  sx={{
