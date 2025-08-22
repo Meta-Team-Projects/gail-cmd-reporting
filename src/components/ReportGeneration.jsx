@@ -527,7 +527,7 @@ const disabledYellowSx = {
                         ) : (
                             <>
                             <Typography sx={{ opacity: 0.75 }}>
-                                Click “Generate new Report” to create the final report.
+                                Click “Generate Report” to create the final report.
                             </Typography>
                             <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
                             <Button
@@ -542,7 +542,7 @@ const disabledYellowSx = {
                                     ...disabledYellowSx
                                 }}
                             >
-                                Generate New Report
+                                Generate Report
                             </Button>
                             </Box>
                             </>

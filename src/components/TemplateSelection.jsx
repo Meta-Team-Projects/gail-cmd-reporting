@@ -41,7 +41,7 @@ import nextArrow from '../assets/nextarrow.png';
 import templateArrowBlack from '../assets/templatearrow-black.png';
 import templateArrowYellow from '../assets/templatearrow-yellow.png';
 
-import placeholder from '../assets/placeholder.png'
+import placeholder_1 from '../assets/placeholder_1.png'
 import placeholder_2 from '../assets/placeholder_2.png'
 import placeholder_3 from '../assets/placeholder_3.png'
 import {
@@ -67,6 +67,7 @@ const TemplateSelection = ({
     }) => {
     const [templates, setTemplates] = useState([]); // [{ name, displayName, url }]
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+    const [previewingTemplateName, setPreviewingTemplateName] = useState(null);
     const previewBoxRef = useRef(null);
     const [previewWidth, setPreviewWidth] = useState(800);
     const pdfUrlRef = useRef(null);               // currently selected preview URL
@@ -86,10 +87,10 @@ const TemplateSelection = ({
     const uploadSource = 'template-selection';
     const [searchTerm, setSearchTerm] = useState('')
 
-    const imageOptions = [placeholder, placeholder_2, placeholder_3]
+    const imageOptions = [placeholder_1, placeholder_2, placeholder_3]
     //const allImages = [...Array(18)].map((_, idx) => imageOptions[idx % imageOptions.length])
     const allImages = [
-        ...Array(2).fill(placeholder),
+        ...Array(2).fill(placeholder_1),
         ...Array(2).fill(placeholder_2),
         ...Array(2).fill(placeholder_3),
     ]
@@ -468,7 +469,8 @@ const TemplateSelection = ({
                                 if (url) {
                                     pdfUrlRef.current = url;
                                     setPdfPreviewUrl(url);
-                                    setSelectedPreview?.(null); // prefer PDF preview
+                                    setSelectedPreview?.(null); 
+                                    setPreviewingTemplateName(label);
                                 }
                                 }}
                                 sx={{
@@ -680,7 +682,11 @@ const TemplateSelection = ({
                         <Typography
                             sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9375vw' }}
                         >
-                            Preview
+                            {
+                                previewingTemplateName
+                                    ? `Previewing Template: ${previewingTemplateName}`
+                                    : 'Preview'
+                            }
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
                             <Button

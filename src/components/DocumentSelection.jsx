@@ -71,6 +71,8 @@ const DocumentSelection = ({
     const [referencePdfs, setReferencePdfs] = useState([]); // [{ name, url }]
     const [templatePdfUrl, setTemplatePdfUrl] = useState(null); // fallback preview (same as TemplateSelection)
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+    const [previewingName, setPreviewingName] = useState(null);
+    const [previewingType, setPreviewingType] = useState('template'); 
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
     const createdUrlsRef = useRef(new Set());
@@ -129,6 +131,13 @@ const DocumentSelection = ({
         setPdfPreviewUrl(curr =>
             willBeVisible ? url : (curr === url ? null : curr)
         );
+        if (willBeVisible) {
+        setPreviewingName(docName);
+        setPreviewingType('document');
+        } else {
+            setPreviewingName(null);
+            setPreviewingType('template');
+        }
         }
         return next;
     });
@@ -214,6 +223,8 @@ const DocumentSelection = ({
             if (t1?.file_b64) {
                 const blobUrl = b64ToBlobUrl(t1.file_b64, 'application/pdf');
                 setTemplatePdfUrl(blobUrl);
+                setPreviewingName(t1?.name || 'Template.pdf');
+                setPreviewingType('template');
             }
         } catch (err) {
             console.error('Error fetching template for preview', err);
@@ -878,7 +889,11 @@ const DocumentSelection = ({
                             }}
                             >
                             <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9375vw' }}>
-                                Preview
+                                {previewingType === 'document' && previewingName
+                                    ? `Previewing Document: ${previewingName}`
+                                    : previewingType === 'template' && previewingName
+                                    ? `Previewing Template: ${previewingName}`
+                                    : 'Previewing Template: CMD Template_1'}
                             </Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
                                 <Button
