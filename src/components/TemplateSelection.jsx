@@ -7,6 +7,7 @@ import {
     IconButton,
     Slider,
     Typography,
+    CircularProgress,
     Popper,
     ClickAwayListener,
     Paper,
@@ -107,6 +108,12 @@ const TemplateSelection = ({
         page * imagesPerPage,
         page * imagesPerPage + imagesPerPage
     )
+
+    const [cardsLoading, setCardsLoading] = useState(true);
+    useEffect(() => {
+        const timer = setTimeout(() => setCardsLoading(false), 12000); // 12s
+        return () => clearTimeout(timer);
+    }, []);
 
     // Convert base64 (with or without data-URL prefix / URL-safe chars) → Blob URL
     const base64ToPdfUrl = (b64) => {
@@ -413,26 +420,42 @@ const TemplateSelection = ({
                     <Box sx={{
                         mt: '0.417vw',
                         display:'flex',
-                        flexWrap: 'wrap',
-                        gap: '2%',
-                        pr: '1.25vw',
-                        //maxHeight: '250px',
-                        overflowY: 'auto',
-                        overflowX: 'hidden',
-                        '&::-webkit-scrollbar': { 
-                            width: '0.2083vw' 
-                        },
-                        '&::-webkit-scrollbar-track': { 
-                            background: 'transparent'
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#0088d7',
-                            borderRadius: '3px',
-                        },
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: '#0088d7 transparent'
+                        ...(cardsLoading
+                            ? {
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                minHeight: '28vh',
+                                pr: '1.25vw',
+                            }
+                            : {
+                                flexWrap: 'wrap',
+                                gap: '2%',
+                                pr: '1.25vw',
+                                overflowY: 'auto',
+                                overflowX: 'hidden',
+                                '&::-webkit-scrollbar': { width: '0.2083vw' },
+                                '&::-webkit-scrollbar-track': { background: 'transparent' },
+                                '&::-webkit-scrollbar-thumb': {
+                                    backgroundColor: '#0088d7',
+                                    borderRadius: '3px',
+                                },
+                                scrollbarWidth: 'thin',
+                                scrollbarColor: '#0088d7 transparent',
+                            }
+                        )
                     }}>
-                        {pseudoTemplateNames.map((label, idx) => {
+                        {cardsLoading ? (
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <Typography
+                                    variant="subtitle2"
+                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
+                                >
+                                    Loading…
+                                </Typography>
+                                <CircularProgress size="1.667vw" />
+                            </Box>
+                        ) : (
+                        pseudoTemplateNames.map((label, idx) => {
                         const src = allImages[idx % allImages.length]; // keep your nice placeholders
                         const isAvailable = Boolean(availableByName[label]);
                         // Only CMD Template_1 is clickable for now (and only if actually fetched)
@@ -488,7 +511,8 @@ const TemplateSelection = ({
                             </Box>
                             </Tooltip>
                         );
-                        })}
+                        })
+                    )}
                     </Box>
                     {/* <Box sx={{
                         display: 'flex',
