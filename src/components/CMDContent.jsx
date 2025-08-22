@@ -78,8 +78,8 @@ const onDocumentLoadSuccess = ({ numPages }) => setNumPages(numPages);
 const allImages = [
     ...Array(2).fill(placeholder),
     ...Array(2).fill(placeholder_2),
-    ...Array(2).fill(placeholder_3),
-    ...Array(2).fill(placeholder_3),
+    ...Array(2).fill(placeholder),
+    ...Array(2).fill(placeholder_2),
 ]
 
 const togglePin = (docName) => {
@@ -396,8 +396,8 @@ return (
                         key={idx}
                         component="img"
                         src={src}
-                        alt={`Placeholder ${idx + 1}`}
-                        onClick={() => setSelectedPreview(src)}
+                        alt={`Report ${idx + 1}`}
+                        onClick={() => setSelectedReport(src)}
                         sx={{
                             width: '48%',
                             // mb: '0.625vw',
