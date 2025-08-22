@@ -7,6 +7,7 @@ import {
     IconButton,
     Slider,
     Typography,
+    CircularProgress,
     Popper,
     ClickAwayListener,
     Paper,
@@ -75,6 +76,12 @@ const DocumentSelection = ({
     const createdUrlsRef = useRef(new Set());
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
+
+    const [refLoading, setRefLoading] = useState(true);
+    useEffect(() => {
+        const t = setTimeout(() => setRefLoading(false), 12000); // 12 seconds
+        return () => clearTimeout(t);
+    }, []);
 
     const addZoomParam = (url, zoom = 50) => {
         if (!url) return undefined;
@@ -448,133 +455,126 @@ const DocumentSelection = ({
                         }}>
                                     
                         {/* determine which docs to show */}
-                        {(() => {
-                            const key = selectedCategory.toLowerCase();
-                            let docs = key === 'reference pdfs'
-                                ? referencePdfs.map(f => f.name)
-                                : Object.values(documentList).flat();
-                            // filter by search
-                            return (
-                            <List sx={{ px: 0 }}>
-                                {docs
-                                // .filter(name =>
-                                //     name.toLowerCase().includes(searchTerm.toLowerCase())
-                                // )
-                                .map(name => {
-                                    const isSelected = selectedDocs.includes(name);
-                                    return (
-                                    <ListItem
-                                    key={name}
-                                    disableGutters
-                                    onClick={() => {
-                                        // toggle selection
-                                        setSelectedDocs(prev =>
-                                            prev.includes(name)
-                                                ? prev.filter(n => n !== name)
-                                                : [...prev, name]
-                                        );
-                                    }}
-                                    sx={{
-                                        bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
-                                        borderRadius: 2,
-                                        mb: '0.208vw',
-                                        p: '0.208vw',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        border: '0.5px solid #00000033',
-                                        cursor: 'pointer',
-                                    }}
-                                    >
-                                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
-                                            <IconButton
-                                            size="small"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSelectedDocs(prev =>
-                                                    prev.includes(name)
-                                                    ? prev.filter(n => n !== name)
-                                                    : [...prev, name]
-                                                );
-                                            }}
-                                            >   
-                                                {isSelected ? (
-                                                    <RadioButtonCheckedOutlinedIcon
+                        {selectedCategory === 'Reference PDFs' && refLoading ? (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: '55vh'
+                                }}
+                            >
+                                <Typography
+                                    variant="subtitle2"
+                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
+                                >
+                                    Loading…
+                                </Typography>
+                                <CircularProgress size="1.667vw" />
+                            </Box>
+                        ) : (
+                            (() => {
+                                const key = selectedCategory.toLowerCase();
+                                let docs = key === 'reference pdfs'
+                                    ? referencePdfs.map(f => f.name)
+                                    : Object.values(documentList).flat();
+                                return (
+                                    <List sx={{ px: 0 }}>
+                                        {docs.map(name => {
+                                            const isSelected = selectedDocs.includes(name);
+                                            return (
+                                                <ListItem
+                                                    key={name}
+                                                    disableGutters
+                                                    onClick={() => {
+                                                        setSelectedDocs(prev =>
+                                                            prev.includes(name)
+                                                                ? prev.filter(n => n !== name)
+                                                                : [...prev, name]
+                                                        );
+                                                    }}
                                                     sx={{
-                                                        fontSize: '0.8333vw',
-                                                        fill: '#081A33',
-                                                        //stroke: '#515151',
-                                                        strokeWidth: 1,
-                                                        transition: 'all 0.2s ease'
+                                                        bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
+                                                        borderRadius: 2,
+                                                        mb: '0.208vw',
+                                                        p: '0.208vw',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'space-between',
+                                                        border: '0.5px solid #00000033',
+                                                        cursor: 'pointer',
                                                     }}
-                                                    />
-                                                ) : (
-                                                    <PanoramaFishEyeOutlinedIcon sx={{
-                                                        fontSize: '0.8333vw',
-                                                        color: '#515151',
-                                                        //fill: '#FFD95C0A',
-                                                        //stroke: '#515151',
-                                                        //strokeWidth: 1.5,
-                                                        transition: 'all 0.2s ease',
-                                                    }}
-                                                    />
-                                                )}
-                                                    
-                                            </IconButton> 
-                                            <Typography
-                                                sx={{
-                                                    fontWeight: 600,
-                                                    color: '#1C1C1C',
-                                                    whiteSpace: 'nowrap',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    fontSize: '0.8333vw'
-                                                }}
                                                 >
-                                                {(() => {
-                                                    const dotIdx = name.lastIndexOf('.');
-                                                    const ext    = dotIdx >= 0 ? name.slice(dotIdx) : '';
-                                                    const base   = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
-                                                    return base.length > 20
-                                                    ? `${base.slice(0,20)}...${ext}`
-                                                    : name;
-                                                })()
-                                            }
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                                            <IconButton
-                                            size="small"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleToggleVisibility(name);
-                                            }}
-                                            >
-                                                {visibleDocs[name] ? (
-                                                    <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
-                                                ) : (
-                                                    <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
-                                                )}
-                                            </IconButton>
-                                            <IconButton 
-                                            size="small"
-                                            onClick={e => {
-                                                    e.stopPropagation();
-                                            //         setDialogDocName(name);
-                                            //         setOpenDeleteDialog(true);
-                                            }}
-                                            >
-                                                <Tooltip title='Delete' placement='bottom' arrow>
-                                                    <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
-                                                </Tooltip>
-                                            </IconButton>
-                                        </Box>
-                                    </ListItem>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
+                                                        <IconButton
+                                                            size="small"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setSelectedDocs(prev =>
+                                                                    prev.includes(name)
+                                                                        ? prev.filter(n => n !== name)
+                                                                        : [...prev, name]
+                                                                );
+                                                            }}
+                                                        >
+                                                            {isSelected ? (
+                                                                <RadioButtonCheckedOutlinedIcon
+                                                                    sx={{ fontSize: '0.8333vw', fill: '#081A33', strokeWidth: 1, transition: 'all 0.2s ease' }}
+                                                                />
+                                                            ) : (
+                                                                <PanoramaFishEyeOutlinedIcon
+                                                                    sx={{ fontSize: '0.8333vw', color: '#515151', transition: 'all 0.2s ease' }}
+                                                                />
+                                                            )}
+                                                        </IconButton>
+                                                        <Typography
+                                                            sx={{
+                                                                fontWeight: 600,
+                                                                color: '#1C1C1C',
+                                                                whiteSpace: 'nowrap',
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                fontSize: '0.8333vw'
+                                                            }}
+                                                        >
+                                                           {(() => {
+                                                                const dotIdx = name.lastIndexOf('.');
+                                                                const ext  = dotIdx >= 0 ? name.slice(dotIdx) : '';
+                                                                const base = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
+                                                                return base.length > 20
+                                                                    ? `${base.slice(0,20)}...${ext}`
+                                                                    : name;
+                                                           })()}
+                                                        </Typography>
+                                                    </Box>
+                                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                                                        <IconButton
+                                                            size="small"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleToggleVisibility(name);
+                                                            }}
+                                                        >
+                                                            {visibleDocs[name] ? (
+                                                                <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                                            ) : (
+                                                                <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
+                                                            )}
+                                                        </IconButton>
+                                                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); }}>
+                                                            <Tooltip title='Delete' placement='bottom' arrow>
+                                                                <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                                                            </Tooltip>
+                                                        </IconButton>
+                                                    </Box>
+                                                </ListItem>
+                                            );
+                                        })}
+                                    </List>
                                 );
-                                })}
-                            </List>
-                        )
-                        })()}
+                            })()
+                        )}
                         </Box>
                     </Box>
 

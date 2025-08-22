@@ -569,7 +569,7 @@ const GeneratePreview = ({
                         '&:hover': {bgcolor: '#FFCB42'}
                     }}
                     >
-                        Generate Report
+                        Next
                     </Button>
                 </Box>
             </Box>

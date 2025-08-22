@@ -306,6 +306,34 @@ const ReportGeneration = ({
     </Box>
     );
 
+const disabledGradientSx = {
+    '&.Mui-disabled': {
+    background: 'linear-gradient(to right, #F0F5FD, #DFEBFF)',
+    color: '#081A33',         
+    opacity: 1,               
+    cursor: 'not-allowed',    
+    pointerEvents: 'auto',    
+    },
+    '&.Mui-disabled:hover': {
+        background: 'linear-gradient(to right, #F0F5FD, #DFEBFF)',
+        cursor: 'not-allowed',
+    },
+};
+
+const disabledYellowSx = {
+    '&.Mui-disabled': {
+        bgcolor: '#FFEAA4',
+        color: '#081A33',         
+        opacity: 1,
+        cursor: 'not-allowed',    
+        pointerEvents: 'auto',
+    },
+    '&.Mui-disabled:hover': {
+        bgcolor: '#FFEAA4',
+        cursor: 'not-allowed',
+    },
+};
+
   return (
     <Box
         sx={{
@@ -499,16 +527,22 @@ const ReportGeneration = ({
                         ) : (
                             <>
                             <Typography sx={{ opacity: 0.75 }}>
-                                Click “Generate new Response” to create the final report.
+                                Click “Generate new Report” to create the final report.
                             </Typography>
                             <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
                             <Button
                                 variant="contained"
                                 onClick={startGenerate}
                                 disabled={isGenerating}
-                            sx={{ bgcolor:'#FFD95C', color:'#081A33', fontWeight:600, '&:hover':{ bgcolor:'#FFCB42' } }}
+                                sx={{
+                                    bgcolor:'#FFD95C',
+                                    color:'#081A33',
+                                    fontWeight:600,
+                                    '&:hover':{ bgcolor:'#FFCB42' },
+                                    ...disabledYellowSx
+                                }}
                             >
-                                Generate New Response
+                                Generate New Report
                             </Button>
                             </Box>
                             </>
@@ -961,7 +995,8 @@ const ReportGeneration = ({
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: '0.208vw',
-                        textAlign: 'center', fontSize: '0.7292vw'
+                        textAlign: 'center', fontSize: '0.7292vw',
+                        ...disabledGradientSx
                     }}
                         disabled={(index === 1 && !finalDocUrl) || (index >= 2 && isGenerating)}
                     >
@@ -971,8 +1006,8 @@ const ReportGeneration = ({
                         'Save as template',
                         'Download Report',
                         // 'AI Analyser',
-                        'Regenerate Response',
-                        'Generate new Response',
+                        'Regenerate Report',
+                        'Generate new Report',
                     ][index]}
                     </Button>
                 ))}
