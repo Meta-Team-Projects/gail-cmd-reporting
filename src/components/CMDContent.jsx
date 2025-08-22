@@ -75,6 +75,13 @@ const [pdfScale, setPdfScale] = useState(1.0);
 const [numPages, setNumPages] = useState(null);
 const onDocumentLoadSuccess = ({ numPages }) => setNumPages(numPages);
 
+const allImages = [
+    ...Array(2).fill(placeholder),
+    ...Array(2).fill(placeholder_2),
+    ...Array(2).fill(placeholder),
+    ...Array(2).fill(placeholder_2),
+]
+
 const togglePin = (docName) => {
     setPinnedDocs(prev => {
     const ns = new Set(prev);
@@ -197,32 +204,59 @@ return (
         display: 'flex',
         justifyContent: 'space-between',
         mx: '0.833vw',
-        height: '35vh',
+        height: '18vh',
         mb: '0.417vw',
         }}
     >
         <Box
         sx={{
-            width: '32.5%',
+            width: '100%',
+            height: '18vh',
             px: '0.833vw',
-            py: '0.417vw',
+            py: '0.5vw',
             background: 'linear-gradient(to right, rgba(230, 240, 250, 1), rgba(204, 229, 255, 1))',
             borderRadius: 2,
             border: '1px solid #CBD0DC',
             boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+            display: 'flex',
+            flexDirection: 'column', justifyContent: 'space-between'
         }}
         >
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.417vw', my: '1.25vw' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.2vw', color: '#081A33' }}>
-            Get started with report generation!
-            </Typography>
-            <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-            Select a template, choose key documents, and let CMD Platform generate clear, insight-rich reports fast and structured.
-            </Typography>
-        </Box>
+            <Box sx={{display: 'flex', flexDirection: 'column', gap: '0.2vw', mt: '0.3vw' }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.2vw', color: '#081A33' }}>
+                Generate New Report
+                </Typography>
+                <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
+                    Generate custom reports or update existing templates with new data, context and formatting. 
+                    Simply select templates and choose key documents to quickly generate structured, insight-rich CMD reports.
+                </Typography>
+            </Box>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
+                <Typography sx={{fontSize: '0.813vw'}}>Start Now</Typography>
+                <TrendingFlatIcon />
+                </Box>
+                <Button
+                onClick={onNavigateToTemplate}
+                variant="contained"
+                sx={{
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    color: '#081A33',
+                    background: 'linear-gradient(to right, #FFE56D, #FFD65A)',
+                    fontWeight: 550,
+                    fontSize: '0.813vw',
+                    px: '0.813vw',
+                    py: '0.3568vw',
+                    boxShadow: '0px 4px 8px #15151540'
+                }}
+                >
+                    Generate Report
+                </Button>
+            </Box>
         </Box>
 
-        <Box
+        {/* <Box
         sx={{
             width: '32.5%',
             px: '0.833vw',
@@ -235,37 +269,37 @@ return (
             flexDirection: 'column', justifyContent: 'space-between'
         }}
         >
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.417vw', my: '1.25vw' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.2vw', color: '#081A33' }}>
-            Generate New Response
-            </Typography>
-            <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-            Need a new version of an existing report or exploring a new angle? Generate custom responses with updated data, context, and formatting.
-            </Typography>
-        </Box>
-        <Box sx={{ py: '0.833vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.833vw' }}>
-            <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
-            <Typography sx={{fontSize: '0.813vw'}}>Start Now</Typography>
-            <TrendingFlatIcon />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.417vw', my: '1.25vw' }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.2vw', color: '#081A33' }}>
+                Generate New Response
+                </Typography>
+                <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
+                Need a new version of an existing report or exploring a new angle? Generate custom responses with updated data, context, and formatting.
+                </Typography>
             </Box>
-            <Button
-            onClick={onNavigateToTemplate}
-            variant="contained"
-            sx={{
-                borderRadius: 2,
-                textTransform: 'none',
-                color: '#fff',
-                bgcolor: '#0087d6',
-                fontWeight: 550,
-                fontSize: '0.813vw',
-                px: '0.813vw',
-                py: '0.3568vw',
-                boxShadow: '0px 4px 8px #15151540'
-            }}
-            >
-            Generate Report
-            </Button>
-        </Box>
+            <Box sx={{ py: '0.833vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.833vw' }}>
+                <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
+                <Typography sx={{fontSize: '0.813vw'}}>Start Now</Typography>
+                <TrendingFlatIcon />
+                </Box>
+                <Button
+                onClick={onNavigateToTemplate}
+                variant="contained"
+                sx={{
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    color: '#fff',
+                    bgcolor: '#0087d6',
+                    fontWeight: 550,
+                    fontSize: '0.813vw',
+                    px: '0.813vw',
+                    py: '0.3568vw',
+                    boxShadow: '0px 4px 8px #15151540'
+                }}
+                >
+                    Generate Report
+                </Button>
+            </Box>
         </Box>
 
         <Box
@@ -281,41 +315,41 @@ return (
             flexDirection: 'column', justifyContent: 'space-between'
         }}
         >
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.417vw', my: '1.25vw' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.2vw', color: '#081A33' }}>
-            Resume from last session 
-            </Typography>
-            <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-            Continue working where you left off. Your documents and settings are auto-saved so you can pick up seamlessly.
-            </Typography>
-        </Box>
-        <Box sx={{ py: '0.833vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.833vw' }}>
-            <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
-            <Typography sx={{fontSize: '0.813vw'}}>Continue</Typography>
-            <TrendingFlatIcon />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.417vw', my: '1.25vw' }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.2vw', color: '#081A33' }}>
+                    Resume from last session 
+                </Typography>
+                <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
+                    Continue working where you left off. Your documents and settings are auto-saved so you can pick up seamlessly.
+                </Typography>
             </Box>
-            <Button
-            variant="contained"
-            sx={{
-                borderRadius: 2,
-                textTransform: 'none',
-                color: '#fff',
-                bgcolor: '#0087d6',
-                fontWeight: 550,
-                fontSize: '0.813vw',
-                px: '0.813vw',
-                py: '0.3568vw',
-                boxShadow: '0px 4px 8px #15151540'
-            }}
-            >
-            Resume from last session
-            </Button>
-        </Box>
-        </Box>
+            <Box sx={{ py: '0.833vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.833vw' }}>
+                <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
+                <Typography sx={{fontSize: '0.813vw'}}>Continue</Typography>
+                <TrendingFlatIcon />
+                </Box>
+                    <Button
+                    variant="contained"
+                    sx={{
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        color: '#fff',
+                        bgcolor: '#0087d6',
+                        fontWeight: 550,
+                        fontSize: '0.813vw',
+                        px: '0.813vw',
+                        py: '0.3568vw',
+                        boxShadow: '0px 4px 8px #15151540'
+                    }}
+                    >
+                        Resume from last session
+                    </Button>
+            </Box>
+        </Box> */}
     </Box>
 
     {/* Bottom Boxes */}
-    <Box sx={{ display: 'flex', gap: '0.417vw', mx: '0.833vw', height: '50vh' }}>
+    <Box sx={{ display: 'flex', flex: 1, gap: '0.417vw', mx: '0.833vw', height: '50vh' }}>
         {/* Left Section: Latest Reports (unchanged) */}
         <Box sx={{
         flex: 1,
@@ -327,25 +361,107 @@ return (
         flexDirection: 'column',
         gap: '0.417vw'
         }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
-            Latest Reports
-            </Typography>
-            <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.25vw'}}/>
-        </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
+                Latest Reports
+                </Typography>
+                <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.25vw'}}/>
+            </Box>
 
-        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
-            <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
-                onClick={() => setSelectedReport('Report 1')} />
-            <img src={placeholder_2} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
-                onClick={() => setSelectedReport('Report 2')} />
-        </Box>
-        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
-            <img src={placeholder_3} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
-                onClick={() => setSelectedReport('Report 3')} />
-            <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
-                onClick={() => setSelectedReport('Report 4')} />
-        </Box>
+            <Box sx={{
+                mt: '0.417vw',
+                display:'flex',
+                flexWrap: 'wrap',
+                gap: '2%',
+                pr: '1.25vw',
+                height: '30vw',
+                //maxHeight: '250px',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                '&::-webkit-scrollbar': { 
+                    width: '0.2083vw' 
+                },
+                '&::-webkit-scrollbar-track': { 
+                    background: 'transparent'
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#0088d7',
+                    borderRadius: '3px',
+                },
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#0088d7 transparent'
+            }}>
+                {allImages.map((src, idx) => (
+                    <Box
+                        key={idx}
+                        component="img"
+                        src={src}
+                        alt={`Report ${idx + 1}`}
+                        onClick={() => setSelectedReport(src)}
+                        sx={{
+                            width: '48%',
+                            // mb: '0.625vw',
+                            borderRadius: '5px',
+                            objectFit: 'cover',
+                            cursor: 'pointer',
+                        }}
+                    />
+                ))}
+            </Box>
+                    {/* <Box
+                        sx={{
+                        position: 'relative',
+                        width: '48%',
+                        mb: '0.625vw',
+                        borderRadius: '6px',
+                        overflow: 'hidden',
+                        cursor: isClickable ? 'pointer' : 'not-allowed',
+                        opacity: isClickable ? 1 : 0.6,
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                        }}
+                    >
+                        <Box
+                        component="img"
+                        src={src}
+                        alt={label}
+                        sx={{ width: '100%', objectFit: 'cover', display: 'block' }}
+                        />
+                        <Box
+                        sx={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            bgcolor: 'rgba(0,0,0,0.6)',
+                            color: '#fff',
+                            px: '0.625vw',
+                            py: '0.365vw',
+                            fontSize: '0.7292vw',
+                        }}
+                        >
+                            label
+                        </Box>
+                    </Box>
+            </Box> */}
+
+            {/* <Box sx={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
+                <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 1')} />
+                <img src={placeholder_2} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 2')} />
+            </Box>
+            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
+                <img src={placeholder_3} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 3')} />
+                <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 4')} />
+            </Box>
+            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}>
+                <img src={placeholder_3} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 3')} />
+                <img src={placeholder} alt="Placeholder" style={{width: '49%', borderRadius: '10px', cursor: 'pointer'}}
+                    onClick={() => setSelectedReport('Report 4')} />
+            </Box> */}
         </Box>
 
         {/* Right Section: Reports Repository -> NOW SHOWS TEMPLATES */}
