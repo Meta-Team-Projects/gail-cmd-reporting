@@ -945,7 +945,7 @@ const ReportGeneration = ({
                             : index === 2
                             ? startGenerate
                             : index === 3
-                            ? startGenerate
+                            ? onNavigateToCMDContent
                             : undefined
                     }
                     sx={{
