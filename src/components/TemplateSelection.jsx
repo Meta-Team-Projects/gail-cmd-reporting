@@ -324,7 +324,7 @@ const TemplateSelection = ({
                 <Box
                     sx={{
                     px: '0.8333vw',
-                    py:'0.3vw',
+                    py:'0.7vw',
                     mx: '0.8333vw',
                     background: 'linear-gradient(to right, #E6F0FA, #CCE5FF)',
                     borderRadius: 2,
@@ -334,7 +334,7 @@ const TemplateSelection = ({
                     }}
                 >
                     <Typography variant="subtitle2" sx={{
-                        fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
+                        fontWeight: 600,fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
                         Select an existing template or upload a new one for your CMD report.
                     </Typography>
