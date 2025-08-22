@@ -646,7 +646,7 @@ const disabledYellowSx = {
                                         borderRadius: '16px',
                                         bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
                                         '&:hover': { bgcolor: '#FEC636' },
-                                        boxShadow: '0px 4px 8px #15151540'
+                                        //boxShadow: '0px 4px 8px #15151540'
                                     }}
                                 />
                             ))}
@@ -1003,7 +1003,7 @@ const disabledYellowSx = {
                     <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />
                     {[
                         // 'Edit Report',
-                        'Save As template',
+                        'Save as Template',
                         'Download Report',
                         // 'AI Analyser',
                         'Regenerate Report',
