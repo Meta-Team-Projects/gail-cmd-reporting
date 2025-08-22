@@ -114,12 +114,19 @@ const DocumentSelection = ({
 
     const [visibleDocs, setVisibleDocs] = useState({});
     const handleToggleVisibility = (docName) => {
-        setVisibleDocs(prev => ({
-            ...prev,
-            [docName]: !prev[docName]
-        }));
+    setVisibleDocs(prev => {
+        const willBeVisible = !prev[docName];
+        const next = { ...prev, [docName]: willBeVisible };
+        const url = refUrlByName[docName]; // only exists for Reference PDFs
+        if (url) {
+        setPdfPreviewUrl(curr =>
+            willBeVisible ? url : (curr === url ? null : curr)
+        );
+        }
+        return next;
+    });
     };
-
+    
     // const imageOptions = [placeholder, placeholder_2, placeholder_3]
     // //const allImages = [...Array(18)].map((_, idx) => imageOptions[idx % imageOptions.length])
     // const allImages = [
@@ -466,11 +473,6 @@ const DocumentSelection = ({
                                                 ? prev.filter(n => n !== name)
                                                 : [...prev, name]
                                         );
-                                        // if this is a Reference PDF, also show its preview like TemplateSelection
-                                        if (selectedCategory.toLowerCase() === 'reference pdfs') {
-                                            const url = refUrlByName[name];
-                                            if (url) setPdfPreviewUrl(url);
-                                        }
                                     }}
                                     sx={{
                                         bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
@@ -546,18 +548,6 @@ const DocumentSelection = ({
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleToggleVisibility(name);
-                                                // also set/clear preview when toggling visibility for Reference PDFs
-                                                if (selectedCategory.toLowerCase() === 'reference pdfs') {
-                                                    const url = refUrlByName[name];
-                                                    if (url) {
-                                                        // if turning visible, show it; if hiding and it's the current, clear to fallback
-                                                        if (!visibleDocs[name]) {
-                                                            setPdfPreviewUrl(url);
-                                                        } else if (pdfPreviewUrl === url) {
-                                                            setPdfPreviewUrl(null);
-                                                        }
-                                                    }
-                                                }
                                             }}
                                             >
                                                 {visibleDocs[name] ? (
