@@ -80,24 +80,24 @@ const CMDContent = ({onNavigateToTemplate}) => {
     };
 
     const fetchDocuments = async () => {
-        try {
-            const { data } = await axios.get(
-                `${import.meta.env.VITE_CHAT_API_URL}/list-documents`
-            )
-            setDocumentList(data.document_list || {})
-        } catch (err) {
-            console.error('Error loading documents', err)
-        }
+        // try {
+        //     const { data } = await axios.get(
+        //         `${import.meta.env.VITE_CHAT_API_URL}/list-documents`
+        //     )
+        //     setDocumentList(data.document_list || {})
+        // } catch (err) {
+        //     console.error('Error loading documents', err)
+        // }
     }
     const collectStats = async () => {
-    try {
-        const { data } = await axios.get(
-        `${import.meta.env.VITE_CHAT_API_URL}/collection_stats`
-        );
-        setStats(data);
-    } catch (error) {
-        console.error('Error fetching stats', error);
-    }
+    // try {
+    //     const { data } = await axios.get(
+    //     `${import.meta.env.VITE_CHAT_API_URL}/collection_stats`
+    //     );
+    //     setStats(data);
+    // } catch (error) {
+    //     console.error('Error fetching stats', error);
+    // }
     };
 
     useEffect(() => {
