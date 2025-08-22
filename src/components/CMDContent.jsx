@@ -70,11 +70,9 @@ const [templatesError, setTemplatesError] = useState(null);
 // Old “Latest Reports” preview
 const [selectedReport, setSelectedReport] = useState(null);
 
-// NEW: Template preview
 const [selectedTemplate, setSelectedTemplate] = useState(null);
-const [pdfScale, setPdfScale] = useState(1.0);
-const [numPages, setNumPages] = useState(null);
-const onDocumentLoadSuccess = ({ numPages }) => setNumPages(numPages);
+const [selectedTemplateUrl, setSelectedTemplateUrl] = useState(null); // blob URL for iframe
+const [pdfScale, setPdfScale] = useState(1.0); // controls #zoom=%
 
 const allImages = [
     ...Array(2).fill(placeholder_1),
@@ -155,10 +153,62 @@ const visibleTemplates = (() => {
     return arr;
 })();
 
+const createdUrlsRef = useRef(new Set());  // track all blob URLs
+const prevUrlRef = useRef(null);           // last blob URL in use
+
+const addZoomParam = (url, zoom = 36) => {
+    if (!url) return undefined;
+    return url.includes('#') ? `${url}&zoom=${zoom}` : `${url}#zoom=${zoom}`;
+};
+
+const base64ToPdfUrl = (b64) => {
+    if (!b64) return null;
+    let clean = String(b64)
+        .replace(/^data:application\/pdf;base64,/i, '')
+        .replace(/\s+/g, '')
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+    let byteChars;
+    try { byteChars = atob(clean); } catch (e) { console.error('Invalid base64 for PDF', e); return null; }
+    const bytes = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    createdUrlsRef.current.add(url);
+    return url;
+};
+
+
 const handleOpenTemplate = (tpl) => {
+    if (prevUrlRef.current) {
+        try { URL.revokeObjectURL(prevUrlRef.current); } catch {}
+        createdUrlsRef.current.delete(prevUrlRef.current);
+        prevUrlRef.current = null;
+    }
+    const url = base64ToPdfUrl(tpl.file_b64);
+    prevUrlRef.current = url;
     setSelectedTemplate(tpl);
+    setSelectedTemplateUrl(url);
     setPdfScale(1.0);
 };
+
+useEffect(() => {
+    return () => {
+        try {
+        createdUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
+        createdUrlsRef.current.clear();
+        } catch {}
+    };
+}, []);
+
+useEffect(() => {
+    if (!selectedTemplate && prevUrlRef.current) {
+        try { URL.revokeObjectURL(prevUrlRef.current); } catch {}
+        createdUrlsRef.current.delete(prevUrlRef.current);
+        prevUrlRef.current = null;
+        setSelectedTemplateUrl(null);
+    }
+}, [selectedTemplate]);
 
 const handleDownloadTemplate = (tpl) => {
     try {
@@ -742,39 +792,50 @@ return (
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.6vw' }}>
                 <Typography sx={{ color: '#fff', fontSize: '0.8vw' }}>
-                {formatBytes(selectedTemplate.size_bytes)} • {formatDate(selectedTemplate.modified_iso)}
+                    {formatBytes(selectedTemplate.size_bytes)} • {formatDate(selectedTemplate.modified_iso)}
                 </Typography>
+                <Button
+                    size="small"
+                    variant="outlined"
+                    component="a"
+                    href={addZoomParam(selectedTemplateUrl, Math.round(pdfScale*100)) || undefined}
+                    target={selectedTemplateUrl ? '_blank' : undefined}
+                    rel={selectedTemplateUrl ? 'noreferrer' : undefined}
+                    sx={{
+                    color: '#fff',
+                    borderColor: 'rgba(255,255,255,0.7)',
+                    textTransform: 'none',
+                    '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
+                    fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
+                    }}
+                >
+                    Open in new tab
+                </Button>
                 <IconButton onClick={() => handleDownloadTemplate(selectedTemplate)}>
                 <img src={download_report} style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }} />
                 </IconButton>
             </Box>
             </Box>
 
-            <Box sx={{ p: '0.8vw', display: 'flex', gap: '1vw', alignItems: 'center' }}>
-            <Typography sx={{ fontSize: '0.8vw' }}>Zoom</Typography>
-            <input
-                type="range"
-                min={0.6} max={2.0} step={0.05}
-                value={pdfScale}
-                onChange={(e) => setPdfScale(parseFloat(e.target.value))}
-                style={{ width: '20vw' }}
-            />
-            {numPages ? (
-                <Typography sx={{ fontSize: '0.8vw', color: '#333' }}>
-                • Pages: {numPages}
-                </Typography>
-            ) : null}
-            </Box>
-
-            <Box sx={{ flex: 1, overflow: 'auto', display: 'flex', justifyContent: 'center' }}>
-            <Document
-                file={`data:application/pdf;base64,${selectedTemplate.file_b64}`}
-                onLoadSuccess={onDocumentLoadSuccess}
-                onLoadError={(e) => console.error(e)}
-                loading={<Typography sx={{ p: 2 }}>Loading PDF…</Typography>}
-            >
-                <Page pageNumber={1} scale={pdfScale} renderTextLayer={false} renderAnnotationLayer={false} />
-            </Document>
+            <Box sx={{ flex: 1, p: '0.8vw' }}>
+                {selectedTemplateUrl ? (
+                    <Box
+                    component="iframe"
+                    src={addZoomParam(selectedTemplateUrl, Math.round(pdfScale * 100))}
+                    title="Template preview"
+                    sx={{
+                        display: 'block',
+                        width: '100%',
+                        height: '100%',
+                        border: 0,
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                        backgroundColor: '#fff',
+                        borderRadius: 1,
+                    }}
+                    />
+                ) : (
+                    <Typography sx={{ p: 2 }}>Preview unavailable.</Typography>
+                )}
             </Box>
         </Box>
         </Box>
