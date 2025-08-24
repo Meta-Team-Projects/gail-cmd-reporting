@@ -1096,14 +1096,14 @@ const disabledYellowSx = {
                     }}
                 >
                     <MenuItem onClick={handleDownloadPdf} disabled={!pdfPreviewUrl}>
-                        <ListItemIcon sx={{ minWidth: 28 }}>
-                            <PictureAsPdfIcon fontSize="small" />
+                        <ListItemIcon sx={{ minWidth: 28, color: 'inherit' }}>
+                            <PictureAsPdfIcon fontSize="small" color="inherit"/>
                         </ListItemIcon>
                         Download as PDF
                     </MenuItem>
                     <MenuItem onClick={handleDownloadDocx} disabled={!finalDocUrl}>
-                        <ListItemIcon sx={{ minWidth: 28 }}>
-                            <DescriptionIcon fontSize="small" />
+                        <ListItemIcon sx={{ minWidth: 28, color: 'inherit' }}>
+                            <DescriptionIcon fontSize="small" color="inherit" />
                         </ListItemIcon>
                         Download as DOCX
                     </MenuItem>
