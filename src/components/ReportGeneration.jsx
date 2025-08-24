@@ -1097,15 +1097,35 @@ const disabledYellowSx = {
                 >
                     <MenuItem onClick={handleDownloadPdf} disabled={!pdfPreviewUrl}>
                         <ListItemIcon sx={{ minWidth: 28, color: 'inherit' }}>
-                            <PictureAsPdfIcon fontSize="small" color="inherit"/>
+                            <PictureAsPdfIcon fontSize="small" color="inherit" />
                         </ListItemIcon>
-                        Download as PDF
+                        <Typography
+                            variant="body2"
+                            noWrap
+                            title={pdfFileName || 'Report.pdf'}
+                            sx={{ flexGrow: 1,overflow: 'hidden', textOverflow: 'ellipsis' }}
+                            >
+                            {pdfFileName || 'Report.pdf'}
+                            </Typography>
+                            <ListItemIcon sx={{ minWidth: 28, ml: 'auto', color: 'inherit',  }}>
+                            <FileDownloadOutlinedIcon fontSize="small" />
+                        </ListItemIcon>
                     </MenuItem>
                     <MenuItem onClick={handleDownloadDocx} disabled={!finalDocUrl}>
-                        <ListItemIcon sx={{ minWidth: 28, color: 'inherit' }}>
+                        <ListItemIcon sx={{ minWidth: 28, color: 'inherit',  }}>
                             <DescriptionIcon fontSize="small" color="inherit" />
                         </ListItemIcon>
-                        Download as DOCX
+                        <Typography
+                            variant="body2"
+                            noWrap
+                            title={finalDocName || 'Report.docx'}
+                            sx={{ flexGrow: 1, mr: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}
+                            >
+                            {finalDocName || 'Report.docx'}
+                            </Typography>
+                            <ListItemIcon sx={{ minWidth: 28, ml: 'auto', color: 'inherit' }}>
+                            <FileDownloadOutlinedIcon fontSize="small" />
+                        </ListItemIcon>
                     </MenuItem>
                 </Menu>
                 </Box>
