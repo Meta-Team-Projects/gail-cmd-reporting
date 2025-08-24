@@ -77,7 +77,9 @@ const TemplateSelection = ({
     const addZoomParam = (url, zoom = 50) => {
             if (!url) return undefined;
             return url.includes('#') ? `${url}&zoom=${zoom}` : `${url}#zoom=${zoom}`;
-};
+    };
+
+    const uploadsDisabled = true;
 
 
     const categories = ['All', 'Pinned', 'Recently Viewed']
@@ -566,7 +568,13 @@ const TemplateSelection = ({
                         alignItems: 'center',
                         gap: '0.208vw',
                         mx: '0.8333vw',
+                        ...(uploadsDisabled && {
+                            filter: 'grayscale(0.75) brightness(1) contrast(0.85)',
+                            cursor: 'not-allowed',
+                         '& *': { cursor: 'not-allowed !important' },
+                        }),
                     }}
+                    aria-disabled={uploadsDisabled}
                 >
                     {/* hidden file input + upload handler */}
                     <input
@@ -574,7 +582,8 @@ const TemplateSelection = ({
                     multiple
                     hidden
                     ref={fileInputRef}
-                    onChange={handleUploadFiles}
+                    onChange={uploadsDisabled ? undefined : handleUploadFiles}
+                    disabled={uploadsDisabled}
                     />
 
                     <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
