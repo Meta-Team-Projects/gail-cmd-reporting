@@ -1081,6 +1081,13 @@ const disabledYellowSx = {
                     anchorEl={downloadMenuAnchor}
                     open={Boolean(downloadMenuAnchor)}
                     onClose={handleCloseDownloadMenu}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    PaperProps={{
+                    sx: {
+                        width: downloadMenuAnchor ? downloadMenuAnchor.offsetWidth : undefined
+                        }
+                    }}
                 >
                     <MenuItem onClick={handleDownloadPdf} disabled={!pdfPreviewUrl}>
                         Download as PDF
