@@ -512,7 +512,7 @@ const disabledYellowSx = {
                             fontSize: '20px'
                         }}/> */}
                     </Box>
-                    <IconButton sx={{
+                    {/* <IconButton sx={{
                         position: 'absolute',
                         top: '2.604vw',
                         right: '0.521vw',
@@ -529,9 +529,9 @@ const disabledYellowSx = {
                             height: '1.0417vw',
                             objectFit: 'contain',
                             }}
-                        />
+                        /> */}
                         {/* <ModeEditOutlinedIcon sx={{fontSize: '20px'}} /> */}
-                    </IconButton>
+                    {/* </IconButton>
                     <IconButton sx={{
                         position: 'absolute',
                         top: '5.208vw',
@@ -543,7 +543,7 @@ const disabledYellowSx = {
                         '&:hover': {backgroundColor: '#FFCB42'},
                         }}>
                         <ZoomInIcon sx={{fontSize: '1.0417vw'}}/>
-                    </IconButton>
+                    </IconButton> */}
                     <Box
                         sx={{
                             display: 'flex',
