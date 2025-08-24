@@ -179,7 +179,7 @@ const DocumentSelection = ({
             setUploadSnackOpen?.(true);
             setUploadProgressKey?.(prev => prev + 1); // keep your progress bar reset
 
-            // Upload sequentially (safer on backends). Switch to Promise.all if you prefer parallel.
+            const uploadedNames = [];
             for (const file of files) {
                 const source = selectedCategory === 'Reference PDFs' ? 'reference' : 'uploaded';
                 const fd = new FormData();
@@ -188,18 +188,25 @@ const DocumentSelection = ({
                 fd.append('doc_link', defaultDocLink);          // <-- OPTIONAL (string)
                 fd.append('batch_size', String(defaultBatchSize)); // <-- OPTIONAL (int)
                 fd.append('upload_source', source);
+            
 
-            await axios.post(
+            const res = await axios.post(
                 `${import.meta.env.VITE_CHAT_API_URL}/ingest-document`,
                 fd,
                 { headers: { 'Content-Type': 'multipart/form-data', accept: 'application/json' } }
             );
+            console.log('ingest response', res.status, res.data);
+            uploadedNames.push(file.name);
             }
 
             const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
             setUploadDuration?.(elapsed);
 
             await fetchReferencePdfs(); // refresh your repo list
+            const namesNow = referencePdfs.map(f => f.name);
+            const present = uploadedNames.filter(n => namesNow.includes(n));
+            console.log('Uploaded & present:', present, 'of', uploadedNames);
+            
             setUploadStatus?.('success');
             setTimeout(() => setUploadSnackOpen?.(false), 4000);
         } catch (err) {
