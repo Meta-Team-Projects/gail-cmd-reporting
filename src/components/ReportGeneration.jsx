@@ -24,6 +24,7 @@ import {
     Tooltip,
     Link,
     Divider,
+    Menu,
     Chip,
     Stack,
     List,
@@ -123,6 +124,16 @@ const ReportGeneration = ({
     const [finalDocUrl, setFinalDocUrl] = useState(null);
     const [finalDocName, setFinalDocName] = useState('Final_Report.docx');
     const [genError, setGenError] = useState('');
+
+    const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+    const [pdfFileName, setPdfFileName] = useState('Final_Report.pdf');
+
+    const createdUrlsRef = useRef(new Set());
+
+    const [downloadMenuAnchor, setDownloadMenuAnchor] = useState(null);
+    const addZoomParam = (url, zoom = 100) =>
+    url ? (url.includes('#') ? `${url}&zoom=${zoom}` : `${url}#zoom=${zoom}`) : url;
+
     const progressTimerRef = useRef(null);
     const genStartRef = useRef(0);
     const estimatedMsRef = useRef(90000); // 90s optimistic ETA; tweak as needed
@@ -134,7 +145,39 @@ const ReportGeneration = ({
         setProgress(0);
         setEtaText('~--s');
         setGenError('');
-        };
+        if (pdfPreviewUrl) {
+            try { URL.revokeObjectURL(pdfPreviewUrl); } catch {}
+            setPdfPreviewUrl(null);
+        }
+            if (finalDocUrl) {
+            try { URL.revokeObjectURL(finalDocUrl); } catch {}
+            setFinalDocUrl(null);
+        }
+    };
+
+    const base64PdfToUrl = (b64) => {
+        if (!b64) return null;
+        let clean = String(b64).replace(/^data:application\/pdf;base64,/i, '').replace(/\s+/g, '');
+        clean = clean.replace(/-/g, '+').replace(/_/g, '/');
+        let byteChars;
+        try { byteChars = atob(clean); } catch (e) { console.error('Invalid PDF base64', e); return null; }
+        const bytes = new Uint8Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        createdUrlsRef.current.add(url);
+        return url;
+    };
+
+    const downloadBlob = (url, filename) => {
+        if (!url) return;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename || 'download';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
 
         const startFakeProgress = () => {
         genStartRef.current = Date.now();
@@ -151,23 +194,19 @@ const ReportGeneration = ({
         }, 250);
         };
 
-        const downloadFinal = () => {
-        if (!finalDocUrl) return;
-        const a = document.createElement('a');
-        a.href = finalDocUrl;
-        a.download = finalDocName || 'Final_Report.docx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        };
+    const handleOpenDownloadMenu = (e) => setDownloadMenuAnchor(e.currentTarget);
+    const handleCloseDownloadMenu = () => setDownloadMenuAnchor(null);
+    const handleDownloadPdf  = () => { downloadBlob(pdfPreviewUrl, pdfFileName); handleCloseDownloadMenu(); };
+    const handleDownloadDocx = () => { downloadBlob(finalDocUrl, finalDocName); handleCloseDownloadMenu(); };
+
 
         const startGenerate = async () => {
         setGenError('');
-        // revoke previous blob if any
-        if (finalDocUrl) {
-            try { URL.revokeObjectURL(finalDocUrl); } catch {}
-        }
+        // revoke previous blobs if any
+        if (finalDocUrl) { try { URL.revokeObjectURL(finalDocUrl); } catch {} }
+        if (pdfPreviewUrl) { try { URL.revokeObjectURL(pdfPreviewUrl); } catch {} }
         setFinalDocUrl(null);
+        setPdfPreviewUrl(null);
         ((selectedTemplateDocxFile?.name || selectedTemplateName || 'Report')
                 .replace(/\.docx$/i, '')) + '_Report.docx'
         setIsGenerating(true);
@@ -176,24 +215,37 @@ const ReportGeneration = ({
         startFakeProgress();
         try {
             const endpoint = `${import.meta.env.VITE_CHAT_API_URL}/generate-report`;
-                let res;
-                if (selectedTemplateDocxFile) {
-                const fd = new FormData();
-                fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
-                res = await axios.post(endpoint, fd, { responseType: 'blob' });
-                } else {
-                res = await axios.post(endpoint, {}, { responseType: 'blob' });
+            // 1) DOCX
+            let resDocx;
+            if (selectedTemplateDocxFile) {
+              const fd = new FormData();
+              fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
+              resDocx = await axios.post(endpoint, fd, { responseType: 'blob' });
+            } else {
+              resDocx = await axios.post(endpoint, {}, { responseType: 'blob' });
             }
-            // If server sends filename in headers, prefer it
-            const cd = res?.headers?.['content-disposition'] || '';
+            const cd = resDocx?.headers?.['content-disposition'] || '';
             const match = cd.match(/filename="?([^"]+)"?/i);
             const serverName = match?.[1];
             if (serverName) setFinalDocName(serverName);
-            const blob = res.data;
-            const blobUrl = URL.createObjectURL(blob);
-            setFinalDocUrl(blobUrl);
-            setProgress(100);
-            setEtaText('0:00 remaining');
+            const docxBlob = resDocx.data;
+            const docxUrl = URL.createObjectURL(docxBlob);
+            setFinalDocUrl(docxUrl);
+            createdUrlsRef.current.add(docxUrl);
+
+            // 2) PDF (for inline preview)
+            const pdfRes = await axios.get(
+              `${import.meta.env.VITE_CHAT_API_URL}/get_report_as_pdf`,
+              { headers: { accept: 'application/json' } }
+            );
+            const pName = pdfRes?.data?.pdf_filename || 'Final_Report.pdf';
+            const pUrl  = base64PdfToUrl(pdfRes?.data?.pdf_b64);
+            if (pUrl) {
+              setPdfFileName(pName);
+              setPdfPreviewUrl(pUrl); // used by iframe preview
+            }
+
+            setProgress(100); setEtaText('0:00 remaining');
         } catch (e) {
             console.error('Failed to generate report', e);
             setGenError('Failed to generate report. Please try again.');
@@ -209,9 +261,12 @@ const ReportGeneration = ({
         useEffect(() => {
         return () => {
             if (progressTimerRef.current) clearInterval(progressTimerRef.current);
-            if (finalDocUrl) {
-            try { URL.revokeObjectURL(finalDocUrl); } catch {}
-            }
+            try {
+                if (finalDocUrl) URL.revokeObjectURL(finalDocUrl);
+                if (pdfPreviewUrl) URL.revokeObjectURL(pdfPreviewUrl);
+                createdUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
+                createdUrlsRef.current.clear();
+            } catch {}
         };
     }, []);
 
@@ -493,34 +548,29 @@ const disabledYellowSx = {
                                 {progress}% completed • ETA {etaText}
                             </Typography>
                             </>
-                        ) : finalDocUrl ? (
-                            <>
-                            <Typography sx={{ color: '#b00020', whiteSpace: 'pre-wrap' }}>
-                                Failed to load {finalDocName} preview.
-                                {'\n'}
-                                This file can’t render inline here.
-                            </Typography>
-                            {/* <Button
-                                variant="text"
-                                href={finalDocUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                Open in new tab
-                            </Button>
-                            <Typography sx={{ fontSize: '0.78vw', opacity: 0.7 }}>
-                                {finalDocName}
-                            </Typography> */}
-                            {/* <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
-                                <Button
-                                    variant="contained"
-                                    onClick={downloadFinal}
-                                    sx={{ bgcolor:'#0088D6', color:'#fff', '&:hover':{ bgcolor:'#0074BA' } }}
-                                >
-                                Download Final
-                                </Button>
-                            </Box> */}
-                            </>
+                        ) : pdfPreviewUrl ? (
+                            // NEW: show PDF preview inline
+                            <Box sx={{ flexGrow: 1, width: '100%', p: '0.833vw', boxSizing: 'border-box' }}>
+                                <Box
+                                component="iframe"
+                                src={addZoomParam(pdfPreviewUrl, 110)}
+                                title="Generated report preview"
+                                sx={{
+                                    display: 'block',
+                                    width: '100%',
+                                    height: '100%',
+                                    border: 0,
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                                    backgroundColor: '#fff',
+                                    borderRadius: 1,
+                                    }}
+                                />
+                            </Box>
+                            ) : finalDocUrl ? (
+                                // DOCX exists but no PDF yet
+                                <Typography sx={{ color: '#081A33', opacity: 0.8 }}>
+                                Report generated. Use “Download Report” to save as DOCX or PDF.
+                                </Typography>
                         ) : genError ? (
                             <Typography sx={{ color: '#b00020' }}>{genError}</Typography>
                         ) : (
@@ -972,15 +1022,11 @@ const disabledYellowSx = {
                     <Button
                     key={index}
                     variant="contained"
-                    onClick={
-                        index === 1
-                            ? downloadFinal
-                            : index === 2
-                            ? startGenerate
-                            : index === 3
-                            ? onNavigateToCMDContent
-                            : undefined
-                    }
+                    onClick={(e) => {
+                        if (index === 1) return handleOpenDownloadMenu(e);
+                        if (index === 2) return startGenerate();
+                        if (index === 3) return onNavigateToCMDContent();
+                    }}
                     sx={{
                         height: '8.5vw',
                         width: '100%', // full width of grid column
@@ -997,7 +1043,10 @@ const disabledYellowSx = {
                         textAlign: 'center', fontSize: '0.7292vw',
                         ...disabledGradientSx
                     }}
-                        disabled={(index === 1 && !finalDocUrl) || (index >= 2 && isGenerating)}
+                        disabled={
+                            (index === 1 && !pdfPreviewUrl && !finalDocUrl) 
+                            || (index >= 2 && isGenerating)
+                        }
                     >
                     <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />
                     {[
@@ -1010,6 +1059,19 @@ const disabledYellowSx = {
                     ][index]}
                     </Button>
                 ))}
+                
+                <Menu
+                    anchorEl={downloadMenuAnchor}
+                    open={Boolean(downloadMenuAnchor)}
+                    onClose={handleCloseDownloadMenu}
+                >
+                    <MenuItem onClick={handleDownloadPdf} disabled={!pdfPreviewUrl}>
+                        Download as PDF
+                    </MenuItem>
+                    <MenuItem onClick={handleDownloadDocx} disabled={!finalDocUrl}>
+                        Download as DOCX
+                    </MenuItem>
+                </Menu>
                 </Box>
                     
             </Box>
