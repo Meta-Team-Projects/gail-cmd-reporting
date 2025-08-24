@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import axios from 'axios'
 
 import {
@@ -218,11 +218,11 @@ const ReportGeneration = ({
             // 1) DOCX
             let resDocx;
             if (selectedTemplateDocxFile) {
-              const fd = new FormData();
-              fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
-              resDocx = await axios.post(endpoint, fd, { responseType: 'blob' });
+                const fd = new FormData();
+                fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
+                resDocx = await axios.post(endpoint, fd, { responseType: 'blob' });
             } else {
-              resDocx = await axios.post(endpoint, {}, { responseType: 'blob' });
+                resDocx = await axios.post(endpoint, {}, { responseType: 'blob' });
             }
             const cd = resDocx?.headers?.['content-disposition'] || '';
             const match = cd.match(/filename="?([^"]+)"?/i);
@@ -235,14 +235,14 @@ const ReportGeneration = ({
 
             // 2) PDF (for inline preview)
             const pdfRes = await axios.get(
-              `${import.meta.env.VITE_CHAT_API_URL}/get_report_as_pdf`,
-              { headers: { accept: 'application/json' } }
+                `${import.meta.env.VITE_CHAT_API_URL}/get_report_as_pdf`,
+                { headers: { accept: 'application/json' } }
             );
             const pName = pdfRes?.data?.pdf_filename || 'Final_Report.pdf';
             const pUrl  = base64PdfToUrl(pdfRes?.data?.pdf_b64);
             if (pUrl) {
-              setPdfFileName(pName);
-              setPdfPreviewUrl(pUrl); // used by iframe preview
+                setPdfFileName(pName);
+                setPdfPreviewUrl(pUrl); // used by iframe preview
             }
 
             setProgress(100); setEtaText('0:00 remaining');
@@ -304,6 +304,16 @@ const ReportGeneration = ({
         console.error('Error fetching stats', error);
     }
     };
+
+    const reportTitle = useMemo(() => {
+        const rawName =
+            (pdfPreviewUrl && pdfFileName) ? pdfFileName :
+            (finalDocUrl && finalDocName) ? finalDocName :
+            selectedTemplateName ? selectedTemplateName.replace(/\.docx$/i, '') :
+            'Report';
+        // strip common extensions just in case
+        return String(rawName).replace(/\.(pdf|docx)$/i, '');
+    }, [pdfPreviewUrl, pdfFileName, finalDocUrl, finalDocName, selectedTemplateName]);
 
     useEffect(() => {
         fetchDocuments();
@@ -475,13 +485,21 @@ const disabledYellowSx = {
                         px: '0.417vw',
                         }}
                     >
-                        <Typography sx={{
-                            color: '#ffffff',
-                            fontSize: '15px',
-                            fontWeight: 700
-                        }}>
-                            Report 1
-                        </Typography>
+                        <Tooltip title={reportTitle} placement="bottom" arrow>
+                            <Typography
+                                sx={{
+                                color: '#ffffff',
+                                fontSize: '15px',
+                                fontWeight: 700,
+                                maxWidth: '70%',           
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                }}
+                            >
+                                {reportTitle}
+                            </Typography>
+                        </Tooltip>
                         {/* <ModeEditOutlinedIcon 
                         sx={{
                             color: '#FFFFFF91',
@@ -549,11 +567,10 @@ const disabledYellowSx = {
                             </Typography>
                             </>
                         ) : pdfPreviewUrl ? (
-                            // NEW: show PDF preview inline
                             <Box sx={{ flexGrow: 1, width: '100%', p: '0.833vw', boxSizing: 'border-box' }}>
                                 <Box
                                 component="iframe"
-                                src={addZoomParam(pdfPreviewUrl, 110)}
+                                src={`${pdfPreviewUrl}#zoom=page-width`}
                                 title="Generated report preview"
                                 sx={{
                                     display: 'block',
