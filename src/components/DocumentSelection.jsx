@@ -64,7 +64,11 @@ const DocumentSelection = ({
     onNavigateToTemplate,
     onNavigateToReport,
     selectedDocs,
-    setSelectedDocs
+    setSelectedDocs,
+    setUploadStatus,
+    setUploadSnackOpen,
+    setUploadProgressKey,
+    setUploadDuration,
     }) => {
     const categories = ['Reference PDFs', 'Uploaded']
     const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
@@ -195,7 +199,7 @@ const DocumentSelection = ({
             const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
             setUploadDuration?.(elapsed);
 
-            await fetchDocuments(); // refresh your repo list
+            await fetchReferencePdfs(); // refresh your repo list
             setUploadStatus?.('success');
             setTimeout(() => setUploadSnackOpen?.(false), 4000);
         } catch (err) {
@@ -239,10 +243,8 @@ const DocumentSelection = ({
     };
 
     useEffect(() => {
-        fetchDocuments();
             fetchReferencePdfs();
             fetchTemplateForPreview();
-            collectStats();
             // cleanup blob URLs on unmount
             return () => {
                 try {
