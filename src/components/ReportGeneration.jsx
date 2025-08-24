@@ -1068,6 +1068,7 @@ const disabledYellowSx = {
                         ...disabledGradientSx
                     }}
                         disabled={
+                            index === 0 ||   
                             (index === 1 && !pdfPreviewUrl && !finalDocUrl) 
                             || (index >= 2 && isGenerating)
                         }

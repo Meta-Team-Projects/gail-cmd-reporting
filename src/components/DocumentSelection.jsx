@@ -152,56 +152,62 @@ const DocumentSelection = ({
     //     ...Array(6).fill(placeholder_3),
     // ]
     // const [page, setPage] = useState(0)
-
+    
     const handleUploadFiles = async (e) => {
-        const files = Array.from(e.target.files)
-        const tooBig = files.filter(f => f.size > 10 * 1024 * 1024)
+        const files = Array.from(e.target.files || []);
+
+        // 10 MB guard (same as before)
+        const tooBig = files.filter(f => f.size > 10 * 1024 * 1024);
         if (tooBig.length) {
-            alert(`These file(s) exceed 10 MB and won’t be uploaded:\n${tooBig.map(f=>f.name).join('\n')}`)
-            e.target.value = null
-            return
+            alert(`These file(s) exceed 10 MB and won’t be uploaded:\n${tooBig.map(f => f.name).join('\n')}`);
+            e.target.value = null;
+            return;
         }
-        const formData = new FormData()
-        files.forEach(f => formData.append('files', f))
-        formData.append('source', uploadSource)
+
+        // optional meta (tweak or derive from UI if needed)
+        const defaultReportDate = "";  // e.g. "2025-08-24" if you have it
+        const defaultDocLink   = "";   // e.g. a source URL if relevant
+        const defaultBatchSize = 128;  // matches Swagger example
 
         const startMs = Date.now();
         try {
-            setUploadStatus('loading')
-            setUploadSnackOpen(true)
-            setUploadProgressKey(prev => prev + 1) // reset progress bar animation
+            setUploadStatus?.('loading');
+            setUploadSnackOpen?.(true);
+            setUploadProgressKey?.(prev => prev + 1); // keep your progress bar reset
+
+            // Upload sequentially (safer on backends). Switch to Promise.all if you prefer parallel.
+            for (const file of files) {
+                const source = selectedCategory === 'Reference PDFs' ? 'reference' : 'uploaded';
+                const fd = new FormData();
+                fd.append('file', file);                        // <-- REQUIRED
+                fd.append('report_date', defaultReportDate);    // <-- OPTIONAL (string)
+                fd.append('doc_link', defaultDocLink);          // <-- OPTIONAL (string)
+                fd.append('batch_size', String(defaultBatchSize)); // <-- OPTIONAL (int)
+                fd.append('upload_source', source);
 
             await axios.post(
-                `${import.meta.env.VITE_CHAT_API_URL}/upload-docs`,
-                formData,
-                { headers: { 'Content-Type': 'multipart/form-data' } }
-            )
+                `${import.meta.env.VITE_CHAT_API_URL}/ingest-document`,
+                fd,
+                { headers: { 'Content-Type': 'multipart/form-data', accept: 'application/json' } }
+            );
+            }
 
             const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
-            setUploadDuration(elapsed);
+            setUploadDuration?.(elapsed);
 
-            await fetchDocuments()
-            setUploadStatus('success')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
+            await fetchDocuments(); // refresh your repo list
+            setUploadStatus?.('success');
+            setTimeout(() => setUploadSnackOpen?.(false), 4000);
         } catch (err) {
-            console.error('Error uploading files', err)
-            setUploadStatus('error')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
+            console.error('Error uploading files', err);
+            setUploadStatus?.('error');
+            setTimeout(() => setUploadSnackOpen?.(false), 4000);
         } finally {
-        e.target.value = null
+            e.target.value = null; // reset picker
         }
-    }
+    };
 
-    const fetchDocuments = async () => {
-        try {
-            const { data } = await axios.get(
-                `${import.meta.env.VITE_CHAT_API_URL}/list-documents`
-            )
-            setDocumentList(data.document_list || {})
-        } catch (err) {
-            console.error('Error loading documents', err)
-        }
-    }
+    
     const fetchReferencePdfs = async () => {
         try {
             const url = `${import.meta.env.VITE_CHAT_API_URL}/get_reference_pdfs?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
@@ -230,16 +236,6 @@ const DocumentSelection = ({
         } catch (err) {
             console.error('Error fetching template for preview', err);
         }
-    };
-    const collectStats = async () => {
-    try {
-        const { data } = await axios.get(
-        `${import.meta.env.VITE_CHAT_API_URL}/collection_stats`
-        );
-        setStats(data);
-    } catch (error) {
-        console.error('Error fetching stats', error);
-    }
     };
 
     useEffect(() => {
@@ -670,6 +666,7 @@ const DocumentSelection = ({
                             hidden
                             ref={fileInputRef}
                             onChange={handleUploadFiles}
+                            accept=".pdf,application/pdf,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                             />
 
                             <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
