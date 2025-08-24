@@ -35,6 +35,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PanoramaFishEyeOutlinedIcon from '@mui/icons-material/PanoramaFishEyeOutlined';
 import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
+import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 // import placeholder from '../assets/placeholder.png'
 // import placeholder_2 from '../assets/placeholder_2.png'
 // import placeholder_3 from '../assets/placeholder_3.png'
@@ -261,6 +262,33 @@ const DocumentSelection = ({
         [referencePdfs]
     );
 
+    const visibleRepoDocs = useMemo(() => {
+        return selectedCategory.toLowerCase() === 'reference pdfs'
+            ? referencePdfs.map(f => f.name)
+            : Object.values(documentList).flat();
+    }, [selectedCategory, referencePdfs, documentList]);
+
+    // Select-all helpers (for current category)
+    const allVisibleSelected =
+        visibleRepoDocs.length > 0 &&
+        visibleRepoDocs.every(n => selectedDocs.includes(n));
+    const someVisibleSelected =
+        !allVisibleSelected &&
+        visibleRepoDocs.some(n => selectedDocs.includes(n));
+
+    const handleToggleAllVisible = () => {
+        setSelectedDocs(prev => {
+            const prevSet = new Set(prev);
+            const makeAll = !visibleRepoDocs.every(n => prevSet.has(n));
+            if (makeAll) {
+                // add all visible docs
+                return Array.from(new Set([...prev, ...visibleRepoDocs]));
+            }
+            // remove all visible docs
+            return prev.filter(n => !visibleRepoDocs.includes(n));
+        });
+    };
+
     const ArrowStepper = ({ activeStep }) => (
     <Box display="flex" justifyContent="center" mt={'0.8333vw'} width="100%" sx={{ px: '0.8333vw' }}>
         <Box display="flex" width="100%">
@@ -485,10 +513,40 @@ const DocumentSelection = ({
                         ) : (
                             (() => {
                                 const key = selectedCategory.toLowerCase();
-                                let docs = key === 'reference pdfs'
-                                    ? referencePdfs.map(f => f.name)
-                                    : Object.values(documentList).flat();
+                                let docs = visibleRepoDocs; // use memoized visible docs
                                 return (
+                                    <>
+                                    {/* Select-all row */}
+                                    <Box
+                                        onClick={handleToggleAllVisible}
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.417vw',
+                                            py: '0.313vw',
+                                            px: '0.417vw',
+                                            mb: '0.417vw',
+                                            borderBottom: '1px dashed #D2D2D2',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <IconButton
+                                            size="small"
+                                            onClick={(e) => { e.stopPropagation(); handleToggleAllVisible(); }}
+                                        >
+                                            {allVisibleSelected ? (
+                                                <RadioButtonCheckedOutlinedIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                            ) : someVisibleSelected ? (
+                                                <IndeterminateCheckBoxOutlinedIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                            ) : (
+                                                <PanoramaFishEyeOutlinedIcon sx={{ fontSize: '0.8333vw', color: '#515151' }} />
+                                            )}
+                                        </IconButton>
+                                        <Typography sx={{ fontWeight: 600, fontSize: '0.8333vw', color: '#081A33' }}>
+                                            Select all documents
+                                        </Typography>
+                                    </Box>
+
                                     <List sx={{ px: 0 }}>
                                         {docs.map(name => {
                                             const isSelected = selectedDocs.includes(name);
@@ -577,6 +635,7 @@ const DocumentSelection = ({
                                             );
                                         })}
                                     </List>
+                                </>
                                 );
                             })()
                         )}
