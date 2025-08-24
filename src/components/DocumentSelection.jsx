@@ -680,7 +680,7 @@ const DocumentSelection = ({
                             </Typography>
                             <Typography variant="caption" display="block" color="#515151"
                             sx={{ fontWeight: 500, fontSize: '0.78vw'}}>
-                                DOCX format, up to 10MB
+                                PDF format, up to 10MB
                             </Typography>
                             
                             <Button

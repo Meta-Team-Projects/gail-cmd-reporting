@@ -1046,7 +1046,8 @@ const disabledYellowSx = {
                     key={index}
                     variant="contained"
                     onClick={(e) => {
-                        if (index === 1) return handleOpenDownloadMenu(e);
+                        // if (index === 1) return handleOpenDownloadMenu(e);
+                        if (index === 1) return handleDownloadDocx();
                         if (index === 2) return startGenerate();
                         if (index === 3) return onNavigateToCMDContent();
                     }}
@@ -1083,7 +1084,7 @@ const disabledYellowSx = {
                     </Button>
                 ))}
                 
-                <Menu
+                {/* <Menu
                     anchorEl={downloadMenuAnchor}
                     open={Boolean(downloadMenuAnchor)}
                     onClose={handleCloseDownloadMenu}
@@ -1127,7 +1128,7 @@ const disabledYellowSx = {
                             <FileDownloadOutlinedIcon fontSize="small" />
                         </ListItemIcon>
                     </MenuItem>
-                </Menu>
+                </Menu> */}
                 </Box>
                     
             </Box>
