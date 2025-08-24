@@ -29,6 +29,7 @@ import {
     Stack,
     List,
     ListItem,
+    ListItemIcon,
     LinearProgress,
     Tooltip as MuiTooltip
 } from '@mui/material'
@@ -45,6 +46,11 @@ import {
     ZoomIn as ZoomInIcon,
     Delete,
     RadioButtonCheckedOutlined as RadioButtonCheckedOutlinedIcon
+} from '@mui/icons-material'
+
+import {
+    PictureAsPdf as PictureAsPdfIcon,
+    Description as DescriptionIcon
 } from '@mui/icons-material'
 
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
@@ -1090,9 +1096,15 @@ const disabledYellowSx = {
                     }}
                 >
                     <MenuItem onClick={handleDownloadPdf} disabled={!pdfPreviewUrl}>
+                        <ListItemIcon sx={{ minWidth: 28 }}>
+                            <PictureAsPdfIcon fontSize="small" />
+                        </ListItemIcon>
                         Download as PDF
                     </MenuItem>
                     <MenuItem onClick={handleDownloadDocx} disabled={!finalDocUrl}>
+                        <ListItemIcon sx={{ minWidth: 28 }}>
+                            <DescriptionIcon fontSize="small" />
+                        </ListItemIcon>
                         Download as DOCX
                     </MenuItem>
                 </Menu>
