@@ -246,7 +246,7 @@ return (
     >
     <Box sx={{ p: '1.042vw' }}>
         <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
-        CMD Platform
+        CMD Reporting
         </Typography>
     </Box>
 
