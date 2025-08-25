@@ -85,6 +85,7 @@ const DocumentSelection = ({
     const itemsPerPage = 7;
 
     const [refLoading, setRefLoading] = useState(true);
+    const [isUploading, setIsUploading] = useState(false);
     useEffect(() => {
         const t = setTimeout(() => setRefLoading(false), 12000); // 8 seconds
         return () => clearTimeout(t);
@@ -175,6 +176,7 @@ const DocumentSelection = ({
 
         const startMs = Date.now();
         try {
+            setIsUploading(true); 
             setUploadStatus?.('loading');
             setUploadSnackOpen?.(true);
             setUploadProgressKey?.(prev => prev + 1); // keep your progress bar reset
@@ -182,6 +184,7 @@ const DocumentSelection = ({
             const uploadedNames = [];
             for (const file of files) {
                 const source = selectedCategory === 'Reference PDFs' ? 'reference' : 'uploaded';
+                console.log('Uploading', file.name, 'to source =', source);
                 const fd = new FormData();
                 fd.append('file', file);                        // <-- REQUIRED
                 fd.append('report_date', defaultReportDate);    // <-- OPTIONAL (string)
@@ -202,11 +205,13 @@ const DocumentSelection = ({
             const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
             setUploadDuration?.(elapsed);
 
-            await fetchReferencePdfs(); // refresh your repo list
+            const refreshed = await fetchReferencePdfs(); // get fresh list synchronously
+            setUploadStatus?.('success');
+            setTimeout(() => setUploadSnackOpen?.(false), 4000);
             const namesNow = referencePdfs.map(f => f.name);
             const present = uploadedNames.filter(n => namesNow.includes(n));
             console.log('Uploaded & present:', present, 'of', uploadedNames);
-            
+
             setUploadStatus?.('success');
             setTimeout(() => setUploadSnackOpen?.(false), 4000);
         } catch (err) {
@@ -214,6 +219,7 @@ const DocumentSelection = ({
             setUploadStatus?.('error');
             setTimeout(() => setUploadSnackOpen?.(false), 4000);
         } finally {
+            setIsUploading(false);
             e.target.value = null; // reset picker
         }
     };
@@ -228,8 +234,10 @@ const DocumentSelection = ({
                 url: b64ToBlobUrl(f?.file_b64, 'application/pdf')
             }));
             setReferencePdfs(mapped);
+            return mapped;
         } catch (err) {
             console.error('Error loading reference PDFs', err);
+            return [];
         }
     };
     const fetchTemplateForPreview = async () => {
@@ -497,7 +505,7 @@ const DocumentSelection = ({
                         }}>
                                     
                         {/* determine which docs to show */}
-                        {selectedCategory === 'Reference PDFs' && refLoading ? (
+                        {(isUploading) || (selectedCategory === 'Reference PDFs' && refLoading) ? (
                             <Box
                                 sx={{
                                     display: 'flex',
@@ -511,7 +519,7 @@ const DocumentSelection = ({
                                     variant="subtitle2"
                                     sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
                                 >
-                                    Loading…
+                                    {isUploading ? 'Uploading document… Please wait' : 'Loading…'}
                                 </Typography>
                                 <CircularProgress size="1.667vw" />
                             </Box>
