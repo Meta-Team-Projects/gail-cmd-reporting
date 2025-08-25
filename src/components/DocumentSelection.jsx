@@ -70,7 +70,8 @@ const DocumentSelection = ({
     setUploadProgressKey,
     setUploadDuration,
     }) => {
-    const categories = ['Reference PDFs', 'Uploaded']
+    //const categories = ['Reference PDFs', 'Uploaded']
+    const categories = ['Reference PDFs']
     const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
     const [documentList, setDocumentList] = useState({})
     const [referencePdfs, setReferencePdfs] = useState([]); // [{ name, url }]
