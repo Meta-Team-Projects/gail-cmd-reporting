@@ -31,14 +31,6 @@ import {
     ListItem
 } from '@mui/material'
 
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import PanoramaFishEyeOutlinedIcon from '@mui/icons-material/PanoramaFishEyeOutlined';
-import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
-import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
-// import placeholder from '../assets/placeholder.png'
-// import placeholder_2 from '../assets/placeholder_2.png'
-// import placeholder_3 from '../assets/placeholder_3.png'
 import {
     CloudUpload,
     PlayArrow as PlayArrowIcon,
@@ -149,15 +141,6 @@ const DocumentSelection = ({
         return next;
     });
     };
-    
-    // const imageOptions = [placeholder, placeholder_2, placeholder_3]
-    // //const allImages = [...Array(18)].map((_, idx) => imageOptions[idx % imageOptions.length])
-    // const allImages = [
-    //     ...Array(6).fill(placeholder),
-    //     ...Array(6).fill(placeholder_2),
-    //     ...Array(6).fill(placeholder_3),
-    // ]
-    // const [page, setPage] = useState(0)
     
     const handleUploadFiles = async (e) => {
         const files = Array.from(e.target.files || []);
@@ -428,19 +411,80 @@ const DocumentSelection = ({
                     <Typography variant="subtitle2" sx={{
                         fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
-                        Select files from the repository and/or upload new files for updating the contents of the CMD report.                    </Typography>
+                        Select files from the repository and/or upload new files for updating the contents of the CMD report.
+                    </Typography>
                 </Box>
+                <Box sx={{
+                    border: '2px dashed #E6E6E6',
+                    borderRadius: 2,
+                    mx: '0.8333vw',
+                    //p: '0.417vw',
+                    textAlign: 'center',
+                    bgcolor: '#FFD95C1A',   //later
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.208vw',
+                    height: '20vh',
+                }}>
+                    {/* hidden file input + upload handler */}
+                    <input
+                    type="file"
+                    multiple
+                    hidden
+                    ref={fileInputRef}
+                    onChange={handleUploadFiles}
+                    accept=".pdf,application/pdf,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    />
 
+                    <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
+                    
+                    <Typography variant="caption" display="block" color="#515151"
+                    sx={{ fontWeight: 500, fontSize: '0.78vw'}}>
+                        Choose a file
+                    </Typography>
+                    <Typography variant="caption" display="block" color="#515151"
+                    sx={{ fontWeight: 500, fontSize: '0.78vw'}}>
+                        PDF format, up to 10MB
+                    </Typography>
+                    
+                    <Button
+                        variant="contained"
+                        onClick={() => fileInputRef.current.click()}
+                        sx={{
+                        borderRadius: 2,
+                        bgcolor: '#0088D6',
+                        color: '#ffffff',
+                        textTransform: 'none',
+                        px: '1.25vw',
+                        py: '0.208vw',
+                        fontWeight: 500,
+                        fontSize: '0.78vw',
+                        mt: '0.417vw',
+                        mb: '0.417vw',
+                        }}
+                    >
+                        Browse File
+                    </Button>
+                </Box>
                 <Box sx={{
                     //border: '1px solid black',
                     display: 'flex',
-                    height: '67vh',
-                    flex: 1,
+                    flexDirection: 'column',
+                    height: '500px', 
+                    overflow: 'hidden',
+                    //flex: 1,
                     mx: '0.8333vw',
                     gap: '0.417vw',
+                    px: '0.8333vw',
+                    py: '0.208vw',
+                    pb: '0.8333vw',
+                    borderRadius: 2,
+                    bgcolor: '#F5FAFF',
                 }}>
                     {/* Left of Left */}
-                    <Box sx={{
+                    {/* <Box sx={{
                         //border: '1px solid green',
                         bgcolor: '#F5FAFF',
                         overflow: 'hidden',
@@ -451,7 +495,8 @@ const DocumentSelection = ({
                         px: '0.8333vw',
                         py: '0.208vw',
                         pb: '0.8333vw',
-                    }}>
+                    }}> */}
+                        
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw' }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                                 Documents Repository
@@ -531,7 +576,7 @@ const DocumentSelection = ({
                                 return (
                                     <>
                                     {/* Select-all row */}
-                                    <Box
+                                    {/* <Box
                                         onClick={handleToggleAllVisible}
                                         sx={{
                                             display: 'flex',
@@ -559,7 +604,7 @@ const DocumentSelection = ({
                                         <Typography sx={{ fontWeight: 600, fontSize: '0.8333vw', color: '#081A33' }}>
                                             Select all documents
                                         </Typography>
-                                    </Box>
+                                    </Box> */}
 
                                     <List sx={{ px: 0 }}>
                                         {docs.map(name => {
@@ -583,8 +628,8 @@ const DocumentSelection = ({
                                                         cursor: 'pointer',
                                                     }}
                                                 >
-                                                    <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
-                                                        <IconButton
+                                                    <Box sx={{ px: '0.7vw', display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
+                                                        {/* <IconButton
                                                             size="small"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -604,7 +649,7 @@ const DocumentSelection = ({
                                                                     sx={{ fontSize: '0.8333vw', color: '#515151', transition: 'all 0.2s ease' }}
                                                                 />
                                                             )}
-                                                        </IconButton>
+                                                        </IconButton> */}
                                                         <Typography
                                                             sx={{
                                                                 fontWeight: 600,
@@ -654,16 +699,16 @@ const DocumentSelection = ({
                             })()
                         )}
                         </Box>
-                    </Box>
+                    {/* </Box> */}
 
                     {/* Right of Left */}
-                    <Box sx={{
+                    {/* <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',
                         flex: 1,
                         gap: '0.417vw',
                     }}>
-                        {/* Browse File Box */}
+                        
                         <Box sx={{
                             border: '2px dashed #E6E6E6',
                             borderRadius: 2,
@@ -677,7 +722,7 @@ const DocumentSelection = ({
                             gap: '0.208vw',
                             height: '30%',
                         }}>
-                            {/* hidden file input + upload handler */}
+                            // hidden file input + upload handler
                             <input
                             type="file"
                             multiple
@@ -718,7 +763,7 @@ const DocumentSelection = ({
                             </Button>
                         </Box>
 
-                        {/* Selected Documents Box */}
+                        
                         <Box sx={{
                             borderRadius: 2,
                             px: '0.833vw',
@@ -730,7 +775,6 @@ const DocumentSelection = ({
                             flexDirection: 'column',
                             gap: '0.208vw',
                             flex: 1,
-                            //height: '70%',
                         }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw' }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
@@ -758,7 +802,7 @@ const DocumentSelection = ({
                                 scrollbarColor: '#0088d7 transparent'
                             }}>
                                         
-                            {/* determine which docs to show */}
+                            // determine which docs to show
                             {(() => {
                                 // flatten all docs if 'All', else pick selected category
                                 // const key = selectedCategory === 'All'
@@ -843,16 +887,6 @@ const DocumentSelection = ({
                                                 </Typography>
                                             </Box>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                                                {/* <IconButton
-                                                size="small"
-                                                onClick={() => handleToggleVisibility(name)}
-                                                >
-                                                    {visibleDocs[name] ? (
-                                                        <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
-                                                    ) : (
-                                                        <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
-                                                    )}
-                                                </IconButton> */}
                                                 <IconButton 
                                                 size="small"
                                                 // onClick={e => {
@@ -874,7 +908,7 @@ const DocumentSelection = ({
                             })()}
                             </Box>
                         </Box>
-                    </Box>
+                    </Box> */}
                 </Box>
                 <Box sx={{
                     display: 'flex',
@@ -986,27 +1020,9 @@ const DocumentSelection = ({
                                     fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
                                 }}
                                 >
-                                <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
-                                Open in new tab
+                                    <OpenInNewIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
+                                    Open in new tab
                                 </Button>
-                                {/* <Button
-                                size="small"
-                                variant="outlined"
-                                component="a"
-                                href={(pdfPreviewUrl || templatePdfUrl) || undefined}
-                                download={pdfPreviewUrl || templatePdfUrl ? 'document.pdf' : undefined}
-                                disabled={!pdfPreviewUrl && !templatePdfUrl}
-                                sx={{
-                                    color: '#fff',
-                                    borderColor: 'rgba(255,255,255,0.7)',
-                                    textTransform: 'none',
-                                    '&:hover': { borderColor: '#fff', background: 'rgba(255,255,255,0.08)' },
-                                    fontSize: '0.7292vw', py: 0.3, px: '0.625vw'
-                                }}
-                                >
-                                <FileDownloadOutlinedIcon sx={{ fontSize: '1.0417vw', mr: 0.5 }} />
-                                Download
-                                </Button> */}
                             </Box>
                             </Box>
                             {/* iframe preview area */}
