@@ -7,6 +7,7 @@ import {
     IconButton,
     Slider,
     Typography,
+    CircularProgress,
     Popper,
     ClickAwayListener,
     Paper,
@@ -82,8 +83,8 @@ const ReportGeneration = ({
     selectedTemplateDocxFile,
     selectedTemplateName
     }) => {
-    const categories = ['All', 'Reference PDFs', 'Uploaded']
-    const [selectedCategory, setSelectedCategory] = useState('All');
+    const categories = ['Reference PDFs']
+    const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
     const [documentList, setDocumentList] = useState({}) // uploaded
     const [referencePdfs, setReferencePdfs] = useState([]);
 
@@ -92,6 +93,70 @@ const ReportGeneration = ({
 
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
+
+    const [refLoading, setRefLoading] = useState(true);
+    useEffect(() => {
+        const t = setTimeout(() => setRefLoading(false), 12000); // 8 seconds
+        return () => clearTimeout(t);
+    }, []);
+
+    const visibleRepoDocs = useMemo(() => {
+        return selectedCategory.toLowerCase() === 'reference pdfs'
+            ? referencePdfs.map(f => f.name)
+            : Object.values(documentList).flat();
+    }, [selectedCategory, referencePdfs, documentList]);
+
+    // Select-all helpers (for current category)
+    const allVisibleSelected =
+        visibleRepoDocs.length > 0 &&
+        visibleRepoDocs.every(n => selectedDocs.includes(n));
+    const someVisibleSelected =
+        !allVisibleSelected &&
+        visibleRepoDocs.some(n => selectedDocs.includes(n));
+
+    const handleToggleAllVisible = () => {
+        setSelectedDocs(prev => {
+            const prevSet = new Set(prev);
+            const makeAll = !visibleRepoDocs.every(n => prevSet.has(n));
+            if (makeAll) {
+                // add all visible docs
+                return Array.from(new Set([...prev, ...visibleRepoDocs]));
+            }
+            // remove all visible docs
+            return prev.filter(n => !visibleRepoDocs.includes(n));
+        });
+    };
+
+    const b64ToBlobUrl = (b64, mime = 'application/pdf') => {
+        if (!b64) return null;
+        let clean = b64
+            .replace(/^data:[^;]+;base64,/i, '')
+            .replace(/\s+/g, '')
+        .replace(/-/g, '+')
+            .replace(/_/g, '/');
+        let bytes;
+        try { bytes = atob(clean); } catch { return null; }
+        const arr = new Uint8Array(bytes.length);
+        for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+        const blob = new Blob([arr], { type: mime });
+        return URL.createObjectURL(blob);
+    };
+
+    const fetchReferencePdfs = async () => {
+        try {
+            const url = `${import.meta.env.VITE_CHAT_API_URL}/get_reference_pdfs?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
+            const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
+            const mapped = (Array.isArray(data) ? data : []).map((f) => ({
+                name: f?.name || 'Document.pdf',
+                url: b64ToBlobUrl(f?.file_b64, 'application/pdf')
+            }));
+            setReferencePdfs(mapped);
+            return mapped;
+        } catch (err) {
+            console.error('Error loading reference PDFs', err);
+            return [];
+        }
+    };
 
     const key = selectedCategory.toLowerCase();
     const uploadedNames = Object.values(documentList).flat();
@@ -287,19 +352,6 @@ const ReportGeneration = ({
         }
     }
 
-    const fetchReferencePdfs = async () => {
-        try {
-            const url = `${import.meta.env.VITE_CHAT_API_URL}/get_reference_pdfs?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
-            const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
-            const mapped = (Array.isArray(data) ? data : []).map((f) => ({
-                name: f?.name || 'Document.pdf'
-            }));
-            setReferencePdfs(mapped);
-        } catch (err) {
-            console.error('Error loading reference PDFs', err);
-        }
-    };
-
     const collectStats = async () => {
     try {
         const { data } = await axios.get(
@@ -322,9 +374,9 @@ const ReportGeneration = ({
     }, [pdfPreviewUrl, pdfFileName, finalDocUrl, finalDocName, selectedTemplateName]);
 
     useEffect(() => {
-        fetchDocuments();
+        //fetchDocuments();
         fetchReferencePdfs();
-        collectStats();
+        //collectStats();
     }, []);
 
     const panelRef = useRef(null);
@@ -745,7 +797,7 @@ const disabledYellowSx = {
                         scrollbarColor: '#0088d7 transparent'
                     }}>
                         {/* determine which docs to show */}
-                        {(() => {
+                        {/* {(() => {
                             const docs = selectedDocs;
                             // filter by search
                             return (
@@ -815,16 +867,6 @@ const disabledYellowSx = {
                                             </Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.417vw' }}>
-                                            {/* <IconButton
-                                            size="small"
-                                            onClick={() => handleToggleVisibility(name)}
-                                            >
-                                                {visibleDocs[name] ? (
-                                                    <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
-                                                ) : (
-                                                    <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
-                                                )}
-                                            </IconButton> */}
                                             <IconButton 
                                             size="small"
                                             // onClick={e => {
@@ -843,7 +885,122 @@ const disabledYellowSx = {
                                 })}
                             </List>
                         )
-                        })()} 
+                        })()} */}
+
+                        {refLoading ? (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: '55vh'
+                                }}
+                            >
+                                <Typography
+                                    variant="subtitle2"
+                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
+                                >
+                                     Loading…
+                                </Typography>
+                                <CircularProgress size="1.667vw" />
+                            </Box>
+                        ) : (
+                            (() => {
+                                const key = selectedCategory.toLowerCase();
+                                let docs = visibleRepoDocs; // use memoized visible docs
+                                return (
+                                    <List sx={{ px: 0 }}>
+                                        {docs.map(name => {
+                                            const isSelected = selectedDocs.includes(name);
+                                            return (
+                                                <ListItem
+                                                    key={name}
+                                                    disableGutters
+                                                    onClick={() => {
+                                                        handleToggleVisibility(name);
+                                                    }}
+                                                    sx={{
+                                                        bgcolor: isSelected ? '#A9C7FF66' : 'transparent',
+                                                        borderRadius: 2,
+                                                        mb: '0.208vw',
+                                                        p: '0.208vw',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'space-between',
+                                                        border: visibleDocs[name] ? '1px solid #0b2c5bff' : '0.5px solid #00000033',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                >
+                                                    <Box sx={{ px: '0.7vw', display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
+                                                        {/* <IconButton
+                                                            size="small"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setSelectedDocs(prev =>
+                                                                    prev.includes(name)
+                                                                        ? prev.filter(n => n !== name)
+                                                                        : [...prev, name]
+                                                                );
+                                                            }}
+                                                        >
+                                                            {isSelected ? (
+                                                                <RadioButtonCheckedOutlinedIcon
+                                                                    sx={{ fontSize: '0.8333vw', fill: '#081A33', strokeWidth: 1, transition: 'all 0.2s ease' }}
+                                                                />
+                                                            ) : (
+                                                                <PanoramaFishEyeOutlinedIcon
+                                                                    sx={{ fontSize: '0.8333vw', color: '#515151', transition: 'all 0.2s ease' }}
+                                                                />
+                                                            )}
+                                                        </IconButton> */}
+                                                        <Typography
+                                                            sx={{
+                                                                fontWeight: 600,
+                                                                color: '#1C1C1C',
+                                                                whiteSpace: 'nowrap',
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                fontSize: '0.8333vw'
+                                                            }}
+                                                        >
+                                                            {(() => {
+                                                                const dotIdx = name.lastIndexOf('.');
+                                                                const ext  = dotIdx >= 0 ? name.slice(dotIdx) : '';
+                                                                const base = dotIdx >= 0 ? name.slice(0, dotIdx) : name;
+                                                                return base.length > 20
+                                                                    ? `${base.slice(0,20)}...${ext}`
+                                                                    : name;
+                                                            })()}
+                                                        </Typography>
+                                                    </Box>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                                                        {/* <IconButton
+                                                            size="small"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleToggleVisibility(name);
+                                                            }}
+                                                        >
+                                                            {visibleDocs[name] ? (
+                                                                <VisibilityIcon sx={{ fontSize: '0.8333vw', color: '#081A33' }} />
+                                                            ) : (
+                                                                <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
+                                                            )}
+                                                        </IconButton> */}
+                                                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); }}>
+                                                            <Tooltip title='Delete' placement='bottom' arrow>
+                                                                <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                                                            </Tooltip>
+                                                        </IconButton>
+                                                    </Box>
+                                                </ListItem>
+                                            );
+                                        })}
+                                    </List>
+                                );
+                            })()
+                        )}
                     </Box>
                     {/* <Box sx={{
                         display: 'flex',
