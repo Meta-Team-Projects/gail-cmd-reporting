@@ -681,11 +681,11 @@ const GeneratePreview = ({
                                                                 <VisibilityOffIcon sx={{ fontSize: '0.8333vw', color: '#081A33'}} />
                                                             )}
                                                         </IconButton> */}
-                                                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); }}>
+                                                        {/* <IconButton size="small" onClick={(e) => { e.stopPropagation(); }}>
                                                             <Tooltip title='Delete' placement='bottom' arrow>
                                                                 <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
                                                             </Tooltip>
-                                                        </IconButton>
+                                                        </IconButton>*/}
                                                     </Box>
                                                 </ListItem>
                                             );
