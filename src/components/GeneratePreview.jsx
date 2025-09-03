@@ -587,7 +587,7 @@ const GeneratePreview = ({
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    minHeight: '55vh'
+                                    minHeight: '45vh'
                                 }}
                             >
                                 <Typography

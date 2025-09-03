@@ -894,7 +894,7 @@ const disabledYellowSx = {
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    minHeight: '55vh'
+                                    minHeight: '20vh'
                                 }}
                             >
                                 <Typography
