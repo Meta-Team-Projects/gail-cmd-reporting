@@ -80,7 +80,7 @@ const DocumentSelection = ({
     const [refLoading, setRefLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
     useEffect(() => {
-        const t = setTimeout(() => setRefLoading(false), 12000); // 8 seconds
+        const t = setTimeout(() => setRefLoading(false), 15000); // 15 seconds
         return () => clearTimeout(t);
     }, []);
 
