@@ -48,6 +48,7 @@ import currentArrow from '../assets/currentarrow.png';
 import nextArrow from '../assets/nextarrow.png';
 import templateArrowBlack from '../assets/templatearrow-black.png';
 import templateArrowYellow from '../assets/templatearrow-yellow.png';
+import { getTemplateNumber } from './cmdTemplateStore';
 
 
 const DocumentSelection = ({
@@ -229,11 +230,13 @@ const DocumentSelection = ({
             const url = `${import.meta.env.VITE_CHAT_API_URL}/get_templates?offset=0&limit=20&max_file_bytes=20971520&max_return_bytes=83886080`;
             const { data } = await axios.get(url, { headers: { accept: 'application/json' } });
             const arr = Array.isArray(data) ? data : [];
-            const t1 = arr.find(t => (t?.name || '').toLowerCase().startsWith('cmd template_1')) || arr[0];
-            if (t1?.file_b64) {
-                const blobUrl = b64ToBlobUrl(t1.file_b64, 'application/pdf');
+            const n = getTemplateNumber();
+            const chosenIndex = (n === 12) ? 0 : (n === 6 ? 1 : 0);
+            const chosen = arr[chosenIndex] || arr[0];
+            if (chosen?.file_b64) {
+                const blobUrl = b64ToBlobUrl(chosen.file_b64, 'application/pdf');
                 setTemplatePdfUrl(blobUrl);
-                setPreviewingName(t1?.name || 'Template.pdf');
+                setPreviewingName(chosen?.name || 'Template.pdf');
                 setPreviewingType('template');
             }
         } catch (err) {
