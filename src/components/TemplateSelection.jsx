@@ -118,6 +118,29 @@ const TemplateSelection = ({
         return () => clearTimeout(timer);
     }, []);
 
+    const MAX_TILES = 6;
+    const tiles = useMemo(() => {
+        const realCount = Math.min(templates.length, MAX_TILES);
+        const real = templates.slice(0, realCount).map((t, idx) => ({
+            key: t.name || t.displayName || `template-${idx}`,
+            label: t.displayName || `CMD Template_${idx + 1}`,
+            src: allImages[idx % allImages.length],
+            url: t.url,
+            clickable: !!t.url,
+        }));
+        const placeholders = Array.from({ length: MAX_TILES - realCount }, (_, i) => {
+            const idx = realCount + i;
+            return {
+                key: `placeholder-${idx + 1}`,
+                label: `CMD Template_${idx + 1}`,
+                src: allImages[idx % allImages.length],
+                url: null,
+                clickable: false,
+            };
+        });
+        return [...real, ...placeholders];
+    }, [templates, allImages]);
+
     // Convert base64 (with or without data-URL prefix / URL-safe chars) → Blob URL
     const base64ToPdfUrl = (b64) => {
         if (!b64) return null;
@@ -176,15 +199,7 @@ const TemplateSelection = ({
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
     }, []);
-    // synthesize list names (only _1 clickable for now)
-    const pseudoTemplateNames = useMemo(
-    () => Array.from({ length: 6 }, (_, i) => `CMD Template_${i + 1}`),
-    []
-    );
-    const availableByName = useMemo(
-    () => Object.fromEntries(templates.map(t => [t.displayName, t.url])),
-    [templates]
-    );
+
 
 
     const handleUploadFiles = async (e) => {
@@ -454,64 +469,58 @@ const TemplateSelection = ({
                                 <CircularProgress size="1.667vw" />
                             </Box>
                         ) : (
-                        pseudoTemplateNames.map((label, idx) => {
-                        const src = allImages[idx % allImages.length]; // keep your nice placeholders
-                        const isAvailable = Boolean(availableByName[label]);
-                        // Only CMD Template_1 is clickable for now (and only if actually fetched)
-                        const isClickable = label === 'CMD Template_1' && isAvailable;
-                        return (
+                        tiles.map((tile) => (
                             <Tooltip
-                            key={label}
-                            title={isClickable ? 'Click to preview' : 'Coming soon'}
-                            placement="top"
-                            >
-                            <Box
-                                onClick={() => {
-                                if (!isClickable) return;
-                                const url = availableByName[label];
-                                if (url) {
-                                    pdfUrlRef.current = url;
-                                    setPdfPreviewUrl(url);
-                                    setSelectedPreview?.(null); 
-                                    setPreviewingTemplateName(label);
-                                }
-                                }}
-                                sx={{
-                                position: 'relative',
-                                width: '48%',
-                                mb: '0.625vw',
-                                borderRadius: '6px',
-                                overflow: 'hidden',
-                                cursor: isClickable ? 'pointer' : 'not-allowed',
-                                opacity: isClickable ? 1 : 0.6,
-                                boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
-                                }}
+                                key={tile.key}
+                                title={tile.clickable ? 'Click to preview' : 'Coming soon'}
+                                placement="top"
                             >
                                 <Box
-                                component="img"
-                                src={src}
-                                alt={label}
-                                sx={{ width: '100%', objectFit: 'cover', display: 'block' }}
-                                />
-                                <Box
-                                sx={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bgcolor: 'rgba(0,0,0,0.6)',
-                                    color: '#fff',
-                                    px: '0.625vw',
-                                    py: '0.365vw',
-                                    fontSize: '0.7292vw',
-                                }}
+                                    onClick={() => {
+                                        if (!tile.clickable) return;
+                                        const url = tile.url;
+                                        if (url) {
+                                            pdfUrlRef.current = url;
+                                            setPdfPreviewUrl(url);
+                                            setSelectedPreview?.(null);
+                                            setPreviewingTemplateName(tile.label);
+                                        }
+                                    }}
+                                    sx={{
+                                        position: 'relative',
+                                        width: '48%',
+                                        mb: '0.625vw',
+                                        borderRadius: '6px',
+                                        overflow: 'hidden',
+                                        cursor: tile.clickable ? 'pointer' : 'not-allowed',
+                                        opacity: tile.clickable ? 1 : 0.6,
+                                        boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                                    }}
                                 >
-                                    {label}
+                                    <Box
+                                        component="img"
+                                        src={tile.src}
+                                        alt={tile.label}
+                                        sx={{ width: '100%', objectFit: 'cover', display: 'block' }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bgcolor: 'rgba(0,0,0,0.6)',
+                                            color: '#fff',
+                                            px: '0.625vw',
+                                            py: '0.365vw',
+                                            fontSize: '0.7292vw',
+                                        }}
+                                    >
+                                        {tile.label}
+                                    </Box>
                                 </Box>
-                            </Box>
                             </Tooltip>
-                        );
-                        })
+                        ))
                     )}
                     </Box>
                     {/* <Box sx={{
