@@ -69,6 +69,7 @@ import currentArrow from '../assets/currentarrow.png';
 import nextArrow from '../assets/nextarrow.png';
 import templateArrowBlack from '../assets/templatearrow-black.png';
 import templateArrowYellow from '../assets/templatearrow-yellow.png';
+import { getTemplateNumber } from './cmdTemplateStore';
 
 
 const ReportGeneration = ({
@@ -286,14 +287,30 @@ const ReportGeneration = ({
         startFakeProgress();
         try {
             const endpoint = `${import.meta.env.VITE_CHAT_API_URL}/generate-report`;
+            const templateNumber = getTemplateNumber() ?? 12;
             // 1) DOCX
             let resDocx;
             if (selectedTemplateDocxFile) {
                 const fd = new FormData();
                 fd.append('file', selectedTemplateDocxFile, selectedTemplateDocxFile.name);
-                resDocx = await axios.post(endpoint, fd, { responseType: 'blob' });
+                resDocx = await axios.post(
+                    endpoint,
+                    fd,
+                    {
+                        responseType: 'blob',
+                        // axios will append this as ?template=6|12
+                        params: { template: templateNumber }
+                    }
+                );
             } else {
-                resDocx = await axios.post(endpoint, {}, { responseType: 'blob' });
+                resDocx = await axios.post(
+                    endpoint,
+                    {},
+                    {
+                        responseType: 'blob',
+                        params: { template: templateNumber }
+                    }
+                );
             }
             const cd = resDocx?.headers?.['content-disposition'] || '';
             const match = cd.match(/filename="?([^"]+)"?/i);
