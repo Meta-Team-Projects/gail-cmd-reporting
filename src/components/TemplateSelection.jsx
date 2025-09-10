@@ -57,6 +57,7 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
 import { StepArrow,ArrowShape,ArrowLabel } from './StepArrow' 
+import { setTemplateNumber } from './cmdTemplateStore';
 
 const TemplateSelection = ({
     leftSidebarOpen,
@@ -126,6 +127,8 @@ const TemplateSelection = ({
             label: t.displayName || `CMD Template_${idx + 1}`,
             src: allImages[idx % allImages.length],
             url: t.url,
+            name: t.name,        
+            index: idx, 
             clickable: !!t.url,
         }));
         const placeholders = Array.from({ length: MAX_TILES - realCount }, (_, i) => {
@@ -484,6 +487,12 @@ const TemplateSelection = ({
                                             setPdfPreviewUrl(url);
                                             setSelectedPreview?.(null);
                                             setPreviewingTemplateName(tile.label);
+                                            const idx =
+                                                typeof tile.index === 'number'
+                                                ? tile.index
+                                                : templates.findIndex(tt => tt.name === tile.name);
+                                            const num = idx === 0 ? 12 : (idx === 1 ? 6 : null);
+                                            setTemplateNumber(num);
                                         }
                                     }}
                                     sx={{
