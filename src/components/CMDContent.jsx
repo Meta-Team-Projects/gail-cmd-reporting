@@ -13,7 +13,8 @@ Tooltip,
 Chip,
 Stack,
 List,
-ListItem
+ListItem,
+CircularProgress,
 } from '@mui/material'
 
 import {
@@ -538,201 +539,207 @@ return (
 
         {/* Right Section: Reports Repository -> NOW SHOWS TEMPLATES */}
         <Box sx={{
-        flex: 1,
-        borderRadius: '12px',
-        mb: '0.417vw',
-        bgcolor: '#F5FAFF',
-        px: '0.833vw', pt: '0.7vw',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.7407vh'
+            flex: 1,
+            borderRadius: '12px',
+            mb: '0.417vw',
+            bgcolor: '#F5FAFF',
+            px: '0.833vw', pt: '0.7vw',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.7407vh'
         }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
-            Reports Repository
-            </Typography>
-            <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
-        </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
+                Reports Repository
+                </Typography>
+                <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
+            </Box>
 
-        {/* Category chips (kept) */}
-        <Stack direction="row" sx={{flexWrap: 'wrap', gap: '0.41vw'}}>
-            <Box sx={{ mt: '0.4vw', display: 'flex', flexWrap: 'wrap', gap: '0.417vw', flexGrow: 1 }}>
-            {categories.map((category) => (
-                <Chip
-                key={category}
-                label={category}
-                variant="filled"
+            {/* Category chips (kept) */}
+            <Stack direction="row" sx={{flexWrap: 'wrap', gap: '0.41vw'}}>
+                <Box sx={{ mt: '0.4vw', display: 'flex', flexWrap: 'wrap', gap: '0.417vw', flexGrow: 1 }}>
+                {categories.map((category) => (
+                    <Chip
+                    key={category}
+                    label={category}
+                    variant="filled"
+                    size="small"
+                    onClick={() => setSelectedCategory(category)}
+                    sx={{
+                        px: '0.469vw',
+                        py: '0.469vw',
+                        mb: '0.417vw',
+                        fontWeight: 500,
+                        fontSize: '0.7292vw',
+                        color: '#081A33',
+                        borderRadius: '16px',
+                        bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
+                        '&:hover': { bgcolor: '#FEC636' },
+                        //boxShadow: '0px 4px 8px #15151540'
+                    }}
+                    />
+                ))}
+                </Box>
+            </Stack>
+
+            {/* Search */}
+            <Box>
+                <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Search templates..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
                 size="small"
-                onClick={() => setSelectedCategory(category)}
                 sx={{
-                    px: '0.469vw',
-                    py: '0.469vw',
-                    mb: '0.417vw',
-                    fontWeight: 500,
-                    fontSize: '0.7292vw',
-                    color: '#081A33',
-                    borderRadius: '16px',
-                    bgcolor: selectedCategory === category ? '#FEC636' : '#FFD95C',
-                    '&:hover': { bgcolor: '#FEC636' },
-                    //boxShadow: '0px 4px 8px #15151540'
+                    '& .MuiOutlinedInput-root': {
+                    bgcolor: '#0088D61A',
+                    borderRadius: 10,
+                    height: '1.5625vw',
+                    fontSize: '0.833vw',
+                    color: '#515151'
+                    }
+                }}
+                InputProps={{
+                    startAdornment: (
+                    <InputAdornment position="start">
+                        <SearchIcon sx={{ color: '#515151', fontSize: '1.042vw' }} />
+                    </InputAdornment>
+                    )
                 }}
                 />
-            ))}
             </Box>
-        </Stack>
 
-        {/* Search */}
-        <Box>
-            <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Search templates..."
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            size="small"
-            sx={{
-                '& .MuiOutlinedInput-root': {
-                bgcolor: '#0088D61A',
-                borderRadius: 10,
-                height: '1.5625vw',
-                fontSize: '0.833vw',
-                color: '#515151'
-                }
-            }}
-            InputProps={{
-                startAdornment: (
-                <InputAdornment position="start">
-                    <SearchIcon sx={{ color: '#515151', fontSize: '1.042vw' }} />
-                </InputAdornment>
-                )
-            }}
-            />
-        </Box>
-
-        {/* Header */}
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: '0.208vw' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.1417vw', color: '#081A33' }}>
-            All Templates
-            </Typography>
-            <Typography variant="subtitle2" sx={{fontSize: '0.9375vw', color: '#081A33'}}>
-            View All &gt;
-            </Typography>
-        </Box>
-
-        {/* Template List */}
-        <Box
-            ref={panelRef}
-            sx={{
-            flexGrow: 1,
-            maxHeight: '35vh',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            '&::-webkit-scrollbar': { width: '0.2083vw' },
-            '&::-webkit-scrollbar-track': { background: 'transparent' },
-            '&::-webkit-scrollbar-thumb': { backgroundColor: '#0088d7', borderRadius: '3px' },
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#0088d7 transparent'
-            }}
-        >
-            {loadingTemplates && (
-            <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
-                Loading templates…
-            </Typography>
-            )}
-            {templatesError && (
-            <Typography sx={{ px: 1, color: '#c62828', fontSize: '0.85vw' }}>
-                {templatesError}
-            </Typography>
-            )}
-
-            {!loadingTemplates && !templatesError && (
-            <List sx={{ px: 0, mb: '0.417vw' }}>
-                {visibleTemplates.length === 0 ? (
-                <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
-                    No templates to display.
+            {/* Header */}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: '0.208vw' }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.1417vw', color: '#081A33' }}>
+                All Templates
                 </Typography>
-                ) : (
-                visibleTemplates.map(tpl => (
-                    <ListItem
-                    key={tpl.name}
-                    disableGutters
-                    onClick={() => handleOpenTemplate(tpl)}
-                    sx={{
-                        cursor: 'pointer',
-                        bgcolor: '#A9C7FF66',
-                        borderRadius: 2,
-                        mb: '0.2083vw',
-                        p: '0.208vw',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        border: '0.5px solid #00000033',
-                        '&:hover': { bgcolor: '#A9C7FFAA' }
-                    }}
+                <Typography variant="subtitle2" sx={{fontSize: '0.9375vw', color: '#081A33'}}>
+                View All &gt;
+                </Typography>
+            </Box>
+
+            {/* Template List */}
+            <Box
+                ref={panelRef}
+                sx={{
+                flexGrow: 1,
+                maxHeight: '35vh',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                '&::-webkit-scrollbar': { width: '0.2083vw' },
+                '&::-webkit-scrollbar-track': { background: 'transparent' },
+                '&::-webkit-scrollbar-thumb': { backgroundColor: '#0088d7', borderRadius: '3px' },
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#0088d7 transparent'
+                }}
+            >
+                {loadingTemplates && (
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
                     >
-                    <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
-                        <IconButton
-                        size="small"
-                        onClick={(e) => { e.stopPropagation(); togglePin(tpl.name); }}
-                        >
-                        <Tooltip title="Pin" placement='bottom' arrow>
-                            <PushPinIcon
-                            sx={{
-                                fontSize: '0.8333vw',
-                                color: pinnedDocs.has(tpl.name) ? '#000000' : '#A9C7FF66',
-                                stroke: 'black',
-                                strokeWidth: 1.5,
-                                transition: 'all 0.2s ease',
-                            }}
-                            />
-                        </Tooltip>
-                        </IconButton>
-
-                        <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                        <Typography
-                            sx={{
-                            fontWeight: 600,
-                            color: '#515151',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            fontSize: '0.8333vw',
-                            maxWidth: '22vw',
-                            }}
-                        >
-                            {tpl.name}
-                        </Typography>
-                        <Typography sx={{ fontSize: '0.72vw', color: '#2b2b2b' }}>
-                            {formatBytes(tpl.size_bytes)} • {formatDate(tpl.modified_iso)}
-                        </Typography>
-                        </Box>
-                    </Box>
-
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.416vw' }}>
-                        <IconButton
-                        size="small"
-                        onClick={(e) => { e.stopPropagation(); handleDownloadTemplate(tpl); }}
-                        >
-                        <Tooltip title='Download' placement='bottom' arrow>
-                            <img
-                            src={download_report}
-                            style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }}
-                            />
-                        </Tooltip>
-                        </IconButton>
-
-                        <IconButton size="small" onClick={(e) => e.stopPropagation()}>
-                        <Tooltip title='Delete (disabled)' placement='bottom' arrow>
-                            <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
-                        </Tooltip>
-                        </IconButton>
-                    </Box>
-                    </ListItem>
-                ))
+                        Loading…
+                    </Typography>
+                    <CircularProgress size="1.667vw" />
+                </Box>
                 )}
-            </List>
-            )}
-        </Box>
+                {templatesError && (
+                <Typography sx={{ px: 1, color: '#c62828', fontSize: '0.85vw' }}>
+                    {templatesError}
+                </Typography>
+                )}
+
+                {!loadingTemplates && !templatesError && (
+                <List sx={{ px: 0, mb: '0.417vw' }}>
+                    {visibleTemplates.length === 0 ? (
+                    <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
+                        No templates to display.
+                    </Typography>
+                    ) : (
+                    visibleTemplates.map(tpl => (
+                        <ListItem
+                        key={tpl.name}
+                        disableGutters
+                        onClick={() => handleOpenTemplate(tpl)}
+                        sx={{
+                            cursor: 'pointer',
+                            bgcolor: '#A9C7FF66',
+                            borderRadius: 2,
+                            mb: '0.2083vw',
+                            p: '0.208vw',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            border: '0.5px solid #00000033',
+                            '&:hover': { bgcolor: '#A9C7FFAA' }
+                        }}
+                        >
+                        <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '0.417vw'}}>
+                            <IconButton
+                            size="small"
+                            onClick={(e) => { e.stopPropagation(); togglePin(tpl.name); }}
+                            >
+                            <Tooltip title="Pin" placement='bottom' arrow>
+                                <PushPinIcon
+                                sx={{
+                                    fontSize: '0.8333vw',
+                                    color: pinnedDocs.has(tpl.name) ? '#000000' : '#A9C7FF66',
+                                    stroke: 'black',
+                                    strokeWidth: 1.5,
+                                    transition: 'all 0.2s ease',
+                                }}
+                                />
+                            </Tooltip>
+                            </IconButton>
+
+                            <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                            <Typography
+                                sx={{
+                                fontWeight: 600,
+                                color: '#515151',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                fontSize: '0.8333vw',
+                                maxWidth: '22vw',
+                                }}
+                            >
+                                {tpl.name}
+                            </Typography>
+                            <Typography sx={{ fontSize: '0.72vw', color: '#2b2b2b' }}>
+                                {formatBytes(tpl.size_bytes)} • {formatDate(tpl.modified_iso)}
+                            </Typography>
+                            </Box>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.416vw' }}>
+                            <IconButton
+                            size="small"
+                            onClick={(e) => { e.stopPropagation(); handleDownloadTemplate(tpl); }}
+                            >
+                            <Tooltip title='Download' placement='bottom' arrow>
+                                <img
+                                src={download_report}
+                                style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }}
+                                />
+                            </Tooltip>
+                            </IconButton>
+
+                            <IconButton size="small" onClick={(e) => e.stopPropagation()}>
+                            <Tooltip title='Delete (disabled)' placement='bottom' arrow>
+                                <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
+                            </Tooltip>
+                            </IconButton>
+                        </Box>
+                        </ListItem>
+                    ))
+                    )}
+                </List>
+                )}
+            </Box>
         </Box>
     </Box>
 
