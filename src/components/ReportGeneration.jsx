@@ -324,7 +324,10 @@ const ReportGeneration = ({
             // 2) PDF (for inline preview)
             const pdfRes = await axios.get(
                 `${import.meta.env.VITE_CHAT_API_URL}/get_report_as_pdf`,
-                { headers: { accept: 'application/json' } }
+                {
+                    headers: { accept: 'application/json' },
+                    params: { template: templateNumber } 
+                }
             );
             const pName = pdfRes?.data?.pdf_filename || 'Final_Report.pdf';
             const pUrl  = base64PdfToUrl(pdfRes?.data?.pdf_b64);
