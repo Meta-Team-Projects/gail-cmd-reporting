@@ -55,7 +55,7 @@ try {
 }
 
 const CMDContent = ({ onNavigateToTemplate }) => {
-const categories = ['All', 'Pinned', 'Recently Viewed'];
+const categories = ['All', 'Pinned'];
 const [selectedCategory, setSelectedCategory] = useState('All');
 
 // Existing doc state (kept as-is but not used for repo list now)
@@ -550,7 +550,7 @@ return (
         }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
-                Reports Repository
+                Reference Templates
                 </Typography>
                 <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
             </Box>

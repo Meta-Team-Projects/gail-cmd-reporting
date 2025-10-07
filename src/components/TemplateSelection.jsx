@@ -83,7 +83,8 @@ const TemplateSelection = ({
     const uploadsDisabled = true;
 
 
-    const categories = ['All', 'Pinned', 'Recently Viewed']
+    // const categories = ['All', 'Pinned', 'Recently Viewed']
+    const categories = ['All', 'Pinned']
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)

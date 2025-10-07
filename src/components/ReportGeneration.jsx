@@ -1218,15 +1218,17 @@ const disabledYellowSx = {
                     justifyItems: 'center',
                 }} 
                 >
-                {[ save_template, download_report, regenerate_response, generate_report].map((icon, index) => (
+                {[ /*save_template,*/ download_report, /*regenerate_response,*/ generate_report].map((icon, index) => (
                     <Button
                     key={index}
                     variant="contained"
                     onClick={(e) => {
                         // if (index === 1) return handleOpenDownloadMenu(e);
-                        if (index === 1) return handleDownloadDocx();
-                        if (index === 2) return startGenerate();
-                        if (index === 3) return onNavigateToCMDContent();
+                        //if (index === 1) return handleDownloadDocx();
+                        // if (index === 2) return startGenerate();
+                        // if (index === 3) return onNavigateToCMDContent();
+                        if (index === 0) return handleDownloadDocx();
+                        if (index === 1) return onNavigateToCMDContent();
                     }}
                     sx={{
                         height: '8.5vw',
@@ -1244,19 +1246,23 @@ const disabledYellowSx = {
                         textAlign: 'center', fontSize: '0.7292vw',
                         ...disabledGradientSx
                     }}
+                        // disabled={
+                        //     index === 0 ||   
+                        //     (index === 1 && !pdfPreviewUrl && !finalDocUrl) 
+                        //     || (index >= 2 && isGenerating)
+                        // }
                         disabled={
-                            index === 0 ||   
-                            (index === 1 && !pdfPreviewUrl && !finalDocUrl) 
-                            || (index >= 2 && isGenerating)
+                            (index === 0 && !pdfPreviewUrl && !finalDocUrl) ||
+                            (index === 1 && isGenerating)
                         }
                     >
                     <img src={icon} style={{ width: '1.823vw', height: '1.823vw' }} />
                     {[
                         // 'Edit Report',
-                        'Save as Template',
+                        //'Save as Template',
                         'Download Report',
                         // 'AI Analyser',
-                        'Regenerate Report',
+                        //'Regenerate Report',
                         'Generate New Report',
                     ][index]}
                     </Button>

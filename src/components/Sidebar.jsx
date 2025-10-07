@@ -42,7 +42,7 @@ const menuItems = [
     { text: 'Home', icon: <Home />, type: MenuType.NONE },
     //{ text: 'New Session', icon: <DifferenceIcon />, type: 'NEW_SESSION' },
     //{ text: 'Saved Notes', icon: <Note />, type: MenuType.SAVED_NOTES, disabled: '' },
-    { text: 'Report Repository', icon: <FilePresentIcon />, type: MenuType.DOCUMENT_INGESTION, disabled: '' },
+    // { text: 'Report Repository', icon: <FilePresentIcon />, type: MenuType.DOCUMENT_INGESTION, disabled: '' },
     { text: 'Document Repository', icon: <QuestionAnswer />, type: MenuType.FAQS, disabled: '' },
     //{ text: 'Saved Queries', icon: <GetApp />, type: MenuType.SAVED_QUERIES, disabled: '' },
 ]
