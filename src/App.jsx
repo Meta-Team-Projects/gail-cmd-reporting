@@ -465,7 +465,8 @@ function App() {
             selectedDocs={selectedDocs}
             setSelectedDocs={setSelectedDocs}
             onNavigateToTemplate={() => setCurrentPage('template-select')}
-            onNavigateToReport={() => setCurrentPage('generate-preview')}/>
+            // onNavigateToReport={() => setCurrentPage('generate-preview')}/>
+            onNavigateToReport={() => setCurrentPage('report-gen')}/>
           )}
           {currentPage === 'generate-preview' && (
             <GeneratePreview 

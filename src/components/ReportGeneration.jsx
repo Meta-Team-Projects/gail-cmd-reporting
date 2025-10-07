@@ -54,7 +54,7 @@ import {
     Description as DescriptionIcon
 } from '@mui/icons-material'
 
-const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
+const steps = ['Template Selection','Document Selection','Final Report']
 import { StepArrow,ArrowShape, ArrowLabel } from './StepArrow' 
 import edit_report from '../assets/edit_report_icon.png'
 import save_template from '../assets/save_template_icon.png'

@@ -40,7 +40,7 @@ import {
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-const steps = ['Template Selection','Document Selection','Generate Report','Final Report']
+const steps = ['Template Selection','Document Selection','Final Report']
 import { StepArrow,ArrowShape, ArrowLabel } from './StepArrow' 
 import arrowMask from '../assets/arrow.png';
 import previousArrow from '../assets/previousarrow.png';
