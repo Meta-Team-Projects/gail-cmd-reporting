@@ -286,8 +286,8 @@ return (
             </Box>
             <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
-                <Typography sx={{fontSize: '0.813vw'}}>Start Now</Typography>
-                <TrendingFlatIcon />
+                    {/* <Typography sx={{fontSize: '0.813vw'}}>Start Now</Typography>
+                    <TrendingFlatIcon /> */}
                 </Box>
                 <Button
                 onClick={onNavigateToTemplate}
@@ -304,7 +304,8 @@ return (
                     boxShadow: '0px 4px 8px #15151540'
                 }}
                 >
-                    Generate Report
+                    <Typography sx={{fontSize: '0.813vw'}}>Start Now</Typography>
+                    <TrendingFlatIcon />
                 </Button>
             </Box>
         </Box>

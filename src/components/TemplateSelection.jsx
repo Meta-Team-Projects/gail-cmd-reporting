@@ -575,7 +575,7 @@ const TemplateSelection = ({
                         </IconButton>
                     </Box> */}
                 </Box>
-                <Box
+                {/* <Box
                     sx={{
                         border: '2px dashed #E6E6E6',
                         borderRadius: 2,
@@ -595,7 +595,6 @@ const TemplateSelection = ({
                     }}
                     aria-disabled={uploadsDisabled}
                 >
-                    {/* hidden file input + upload handler */}
                     <input
                     type="file"
                     multiple
@@ -634,7 +633,7 @@ const TemplateSelection = ({
                     >
                         {uploading ? 'Uploading…' : 'Browse Reports'}
                     </Button>
-                </Box>
+                </Box> */}
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
