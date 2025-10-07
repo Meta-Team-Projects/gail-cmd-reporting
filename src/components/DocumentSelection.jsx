@@ -25,8 +25,6 @@ import {
     Tooltip,
     Link,
     Divider,
-    Chip,
-    Stack,
     List,
     ListItem
 } from '@mui/material'
@@ -64,8 +62,9 @@ const DocumentSelection = ({
     setUploadDuration,
     }) => {
     //const categories = ['Reference PDFs', 'Uploaded']
-    const categories = ['Reference PDFs']
-    const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
+    // const categories = ['Reference PDFs']
+    // const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
+    const selectedCategory = 'Reference PDFs';
     const [documentList, setDocumentList] = useState({})
     const [referencePdfs, setReferencePdfs] = useState([]); // [{ name, url }]
     const [templatePdfUrl, setTemplatePdfUrl] = useState(null); // fallback preview (same as TemplateSelection)
@@ -81,7 +80,7 @@ const DocumentSelection = ({
     const [refLoading, setRefLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
     useEffect(() => {
-        const t = setTimeout(() => setRefLoading(false), 30000); // 30 seconds
+        const t = setTimeout(() => setRefLoading(false), 45000); // 45 seconds
         return () => clearTimeout(t);
     }, []);
 
@@ -373,7 +372,7 @@ const DocumentSelection = ({
             <Typography
             variant="h6"
             sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
-                CMD Reporting
+                CMD Report Generation
             </Typography>
         </Box>
         <Box sx={{
@@ -474,7 +473,8 @@ const DocumentSelection = ({
                     //border: '1px solid black',
                     display: 'flex',
                     flexDirection: 'column',
-                    height: '500px', 
+                    height: '600px', 
+                    minWidth: '38vw',
                     overflow: 'hidden',
                     //flex: 1,
                     mx: '0.8333vw',
@@ -504,7 +504,7 @@ const DocumentSelection = ({
                                 Reference Document Repository
                             </Typography>
                         </Box>
-                        <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
+                        {/* <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
                             <Box sx={{ 
                                 display: 'flex', flexWrap: 'wrap',
                                 gap: '0.417vw', flexGrow: 1 }}>
@@ -529,27 +529,27 @@ const DocumentSelection = ({
                                     />
                                 ))}
                             </Box>
-                        </Stack>
+                        </Stack> */}
                         <Box
                         sx={{
                             mt: '0.417vw', pr: '0.417vw',
                             // flexGrow: 1,
-                            maxHeight: '65vh',
-                            overflowY: 'auto !important',
-                            overflow: 'hidden',
-                            '&::-webkit-scrollbar': { 
-                            
-                            width: '0.2083vw' 
-                            },
-                            '&::-webkit-scrollbar-track': { 
-                                background: 'transparent'
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#0088d7',
-                                borderRadius: '3px',
-                            },
-                            scrollbarWidth: 'thin',
-                            scrollbarColor: '#0088d7 transparent'
+                            maxHeight: '75vh',
+                            overflowY: 'auto',
+                            overflowX: 'hidden',
+                            boxSizing: 'border-box',
+                            // '&::-webkit-scrollbar': {
+                            //     width: '0.2083vw'
+                            // },
+                            // '&::-webkit-scrollbar-track': {
+                            //     background: 'transparent'
+                            // },
+                            // '&::-webkit-scrollbar-thumb': {
+                            //     backgroundColor: '#0088d7',
+                            //     borderRadius: '3px',
+                            // },
+                            // scrollbarWidth: 'thin',
+                            // scrollbarColor: '#0088d7 transparent'
                         }}>
                                     
                         {/* determine which docs to show */}
@@ -565,7 +565,7 @@ const DocumentSelection = ({
                             >
                                 <Typography
                                     variant="subtitle2"
-                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
+                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw', pt:'25vh' }}
                                 >
                                     {isUploading ? 'Uploading document… Please wait' : 'Loading…'}
                                 </Typography>

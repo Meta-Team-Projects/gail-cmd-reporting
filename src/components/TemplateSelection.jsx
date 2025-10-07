@@ -324,7 +324,7 @@ const TemplateSelection = ({
             <Typography
             variant="h6"
             sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
-                CMD Reporting
+                CMD Report Generation
             </Typography>
         </Box>
         <Box sx={{
@@ -466,7 +466,7 @@ const TemplateSelection = ({
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 <Typography
                                     variant="subtitle2"
-                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
+                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw', pt: '10vw' }}
                                 >
                                     Loading…
                                 </Typography>

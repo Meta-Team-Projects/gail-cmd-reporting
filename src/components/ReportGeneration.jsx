@@ -514,7 +514,7 @@ const disabledYellowSx = {
             <Typography
             variant="h6"
             sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
-                CMD Reporting
+                CMD Report Generation
             </Typography>
         </Box>
         <Box sx={{
