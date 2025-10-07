@@ -84,8 +84,8 @@ const TemplateSelection = ({
 
 
     // const categories = ['All', 'Pinned', 'Recently Viewed']
-    const categories = ['All']
-    const [selectedCategory, setSelectedCategory] = useState('All');
+    // const categories = ['All']
+    // const [selectedCategory, setSelectedCategory] = useState('All');
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
     const [uploading, setUploading] = useState(false);
@@ -383,7 +383,7 @@ const TemplateSelection = ({
                         </Typography>
                     </Box>
 
-                    <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
+                    {/* <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
                         <Box sx={{ 
                             display: 'flex', flexWrap: 'wrap',
                             gap: '0.417vw', flexGrow: 1 }}>
@@ -408,7 +408,7 @@ const TemplateSelection = ({
                                 />
                             ))}
                         </Box>
-                    </Stack>
+                    </Stack> */}
                     <Box sx={{ mr: '1.667vw', mt: '0.417vw',}}>
                         <TextField
                             fullWidth

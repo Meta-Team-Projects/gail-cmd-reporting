@@ -84,8 +84,8 @@ const ReportGeneration = ({
     selectedTemplateDocxFile,
     selectedTemplateName
     }) => {
-    const categories = ['Reference PDFs']
-    const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
+    // const categories = ['Reference PDFs']
+    // const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
     const [documentList, setDocumentList] = useState({}) // uploaded
     const [referencePdfs, setReferencePdfs] = useState([]);
 
@@ -97,15 +97,20 @@ const ReportGeneration = ({
 
     const [refLoading, setRefLoading] = useState(true);
     useEffect(() => {
-        const t = setTimeout(() => setRefLoading(false), 15000); // 15 seconds
+        const t = setTimeout(() => setRefLoading(false), 45000); // 45 seconds
         return () => clearTimeout(t);
     }, []);
 
+    // const visibleRepoDocs = useMemo(() => {
+    //     return selectedCategory.toLowerCase() === 'reference pdfs'
+    //         ? referencePdfs.map(f => f.name)
+    //         : Object.values(documentList).flat();
+    // }, [selectedCategory, referencePdfs, documentList]);
+
     const visibleRepoDocs = useMemo(() => {
-        return selectedCategory.toLowerCase() === 'reference pdfs'
-            ? referencePdfs.map(f => f.name)
-            : Object.values(documentList).flat();
-    }, [selectedCategory, referencePdfs, documentList]);
+        // Only show reference PDFs; no categories
+        return referencePdfs.map(f => f.name);
+    }, [referencePdfs]);
 
     // Select-all helpers (for current category)
     const allVisibleSelected =
@@ -159,18 +164,18 @@ const ReportGeneration = ({
         }
     };
 
-    const key = selectedCategory.toLowerCase();
-    const uploadedNames = Object.values(documentList).flat();
-    const referenceNames = referencePdfs.map(f => f.name);
-    let docs =
-        key === 'reference pdfs'
-        ? referenceNames
-        : key === 'uploaded'
-        ? uploadedNames
-        : [...referenceNames, ...uploadedNames];
-    // Apply search filter if needed here
-    const paginatedDocs = docs.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
-    const totalPages = Math.ceil(docs.length / itemsPerPage);
+    // const key = selectedCategory.toLowerCase();
+    // const uploadedNames = Object.values(documentList).flat();
+    // const referenceNames = referencePdfs.map(f => f.name);
+    // let docs =
+    //     key === 'reference pdfs'
+    //     ? referenceNames
+    //     : key === 'uploaded'
+    //     ? uploadedNames
+    //     : [...referenceNames, ...uploadedNames];
+    // // Apply search filter if needed here
+    // const paginatedDocs = docs.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+    // const totalPages = Math.ceil(docs.length / itemsPerPage);
 
 
     // const handleToggle = (name) => {
@@ -208,7 +213,7 @@ const ReportGeneration = ({
 
     const progressTimerRef = useRef(null);
     const genStartRef = useRef(0);
-    const estimatedMsRef = useRef(90000); // 90s optimistic ETA; tweak as needed
+    const estimatedMsRef = useRef(180000); // 180s optimistic ETA; tweak as needed
 
     const resetGenerationState = () => {
         if (progressTimerRef.current) clearInterval(progressTimerRef.current);
@@ -283,7 +288,7 @@ const ReportGeneration = ({
                 .replace(/\.docx$/i, '')) + '_Report.docx'
         setIsGenerating(true);
         setProgress(1);
-        setEtaText('~1:30 remaining');
+        setEtaText('~3:00 remaining');
         startFakeProgress();
         try {
             const endpoint = `${import.meta.env.VITE_CHAT_API_URL}/generate-report`;
@@ -770,7 +775,7 @@ const disabledYellowSx = {
                         </IconButton>
                     </Box>
                 
-                    <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
+                    {/* <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
                         <Box sx={{ 
                             display: 'flex', flexWrap: 'wrap',
                             gap: '0.417vw', flexGrow: 1 }}>
@@ -795,7 +800,7 @@ const disabledYellowSx = {
                                 />
                             ))}
                         </Box>
-                    </Stack>
+                    </Stack> */}
                     <Box
                     sx={{
                         flexGrow: 1,
@@ -919,16 +924,19 @@ const disabledYellowSx = {
                             >
                                 <Typography
                                     variant="subtitle2"
-                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
+                                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw', pt:'18vh' }}
                                 >
-                                     Loading…
+                                    Loading…
                                 </Typography>
                                 <CircularProgress size="1.667vw" />
                             </Box>
                         ) : (
+                            // (() => {
+                            //     const key = selectedCategory.toLowerCase();
+                            //     let docs = visibleRepoDocs; // use memoized visible docs
+                            //     return (
                             (() => {
-                                const key = selectedCategory.toLowerCase();
-                                let docs = visibleRepoDocs; // use memoized visible docs
+                                const docs = visibleRepoDocs; // only reference PDFs
                                 return (
                                     <List sx={{ px: 0 }}>
                                         {docs.map(name => {
