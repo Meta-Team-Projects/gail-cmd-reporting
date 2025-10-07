@@ -37,6 +37,11 @@ import download_report from '../assets/download_report_icon.png'
 import save_template from '../assets/save_template_icon.png'
 import generate_report from '../assets/generate_report_icon.png'
 
+import template_icon from '../assets/template_icon.png'
+import documents_icon from '../assets/documents_icon.png'
+import generate_icon from '../assets/generate_icon.png'
+import small_arrow from '../assets/small-arrow.png'
+
 const BYTES_LIMIT = 20971520;
 const RETURN_BYTES_LIMIT = 83886080;
 
@@ -282,9 +287,30 @@ return (
                 <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
                     Generate or update CMD reports using report templates and reference documents.
                 </Typography>
-                <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-                    Select Template | Choose Reference Documents | Generate Report
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.625vw', flexWrap: 'wrap', color: '#081A33' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.313vw' }}>
+                        <Box component="img" src={template_icon} alt="" sx={{ width: '1.0417vw', height: '1.0417vw', objectFit: 'contain' }} />
+                        <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
+                        Select Template
+                        </Typography>
+                    </Box>
+                    <Box component="img" src={small_arrow} alt="" aria-hidden
+                        sx={{ width: '0.78125vw', height: '0.78125vw', objectFit: 'contain', opacity: 0.9 }} />
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.313vw' }}>
+                        <Box component="img" src={documents_icon} alt="" sx={{ width: '1.0417vw', height: '1.0417vw', objectFit: 'contain' }} />
+                        <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
+                        Choose Reference Documents
+                        </Typography>
+                    </Box>
+                    <Box component="img" src={small_arrow} alt="" aria-hidden
+                        sx={{ width: '0.78125vw', height: '0.78125vw', objectFit: 'contain', opacity: 0.9 }} />
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.313vw' }}>
+                        <Box component="img" src={generate_icon} alt="" sx={{ width: '1.0417vw', height: '1.0417vw', objectFit: 'contain' }} />
+                        <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
+                        Generate Report
+                        </Typography>
+                    </Box>
+                </Box>
             </Box>
             <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
@@ -301,8 +327,9 @@ return (
                     background: 'linear-gradient(to right, #FFE56D, #FFD65A)',
                     fontWeight: 550,
                     fontSize: '0.813vw',
+                    mt: '0vw',
                     px: '0.813vw',
-                    py: '0.3568vw',
+                    py: '0.2568vw',
                     boxShadow: '0px 4px 8px #15151540'
                 }}
                 >
@@ -642,7 +669,7 @@ return (
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Typography
                         variant="subtitle2"
-                        sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.625vw' }}
+                        sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', pt: '10vw' }}
                     >
                         Loading…
                     </Typography>
