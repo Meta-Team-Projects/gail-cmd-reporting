@@ -40,7 +40,7 @@ import {
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-const steps = ['Template Selection','Document Selection','Final Report']
+const steps = ['Report Template Selection','Reference Document Preview','Generate Report']
 import { StepArrow,ArrowShape, ArrowLabel } from './StepArrow' 
 import arrowMask from '../assets/arrow.png';
 import previousArrow from '../assets/previousarrow.png';
@@ -81,7 +81,7 @@ const DocumentSelection = ({
     const [refLoading, setRefLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
     useEffect(() => {
-        const t = setTimeout(() => setRefLoading(false), 20000); // 20 seconds
+        const t = setTimeout(() => setRefLoading(false), 30000); // 30 seconds
         return () => clearTimeout(t);
     }, []);
 
@@ -414,10 +414,10 @@ const DocumentSelection = ({
                     <Typography variant="subtitle2" sx={{
                         fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
-                        Select files from the repository and/or upload new files for updating the contents of the CMD report.
+                        Preview reference documents for updating the CMD report.
                     </Typography>
                 </Box>
-                <Box sx={{
+                {/* <Box sx={{
                     border: '2px dashed #E6E6E6',
                     borderRadius: 2,
                     mx: '0.8333vw',
@@ -431,7 +431,6 @@ const DocumentSelection = ({
                     gap: '0.208vw',
                     height: '20vh',
                 }}>
-                    {/* hidden file input + upload handler */}
                     <input
                     type="file"
                     multiple
@@ -470,7 +469,7 @@ const DocumentSelection = ({
                     >
                         Browse File
                     </Button>
-                </Box>
+                </Box> */}
                 <Box sx={{
                     //border: '1px solid black',
                     display: 'flex',
@@ -502,7 +501,7 @@ const DocumentSelection = ({
                         
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw' }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
-                                Documents Repository
+                                Reference Document Repository
                             </Typography>
                         </Box>
                         <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>

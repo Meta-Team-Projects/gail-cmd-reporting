@@ -55,7 +55,7 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-const steps = ['Template Selection','Document Selection','Final Report']
+const steps = ['Report Template Selection','Reference Document Preview','Generate Report']
 import { StepArrow,ArrowShape,ArrowLabel } from './StepArrow' 
 import { setTemplateNumber } from './cmdTemplateStore';
 
@@ -84,7 +84,7 @@ const TemplateSelection = ({
 
 
     // const categories = ['All', 'Pinned', 'Recently Viewed']
-    const categories = ['All', 'Pinned']
+    const categories = ['All']
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
@@ -116,7 +116,7 @@ const TemplateSelection = ({
 
     const [cardsLoading, setCardsLoading] = useState(true);
     useEffect(() => {
-        const timer = setTimeout(() => setCardsLoading(false), 15000); // 15s
+        const timer = setTimeout(() => setCardsLoading(false), 30000); // 30s
         return () => clearTimeout(timer);
     }, []);
 
@@ -359,7 +359,7 @@ const TemplateSelection = ({
                     <Typography variant="subtitle2" sx={{
                         fontWeight: 600,fontSize: '0.8854vw', color: '#081A33', lineHeight: '1.4',
                     }}>
-                        Select an existing template or upload a new one for your CMD report.
+                        Select an existing template as a base for your CMD report.
                     </Typography>
                 </Box>
                 <Box sx={{
@@ -379,7 +379,7 @@ const TemplateSelection = ({
                 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
-                            Reports Repository
+                            Report Templates Repository
                         </Typography>
                     </Box>
 

@@ -247,7 +247,7 @@ return (
     >
     <Box sx={{ p: '1.042vw' }}>
         <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
-        CMD Reporting
+        CMD Report Generation
         </Typography>
     </Box>
 
@@ -275,13 +275,15 @@ return (
             flexDirection: 'column', justifyContent: 'space-between'
         }}
         >
-            <Box sx={{display: 'flex', flexDirection: 'column', gap: '0.2vw', mt: '0.3vw' }}>
+            <Box sx={{display: 'flex', flexDirection: 'column', gap: '0.15vw', mt: '0.3vw' }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.2vw', color: '#081A33' }}>
                 Generate New Report
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-                    Generate custom reports or update existing templates with new data, context and formatting. 
-                    Simply select templates and choose key documents to quickly generate structured, insight-rich CMD reports.
+                    Generate or update CMD reports using report templates and reference documents.
+                </Typography>
+                <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
+                    Select Template | Choose Reference Documents | Generate Report
                 </Typography>
             </Box>
             <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -417,7 +419,7 @@ return (
         }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
-                Latest Reports
+                Latest Generated Reports
                 </Typography>
                 <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
             </Box>
@@ -551,7 +553,7 @@ return (
         }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography sx={{ color: '#081A33', fontWeight: 700, fontSize: '1.0417vw' }}>
-                Reference Templates
+                Report Templates
                 </Typography>
                 <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
             </Box>
@@ -612,14 +614,14 @@ return (
             </Box>
 
             {/* Header */}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: '0.208vw' }}>
+            {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: '0.208vw' }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.1417vw', color: '#081A33' }}>
                 All Templates
                 </Typography>
                 <Typography variant="subtitle2" sx={{fontSize: '0.9375vw', color: '#081A33'}}>
                 View All &gt;
                 </Typography>
-            </Box>
+            </Box> */}
 
             {/* Template List */}
             <Box

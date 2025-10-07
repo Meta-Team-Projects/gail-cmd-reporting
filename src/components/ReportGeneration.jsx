@@ -54,7 +54,7 @@ import {
     Description as DescriptionIcon
 } from '@mui/icons-material'
 
-const steps = ['Template Selection','Document Selection','Final Report']
+const steps = ['Report Template Selection','Reference Document Preview','Generate Report']
 import { StepArrow,ArrowShape, ArrowLabel } from './StepArrow' 
 import edit_report from '../assets/edit_report_icon.png'
 import save_template from '../assets/save_template_icon.png'
@@ -759,7 +759,7 @@ const disabledYellowSx = {
                 }}>
                     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: '0.208vw' }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.04vw', color: '#081A33' }}>
-                            Documents Repository
+                            Reference Documents Repository
                         </Typography>
                         <IconButton
                         size="small"
@@ -1263,7 +1263,7 @@ const disabledYellowSx = {
                         'Download Report',
                         // 'AI Analyser',
                         //'Regenerate Report',
-                        'Generate New Report',
+                        'Start New Report',
                     ][index]}
                     </Button>
                 ))}
