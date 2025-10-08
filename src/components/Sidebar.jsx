@@ -115,7 +115,7 @@ const Sidebar = ({
                         minWidth: 0,
                         mr: open ? 2 : 'auto',
                         justifyContent: 'center',
-                        color: 'inherit',
+                        color: '#fff',
                     }}
                 >
                     {item.type === 'TOGGLE_NOTEPAD' ? (
@@ -148,7 +148,7 @@ const Sidebar = ({
                                     ? '#fff'
                                     : activeMenu === item.type
                                         ? '#fff'
-                                        : '#678092',
+                                        : '#fff',
                                 //Lighter theme
                                 /*color: item.type === 'TOGGLE_NOTEPAD'
                                     ? '#303030'
