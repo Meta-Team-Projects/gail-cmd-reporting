@@ -169,10 +169,10 @@ const DocumentIngestion = ({ open, onToggle }) => {
             <Paper
                 sx={{
                     width: open ? (isWide ? '46.88vw' : '26.04vw') : 0,
-                    height: '87.5vh',
+                    height: '93vh',
                     position: 'fixed',
                     right: '1.4vw',
-                    top: '9.5vh',
+                    top: '3.5vh',
                     bgcolor: 'background.sidebar',
                     display: 'flex',
                     flexDirection: 'column',

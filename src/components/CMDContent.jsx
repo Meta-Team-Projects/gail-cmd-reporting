@@ -15,6 +15,7 @@ Stack,
 List,
 ListItem,
 CircularProgress,
+Divider,
 } from '@mui/material'
 
 import {
@@ -23,8 +24,13 @@ TrendingFlat as TrendingFlatIcon,
 EditOutlined as EditOutlinedIcon,
 Delete
 } from '@mui/icons-material';
+
+import DocumentIngestion from './DocumentIngestion'
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PushPinIcon from '@mui/icons-material/PushPin';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import placeholder from '../assets/placeholder.png';
 import placeholder_1 from '../assets/placeholder_1.png';
@@ -45,6 +51,8 @@ import small_arrow from '../assets/small-arrow.png'
 const BYTES_LIMIT = 20971520;
 const RETURN_BYTES_LIMIT = 83886080;
 
+const RHS_WIDTH = '26.5vw';
+
 function formatBytes(bytes = 0) {
 if (bytes === 0) return '0 B';
 const k = 1024, sizes = ['B','KB','MB','GB','TB'];
@@ -62,6 +70,7 @@ try {
 const CMDContent = ({ onNavigateToTemplate }) => {
 const categories = ['All', 'Pinned'];
 const [selectedCategory, setSelectedCategory] = useState('All');
+const [rightOpen, setRightOpen] = useState(false);
 
 // Existing doc state (kept as-is but not used for repo list now)
 const [documentList, setDocumentList] = useState({})
@@ -235,6 +244,7 @@ return (
     sx={{
         marginTop: '2.5vh',
         height: '95vh',
+        pr: rightOpen ? RHS_WIDTH : 0,
         marginLeft: '1vw',
         boxShadow: '2px 0px 8px #50505040',
         bgcolor:'#FFFFFF',
@@ -254,6 +264,23 @@ return (
         <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
         CMD Report Generation
         </Typography>
+        {/* Right sidebar toggle button (top-right corner of header row) */}
+        <IconButton
+            onClick={() => setRightOpen(o => !o)}
+            sx={{
+                position: 'absolute',
+                top: '0.6vw',
+                right: rightOpen ? `calc(${RHS_WIDTH} + 0.8vw)` : '0.8vw',
+                bgcolor: '#FFD95C',
+                color: '#081A33',
+                borderRadius: '10px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                '&:hover': { bgcolor: '#FFCB42' }
+            }}
+            aria-label="Toggle details panel"
+            >
+            {rightOpen ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+        </IconButton>
     </Box>
     
     <Box
@@ -894,8 +921,16 @@ return (
         </Box>
         </Box>
     )}
-    </Box>
+    
+
+    {/* Right Sidebar replaced by DocumentIngestion */}
+    <DocumentIngestion
+        open={rightOpen}
+        onToggle={() => setRightOpen(false)}
+    />
+</Box>
 )
+
 }
 
 export default CMDContent
