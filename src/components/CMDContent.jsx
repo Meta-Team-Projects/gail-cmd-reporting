@@ -255,8 +255,7 @@ return (
         CMD Report Generation
         </Typography>
     </Box>
-
-    {/* Top 3 Boxes */}
+    
     <Box
         sx={{
         display: 'flex',
@@ -287,11 +286,14 @@ return (
                 <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
                     Generate or update CMD reports using report templates and reference documents.
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.625vw', flexWrap: 'wrap', color: '#081A33' }}>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: '0.4vw' }}>
+                {/* Left: steps row (left-aligned) */}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.625vw', flexWrap: 'wrap', color: '#081A33', minWidth: 0 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.313vw' }}>
                         <Box component="img" src={template_icon} alt="" sx={{ width: '1.0417vw', height: '1.0417vw', objectFit: 'contain' }} />
                         <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-                        Select Template
+                            Select Template
                         </Typography>
                     </Box>
                     <Box component="img" src={small_arrow} alt="" aria-hidden
@@ -299,7 +301,7 @@ return (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.313vw' }}>
                         <Box component="img" src={documents_icon} alt="" sx={{ width: '1.0417vw', height: '1.0417vw', objectFit: 'contain' }} />
                         <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-                        Choose Reference Documents
+                            Choose Reference Documents
                         </Typography>
                     </Box>
                     <Box component="img" src={small_arrow} alt="" aria-hidden
@@ -307,15 +309,9 @@ return (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.313vw' }}>
                         <Box component="img" src={generate_icon} alt="" sx={{ width: '1.0417vw', height: '1.0417vw', objectFit: 'contain' }} />
                         <Typography variant="subtitle2" sx={{ fontSize: '0.9375vw', color: '#081A33' }}>
-                        Generate Report
+                            Generate Report
                         </Typography>
                     </Box>
-                </Box>
-            </Box>
-            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box sx={{ display: 'flex', gap: '0.417vw', alignItems: 'center' }}>
-                    {/* <Typography sx={{fontSize: '0.813vw'}}>Start Now</Typography>
-                    <TrendingFlatIcon /> */}
                 </Box>
                 <Button
                 onClick={onNavigateToTemplate}
