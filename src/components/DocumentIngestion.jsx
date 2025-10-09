@@ -202,7 +202,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <FilePresentIcon sx={{color: '#081A33', fontSize: '1.25vw'}}/>
                             <Typography variant="h6" sx={{ fontWeight: 600, color: '#081A33', fontSize: '1.25vw' }}>
-                                Data Manager
+                                Document Manager
                             </Typography>
                         </Box>
                         {open && (
@@ -245,7 +245,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                 <Box
                     sx={{
                         position: 'relative',
-                        p: 2,
+                        px: 1,
                         mb: 1,
                         ml: 3,
                         mr: 3,
@@ -255,43 +255,37 @@ const DocumentIngestion = ({ open, onToggle }) => {
                         boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
                         transform: 'translateZ(0)',
                         display: 'flex',
-                        justifyContent: 'center',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                     }}
                 >
                     <TextField
                         select
-                        label="Choose repository mode"
                         value={selectedRepo}
                         onChange={(e) => setSelectedRepo(e.target.value)}
                         size="medium"
+                        variant="standard"
+                        InputProps={{ disableUnderline: true }}
                         sx={{
-                            mt: 0.5,
-                            mb: 0.5,
-                            width: '90%',
+                            width: '100%',
                             '& label': {
-                               color: '#081A33',
-                                fontWeight: 500,
-                                fontSize: '0.7292vw'
-                            },
-                            '& label.Mui-focused': {
                                 color: '#081A33',
+                                fontWeight: 600,
+                                fontSize: '0.7292vw',
+                                transform: 'translate(0, -8px) scale(1)',
                             },
-                            '& .MuiOutlinedInput-root': {
-                                bgcolor: '#fff',
+                            '& .MuiInputBase-root': {
+                                background: 'transparent',
                                 borderRadius: 2,
-                                '& fieldset': {
-                                    borderColor: '#FFD95C',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: '#FEC636',
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: '#EDCC09',
-                                },
-                                '& .MuiSelect-icon': {
-                                    color: '#081A33',
-                                },
+                                px: 1,
+                                py: 0.5,
                             },
+                            // remove any borders/underlines completely
+                            '& .MuiInput-underline:before, & .MuiInput-underline:after': {
+                                borderBottom: 'none',
+                            },
+                            '& .MuiSelect-icon': { color: '#081A33' },
+                            color: '#081A33',
                         }}
                         SelectProps={{
                             MenuProps: {
@@ -299,27 +293,24 @@ const DocumentIngestion = ({ open, onToggle }) => {
                                     sx: {
                                         bgcolor: '#FFFBEF',
                                         color: '#081A33',
-                                        '& .MuiMenuItem-root:hover': {
-                                            bgcolor: '#FFD95C',
-                                        },
-                                        '& .Mui-selected': {
-                                            bgcolor: '#FFD95C !important',
-                                            fontWeight: 600,
-                                        },
-                                    }
-                                }
-                            }
+                                        '& .MuiMenuItem-root:hover': { bgcolor: '#FFD95C' },
+                                        '& .Mui-selected': { bgcolor: '#FFD95C !important', fontWeight: 600 },
+                                    },
+                                },
+                            },
                         }}
                     >
                         {repoOptions.map((opt) => (
                             <MenuItem key={opt} value={opt}>
-                                <Typography variant="body2" sx={{ fontSize: '0.7292vw' }}>
+                                <Typography variant="body2" sx={{ fontSize: '0.7292vw', color: '#081A33' }}>
                                     {opt}
                                 </Typography>
                             </MenuItem>
                         ))}
                     </TextField>
                 </Box>
+
+
                 <Box
                     ref={uploadBoxRef}
                     sx={{
