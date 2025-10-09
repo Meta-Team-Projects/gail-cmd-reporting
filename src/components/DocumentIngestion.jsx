@@ -99,14 +99,32 @@ const DocumentIngestion = ({ open, onToggle }) => {
 
     const fetchDocuments = async () => {
         try {
-            const { data } = await axios.get(
-                `${import.meta.env.VITE_CHAT_API_URL}/list-documents`
-            )
-            setDocumentList(data.document_list || {})
+            const isDocsRepo = selectedRepo === 'Document Repository';
+            const url = isDocsRepo
+                ? `${import.meta.env.VITE_CHAT_API_URL}/get_reference_pdfs`
+                : `${import.meta.env.VITE_CHAT_API_URL}/get_templates`;
+
+            const { data } = await axios.get(url, {
+                params: {
+                    offset: 0,
+                    limit: 20,
+                    max_file_bytes: 20971520,
+                    max_return_bytes: 83886080,
+                },
+                headers: { accept: 'application/json' },
+            });
+
+            // API returns an array of { name, ...bytes }
+            const names = Array.isArray(data)
+                ? data.map(item => item?.name).filter(Boolean)
+                : [];
+
+            // Keep shape compatible with existing consumer (flattens values)
+            setDocumentList({ __all: names });
         } catch (err) {
-            console.error('Error loading documents', err)
+            console.error('Error loading documents', err);
         }
-    }
+    };
 
     const collectStats = async () => {
     try {
@@ -123,6 +141,10 @@ const DocumentIngestion = ({ open, onToggle }) => {
         fetchDocuments();
         collectStats();
     }, [])
+
+    useEffect(() => {
+        fetchDocuments();
+    }, [selectedRepo]);
 
     const handleUploadFiles = async (e) => {
         const files = Array.from(e.target.files)
@@ -743,15 +765,13 @@ const DocumentIngestion = ({ open, onToggle }) => {
                     
                     {/* determine which docs to show */}
                     {(() => {
-                        // flatten all docs if 'All', else pick selected category
-                        const key = selectedCategory === 'All'
-                        ? null
-                        : selectedCategory.toLowerCase()
-                        let docs = []
+                        const key = selectedCategory === 'All' ? null : selectedCategory.toLowerCase();
+                        let docs = [];
                         if (key) {
-                        docs = documentList[key] || []
+                            docs = documentList[key] || [];
                         } else {
-                        docs = Object.values(documentList).flat()
+                            // { __all: [names...] }
+                            docs = Object.values(documentList).flat();
                         }
                         // filter by search
                         return (
