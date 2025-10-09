@@ -29,8 +29,6 @@ import DocumentIngestion from './DocumentIngestion'
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PushPinIcon from '@mui/icons-material/PushPin';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import placeholder from '../assets/placeholder.png';
 import placeholder_1 from '../assets/placeholder_1.png';
@@ -67,10 +65,9 @@ try {
 } catch { return '-'; }
 }
 
-const CMDContent = ({ onNavigateToTemplate }) => {
+const CMDContent = ({ onNavigateToTemplate, docManagerOpen, onToggleDocManager }) => {
 const categories = ['All', 'Pinned'];
 const [selectedCategory, setSelectedCategory] = useState('All');
-const [rightOpen, setRightOpen] = useState(false);
 
 // Existing doc state (kept as-is but not used for repo list now)
 const [documentList, setDocumentList] = useState({})
@@ -244,7 +241,7 @@ return (
     sx={{
         marginTop: '2.5vh',
         height: '95vh',
-        pr: rightOpen ? RHS_WIDTH : 0,
+        pr: docManagerOpen ? RHS_WIDTH : 0,
         marginLeft: '1vw',
         boxShadow: '2px 0px 8px #50505040',
         bgcolor:'#FFFFFF',
@@ -264,23 +261,6 @@ return (
         <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '1.25vw', color: '#081A33'}}>
         CMD Report Generation
         </Typography>
-        {/* Right sidebar toggle button (top-right corner of header row) */}
-        <IconButton
-            onClick={() => setRightOpen(o => !o)}
-            sx={{
-                position: 'absolute',
-                top: '0.6vw',
-                right: rightOpen ? `calc(${RHS_WIDTH} + 0.8vw)` : '0.8vw',
-                bgcolor: '#FFD95C',
-                color: '#081A33',
-                borderRadius: '10px',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                '&:hover': { bgcolor: '#FFCB42' }
-            }}
-            aria-label="Toggle details panel"
-            >
-            {rightOpen ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-        </IconButton>
     </Box>
     
     <Box
@@ -925,8 +905,8 @@ return (
 
     {/* Right Sidebar replaced by DocumentIngestion */}
     <DocumentIngestion
-        open={rightOpen}
-        onToggle={() => setRightOpen(false)}
+        open={docManagerOpen}
+        onToggle={onToggleDocManager}
     />
 </Box>
 )

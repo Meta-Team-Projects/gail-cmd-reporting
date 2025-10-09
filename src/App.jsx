@@ -88,6 +88,8 @@ function App() {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(true)
   const [showNotepad, setShowNotepad] = useState(false)
   const [selectedNote, setSelectedNote] = useState(null)
+  const [docManagerOpen, setDocManagerOpen] = useState(false);
+  const handleToggleDocManager = () => setDocManagerOpen(o => !o);
 
   const [sessionDrafts, setSessionDrafts] = useState({
       [ initial.id ]: ''
@@ -343,6 +345,7 @@ function App() {
           onDelete={handleDeleteSession}
           onReset={handleResetSession}
           layoutMode={layoutMode}
+          onToggleDocManager={handleToggleDocManager}
         />
         <Box
           component="main"
@@ -438,7 +441,10 @@ function App() {
 
           {/* {renderRightMenu()} */}
           {currentPage === 'cmd' && (
-            <CMDContent onNavigateToTemplate={() => setCurrentPage('template-select')}/>
+            <CMDContent onNavigateToTemplate={() => setCurrentPage('template-select')}
+            docManagerOpen={docManagerOpen}
+            onToggleDocManager={handleToggleDocManager}
+            />
           )}
           {currentPage === 'template-select' && (
             <TemplateSelection

@@ -65,6 +65,7 @@ const Sidebar = ({
     onRename,
     onDelete,
     onReset,
+    onToggleDocManager,
 }) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -73,6 +74,10 @@ const Sidebar = ({
         if (menuType === 'TOGGLE_NOTEPAD') {
             if (typeof onNotepadToggle === 'function') onNotepadToggle()
             return
+        }
+        if (menuType === MenuType.DOCUMENT_INGESTION) {
+            if (typeof onToggleDocManager === 'function') onToggleDocManager();
+            return;
         }
         if (menuType === 'NEW_SESSION') {
             if (typeof onMenuClick === 'function') onMenuClick('NEW_SESSION')
