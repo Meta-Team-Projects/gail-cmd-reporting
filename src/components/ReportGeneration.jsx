@@ -82,7 +82,8 @@ const ReportGeneration = ({
     onGenerateNewResponse,
     editDocuments,
     selectedTemplateDocxFile,
-    selectedTemplateName
+    selectedTemplateName,
+    dimMainContent,
     }) => {
     // const categories = ['Reference PDFs']
     // const [selectedCategory, setSelectedCategory] = useState('Reference PDFs');
@@ -507,7 +508,7 @@ const disabledYellowSx = {
                 md: '98%'
             },
             transition: 'max-width 0.3s ease',
-            //filter: dimMainContent ? 'grayscale(0.5) brightness(0.5)' : 'none',
+            filter: dimMainContent ? 'grayscale(0.5) brightness(0.5)' : 'none',
             //bgcolor: 'linear-gradient(180deg, #1F2A44 0%, #000B25 100%)',
             position: 'relative',
         }}

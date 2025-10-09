@@ -470,7 +470,9 @@ function App() {
             setSelectedDocs={setSelectedDocs}
             onNavigateToTemplate={() => setCurrentPage('template-select')}
             // onNavigateToReport={() => setCurrentPage('generate-preview')}/>
-            onNavigateToReport={() => setCurrentPage('report-gen')}/>
+            onNavigateToReport={() => setCurrentPage('report-gen')}
+            dimMainContent={currentPage === 'doc-select' && rightSidebarOpen && activeRightMenu !== MenuType.NONE}
+            />
           )}
           {currentPage === 'generate-preview' && (
             <GeneratePreview 
@@ -494,6 +496,7 @@ function App() {
             }}
             onGenerateNewResponse={handleGenerateNewResponse}
             editDocuments={handleEditDocuments}
+            dimMainContent={currentPage === 'report-gen' && rightSidebarOpen && activeRightMenu !== MenuType.NONE}
             />
           )}
         </Box>
