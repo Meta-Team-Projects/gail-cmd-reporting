@@ -363,7 +363,8 @@ const DocumentIngestion = ({ open, onToggle }) => {
                     ref={uploadBoxRef}
                     sx={{
                         position: 'relative', 
-                        p: 2,
+                        px: 2,
+                        py:1,
                         mb: 1,
                         ml: 3,
                         mr: 3,
@@ -740,7 +741,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                         </Typography>
                         <CircularProgress size="1.667vw" />
                     </Backdrop>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1, }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt:1, mb: 1, }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '0.7292vw' }}>
                             {selectedRepo}
                         </Typography>
