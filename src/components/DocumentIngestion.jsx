@@ -69,6 +69,9 @@ const DocumentIngestion = ({ open, onToggle }) => {
     const [stats, setStats] = useState(null);
     const [uploadDuration, setUploadDuration] = useState(5);
 
+    const repoOptions = ['Document Repository', 'Report Templates Repository']
+    const [selectedRepo, setSelectedRepo] = useState('Document Repository') // default selected
+
 
     const sentenceCase = str =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -132,6 +135,8 @@ const DocumentIngestion = ({ open, onToggle }) => {
         const formData = new FormData()
         files.forEach(f => formData.append('files', f))
         formData.append('source', uploadSource)
+
+        formData.append('repository_type', selectedRepo === 'Document Repository' ? 'documents' : 'report_templates')
 
         const startMs = Date.now();
         try {
@@ -236,7 +241,85 @@ const DocumentIngestion = ({ open, onToggle }) => {
                     </Box>
                     <Divider sx={{ my: 1, mx: -3, borderColor: '#e0e0e0' }} /> 
 
-                </Box>    
+                </Box> 
+                <Box
+                    sx={{
+                        position: 'relative',
+                        p: 2,
+                        mb: 1,
+                        ml: 3,
+                        mr: 3,
+                        bgcolor: '#e9f5fc',
+                        border: '1px solid #008cff',
+                        borderRadius: 2,
+                        boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                        transform: 'translateZ(0)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <TextField
+                        select
+                        label="Choose repository mode"
+                        value={selectedRepo}
+                        onChange={(e) => setSelectedRepo(e.target.value)}
+                        size="medium"
+                        sx={{
+                            mt: 0.5,
+                            mb: 0.5,
+                            width: '90%',
+                            '& label': {
+                               color: '#081A33',
+                                fontWeight: 500,
+                                fontSize: '0.7292vw'
+                            },
+                            '& label.Mui-focused': {
+                                color: '#081A33',
+                            },
+                            '& .MuiOutlinedInput-root': {
+                                bgcolor: '#fff',
+                                borderRadius: 2,
+                                '& fieldset': {
+                                    borderColor: '#FFD95C',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: '#FEC636',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: '#EDCC09',
+                                },
+                                '& .MuiSelect-icon': {
+                                    color: '#081A33',
+                                },
+                            },
+                        }}
+                        SelectProps={{
+                            MenuProps: {
+                                PaperProps: {
+                                    sx: {
+                                        bgcolor: '#FFFBEF',
+                                        color: '#081A33',
+                                        '& .MuiMenuItem-root:hover': {
+                                            bgcolor: '#FFD95C',
+                                        },
+                                        '& .Mui-selected': {
+                                            bgcolor: '#FFD95C !important',
+                                            fontWeight: 600,
+                                        },
+                                    }
+                                }
+                            }
+                        }}
+                    >
+                        {repoOptions.map((opt) => (
+                            <MenuItem key={opt} value={opt}>
+                                <Typography variant="body2" sx={{ fontSize: '0.7292vw' }}>
+                                    {opt}
+                                </Typography>
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Box>
                 <Box
                     ref={uploadBoxRef}
                     sx={{
@@ -386,7 +469,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                         >
                             
                             {/* --- CATEGORY DROPDOWN FOR UPLOAD --- */}
-                            <TextField
+                            {/* <TextField
                             select
                             label="Select the Category"
                             value={uploadSource}
@@ -452,7 +535,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                                     </Typography>
                                     </MenuItem>
                                 ))}
-                            </TextField>
+                            </TextField> */}
 
                             {/* hidden file input + upload handler */}
                             <input
@@ -545,7 +628,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                 </Box>
                 )}
 
-                <Box
+                {/* <Box
                     sx={{
                     p: 1,
                     ml: 3,
@@ -578,7 +661,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                         />
                         ))}
                     </Stack>
-                </Box>
+                </Box> */}
                 
                 <Box
                 ref={panelRef}
@@ -598,7 +681,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1, }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '0.7292vw' }}>
-                            Document Repository
+                            {selectedRepo}
                         </Typography>
                         <FolderCopyIcon sx={{ color: '#081A33', fontWeight: 600, fontSize: '0.833vw' }} />
                     </Box>
