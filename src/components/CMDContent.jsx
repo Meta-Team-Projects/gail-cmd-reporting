@@ -25,7 +25,6 @@ EditOutlined as EditOutlinedIcon,
 Delete
 } from '@mui/icons-material';
 
-import DocumentIngestion from './DocumentIngestion'
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PushPinIcon from '@mui/icons-material/PushPin';
@@ -49,7 +48,6 @@ import small_arrow from '../assets/small-arrow.png'
 const BYTES_LIMIT = 20971520;
 const RETURN_BYTES_LIMIT = 83886080;
 
-const RHS_WIDTH = '26.5vw';
 
 function formatBytes(bytes = 0) {
 if (bytes === 0) return '0 B';
@@ -65,7 +63,7 @@ try {
 } catch { return '-'; }
 }
 
-const CMDContent = ({ onNavigateToTemplate, docManagerOpen, onToggleDocManager }) => {
+const CMDContent = ({ onNavigateToTemplate, docManagerOpen, onToggleDocManager, dimMainContent = false  }) => {
 const categories = ['All', 'Pinned'];
 const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -241,7 +239,6 @@ return (
     sx={{
         marginTop: '2.5vh',
         height: '95vh',
-        pr: docManagerOpen ? RHS_WIDTH : 0,
         marginLeft: '1vw',
         boxShadow: '2px 0px 8px #50505040',
         bgcolor:'#FFFFFF',
@@ -902,12 +899,6 @@ return (
         </Box>
     )}
     
-
-    {/* Right Sidebar replaced by DocumentIngestion */}
-    <DocumentIngestion
-        open={docManagerOpen}
-        onToggle={onToggleDocManager}
-    />
 </Box>
 )
 

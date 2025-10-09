@@ -65,7 +65,9 @@ const TemplateSelection = ({
     onNavigateToLandingPage,
     selectedPreview,
     setSelectedPreview,
-    isEditMode
+    isEditMode,
+    docManagerOpen,
+    onToggleDocManager
     }) => {
     const [templates, setTemplates] = useState([]); // [{ name, displayName, url }]
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);

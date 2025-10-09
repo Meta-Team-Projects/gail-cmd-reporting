@@ -473,7 +473,7 @@ const DocumentSelection = ({
                     //border: '1px solid black',
                     display: 'flex',
                     flexDirection: 'column',
-                    height: '600px', 
+                    minHeight: '71vh', 
                     minWidth: '38vw',
                     overflow: 'hidden',
                     //flex: 1,
