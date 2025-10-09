@@ -23,6 +23,7 @@ import {
     Backdrop, Snackbar, Fade, SnackbarContent, LinearProgress,
     GlobalStyles
 } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
 import {
     CloudUpload,
     Delete,
@@ -69,6 +70,9 @@ const DocumentIngestion = ({ open, onToggle }) => {
     const [stats, setStats] = useState(null);
     const [uploadDuration, setUploadDuration] = useState(5);
 
+    const [isRepoLoading, setIsRepoLoading] = useState(false);
+    const repoLoadingTimeoutRef = useRef(null);
+
     const repoOptions = ['Document Repository', 'Report Templates Repository']
     const [selectedRepo, setSelectedRepo] = useState('Document Repository') // default selected
 
@@ -99,6 +103,16 @@ const DocumentIngestion = ({ open, onToggle }) => {
 
     const fetchDocuments = async () => {
         try {
+            setIsRepoLoading(true);
+            if (repoLoadingTimeoutRef.current) {
+                clearTimeout(repoLoadingTimeoutRef.current);
+                repoLoadingTimeoutRef.current = null;
+            }
+            repoLoadingTimeoutRef.current = setTimeout(() => {
+                setIsRepoLoading(false);
+                repoLoadingTimeoutRef.current = null;
+            }, 30000);
+
             const isDocsRepo = selectedRepo === 'Document Repository';
             const url = isDocsRepo
                 ? `${import.meta.env.VITE_CHAT_API_URL}/get_reference_pdfs`
@@ -123,6 +137,12 @@ const DocumentIngestion = ({ open, onToggle }) => {
             setDocumentList({ __all: names });
         } catch (err) {
             console.error('Error loading documents', err);
+            } finally {
+                if (repoLoadingTimeoutRef.current) {
+                clearTimeout(repoLoadingTimeoutRef.current);
+                repoLoadingTimeoutRef.current = null;
+            }
+            setIsRepoLoading(false);
         }
     };
 
@@ -141,6 +161,12 @@ const DocumentIngestion = ({ open, onToggle }) => {
         fetchDocuments();
         collectStats();
     }, [])
+
+    useEffect(() => {
+        return () => {
+            if (repoLoadingTimeoutRef.current) clearTimeout(repoLoadingTimeoutRef.current);
+        };
+    }, []);
 
     useEffect(() => {
         fetchDocuments();
@@ -692,6 +718,28 @@ const DocumentIngestion = ({ open, onToggle }) => {
                     transform: 'translateZ(0)',
                     bgcolor: '#e9f5fc',
                 }}>
+                    {/* Repo fetch loading overlay (matches CMDContent look & feel) */}
+                    <Backdrop
+                        open={isRepoLoading}
+                        container={() => panelRef.current}
+                        sx={{
+                            position: 'absolute',
+                            inset: 0,
+                            bgcolor: 'rgba(245,250,255,0.85)',
+                            zIndex: (theme) => theme.zIndex.snackbar - 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1.5
+                        }}
+                    >
+                        <Typography
+                            variant="subtitle2"
+                            sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33' }}
+                        >
+                            Loading…
+                        </Typography>
+                        <CircularProgress size="1.667vw" />
+                    </Backdrop>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1, }}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '0.7292vw' }}>
                             {selectedRepo}
