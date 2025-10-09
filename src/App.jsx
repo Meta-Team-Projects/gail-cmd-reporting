@@ -88,8 +88,6 @@ function App() {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(true)
   const [showNotepad, setShowNotepad] = useState(false)
   const [selectedNote, setSelectedNote] = useState(null)
-  const [docManagerOpen, setDocManagerOpen] = useState(false);
-  const handleToggleDocManager = () => setDocManagerOpen(o => !o);
 
   const [sessionDrafts, setSessionDrafts] = useState({
       [ initial.id ]: ''
@@ -102,7 +100,7 @@ function App() {
     
   const [layoutMode, setLayoutMode] = useState('expand')
   const [rightSidebarOpen, setRightSidebarOpen] = useState(true)
-  const [activeRightMenu, setActiveRightMenu] = useState(MenuType.FORMULATE)
+  const [activeRightMenu, setActiveRightMenu] = useState(MenuType.NONE)
 
   const [savedNotes, setSavedNotes] = useState([])
 
@@ -345,7 +343,6 @@ function App() {
           onDelete={handleDeleteSession}
           onReset={handleResetSession}
           layoutMode={layoutMode}
-          onToggleDocManager={handleToggleDocManager}
         />
         <Box
           component="main"
@@ -439,11 +436,11 @@ function App() {
             sources={draftedSources} 
           /> */}
 
-          {/* {renderRightMenu()} */}
+          {renderRightMenu()}
           {currentPage === 'cmd' && (
-            <CMDContent onNavigateToTemplate={() => setCurrentPage('template-select')}
-            docManagerOpen={docManagerOpen}
-            onToggleDocManager={handleToggleDocManager}
+            <CMDContent
+              onNavigateToTemplate={() => setCurrentPage('template-select')}
+              dimMainContent={currentPage === 'cmd' && rightSidebarOpen && activeRightMenu !== MenuType.NONE}
             />
           )}
           {currentPage === 'template-select' && (
@@ -462,8 +459,7 @@ function App() {
               }
             }}
             isEditMode={isEditingTemplate}
-            docManagerOpen={docManagerOpen}
-            onToggleDocManager={handleToggleDocManager}
+            dimMainContent={currentPage === 'template-select' && rightSidebarOpen && activeRightMenu !== MenuType.NONE}
             />
           )}
           {currentPage === 'doc-select' && (
@@ -500,10 +496,6 @@ function App() {
             editDocuments={handleEditDocuments}
             />
           )}
-          <DocumentIngestion
-            open={docManagerOpen}
-            onToggle={handleToggleDocManager}
-          />
         </Box>
       </Box>
     </ThemeProvider>

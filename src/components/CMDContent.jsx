@@ -63,7 +63,7 @@ try {
 } catch { return '-'; }
 }
 
-const CMDContent = ({ onNavigateToTemplate, docManagerOpen, onToggleDocManager, dimMainContent = false  }) => {
+const CMDContent = ({ onNavigateToTemplate, dimMainContent = false  }) => {
 const categories = ['All', 'Pinned'];
 const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -252,6 +252,7 @@ return (
         maxWidth: { xs: '90%', sm: '94.5%', md: '98%' },
         transition: 'max-width 0.3s ease',
         position: 'relative',
+        filter: dimMainContent ? 'grayscale(0.5) brightness(0.5)' : 'none',
     }}
     >
     <Box sx={{ p: '1.042vw' }}>
