@@ -29,16 +29,13 @@ Delete
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PushPinIcon from '@mui/icons-material/PushPin';
 
-import placeholder from '../assets/placeholder.png';
+import download_report from '../assets/download_report_icon.png';
+
 import placeholder_1 from '../assets/placeholder_1.png';
 import placeholder_2 from '../assets/placeholder_2.png';
 import placeholder_3 from '../assets/placeholder_3.png';
-import placeholder_4 from '../assets/placeholder_4.png';
+// import placeholder_4 from '../assets/placeholder_4.png';
 import placeholder_5 from '../assets/placeholder_5.png';
-
-import download_report from '../assets/download_report_icon.png'
-import save_template from '../assets/save_template_icon.png'
-import generate_report from '../assets/generate_report_icon.png'
 
 import template_icon from '../assets/template_icon.png'
 import documents_icon from '../assets/documents_icon.png'
@@ -79,18 +76,25 @@ const [loadingTemplates, setLoadingTemplates] = useState(false);
 const [templatesError, setTemplatesError] = useState(null);
 
 // Old “Latest Reports” preview
+const [latestReports, setLatestReports] = useState([]);
+const [loadingReports, setLoadingReports] = useState(false);
+const [reportsError, setReportsError] = useState(null);
 const [selectedReport, setSelectedReport] = useState(null);
+const [selectedReportUrl, setSelectedReportUrl] = useState(null);
 
 const [selectedTemplate, setSelectedTemplate] = useState(null);
 const [selectedTemplateUrl, setSelectedTemplateUrl] = useState(null); // blob URL for iframe
 const [pdfScale, setPdfScale] = useState(1.0); // controls #zoom=%
 
-const allImages = [
-    ...Array(2).fill(placeholder_1),
-    ...Array(2).fill(placeholder_5),
-    ...Array(2).fill(placeholder_5),
-    ...Array(2).fill(placeholder_5),
-]
+
+const previewImages = [
+    placeholder_1,
+    // placeholder_2,
+    // placeholder_3,
+    // placeholder_4,
+    // placeholder_5,
+];
+
 
 const togglePin = (docName) => {
     setPinnedDocs(prev => {
@@ -127,6 +131,30 @@ const fetchTemplates = async () => {
     }
 };
 
+const fetchLatestReports = async () => {
+    setLoadingReports(true);
+    setReportsError(null);
+    try {
+    const { data } = await axios.get(
+        `${import.meta.env.VITE_CHAT_API_URL}/get_latest_reports`,
+        {
+        params: {
+            limit: 8,
+            delete_after: false,
+        },
+        headers: { accept: 'application/json' },
+        }
+    );
+    const reportsArr = data?.reports || [];
+    setLatestReports(Array.isArray(reportsArr) ? reportsArr : []);
+    } catch (err) {
+    console.error('Error fetching latest reports', err);
+    setReportsError('Failed to load latest reports');
+    } finally {
+    setLoadingReports(false);
+    }
+};
+
 // (Kept; currently unused for repo list)
 const fetchDocuments = async () => {
     // your old list-documents call (left commented as in your snippet)
@@ -139,6 +167,7 @@ useEffect(() => {
     fetchDocuments();
     collectStats();
     fetchTemplates();
+    fetchLatestReports();
 }, []);
 
 const panelRef = useRef(null);
@@ -165,7 +194,8 @@ const visibleTemplates = (() => {
 })();
 
 const createdUrlsRef = useRef(new Set());  
-const prevUrlRef = useRef(null);           
+const prevUrlRef = useRef(null);     
+const reportPrevUrlRef = useRef(null); 
 
 const addZoomParam = (url, zoom = 36) => {
     if (!url) return undefined;
@@ -203,6 +233,46 @@ const handleOpenTemplate = (tpl) => {
     setPdfScale(1.0);
 };
 
+// Open a latest report in modal (NEW)
+const handleOpenReport = (report) => {
+    if (reportPrevUrlRef.current) {
+        try { URL.revokeObjectURL(reportPrevUrlRef.current); } catch {}
+        createdUrlsRef.current.delete(reportPrevUrlRef.current);
+        reportPrevUrlRef.current = null;
+    }
+    const rawB64 =
+        report.pdf_b64 ||
+        (typeof report.pdf_data_uri === 'string'
+            ? report.pdf_data_uri.replace(/^data:application\/pdf;base64,/i, '')
+            : null);
+
+    const url = base64ToPdfUrl(rawB64);
+    reportPrevUrlRef.current = url;
+    setSelectedReport(report);
+    setSelectedReportUrl(url);
+};
+
+// Download a latest report (NEW)
+const handleDownloadReport = (report) => {
+    try {
+    const rawB64 =
+        report.pdf_b64 ||
+        (typeof report.pdf_data_uri === 'string'
+            ? report.pdf_data_uri.replace(/^data:application\/pdf;base64,/i, '')
+            : null);
+    if (!rawB64) return;
+
+    const link = document.createElement('a');
+    link.href = `data:application/pdf;base64,${rawB64}`;
+    link.download = report.pdf_filename || 'latest_report.pdf';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    } catch (e) {
+    console.error('Report download failed', e);
+    }
+};
+
 useEffect(() => {
     return () => {
         try {
@@ -220,6 +290,15 @@ useEffect(() => {
         setSelectedTemplateUrl(null);
     }
 }, [selectedTemplate]);
+
+useEffect(() => {
+    if (!selectedReport && reportPrevUrlRef.current) {
+        try { URL.revokeObjectURL(reportPrevUrlRef.current); } catch {}
+        createdUrlsRef.current.delete(reportPrevUrlRef.current);
+        reportPrevUrlRef.current = null;
+        setSelectedReportUrl(null);
+    }
+}, [selectedReport]);
 
 const handleDownloadTemplate = (tpl) => {
     try {
@@ -452,65 +531,139 @@ return (
                 <AccessTimeIcon sx={{color: '#081A33', fontSize: '1.5vw'}}/>
             </Box>
 
-            <Box sx={{
+            <Box
+                sx={{
                 mt: '0.5vw',
-                display:'flex',
+                display: 'flex',
                 flexWrap: 'wrap',
                 gap: '2%',
                 pr: '1.25vw',
-                height: '30vw',
-                //maxHeight: '250px',
+                maxheight: '30vw',
                 overflowY: 'auto',
                 overflowX: 'hidden',
-                '&::-webkit-scrollbar': { 
-                    width: '0.2083vw' 
-                },
-                '&::-webkit-scrollbar-track': { 
-                    background: 'transparent'
-                },
+                '&::-webkit-scrollbar': { width: '0.2083vw' },
+                '&::-webkit-scrollbar-track': { background: 'transparent' },
                 '&::-webkit-scrollbar-thumb': {
                     backgroundColor: '#0088d7',
                     borderRadius: '3px',
                 },
                 scrollbarWidth: 'thin',
-                scrollbarColor: '#0088d7 transparent'
-            }}>
-                {allImages.map((src, idx) => (
-                    <Box sx={{borderRadius: '6px', width: '48%', position: 'relative'}}>
-                    <Box
-                        key={idx}
-                        component="img"
-                        src={src}
-                        alt={`Report ${idx + 1}`}
-                        onClick={() => setSelectedReport(src)}
-                        sx={{
-                            width: '100%',
-                            // mb: '0.625vw',
-                            borderRadius: '6px',
-                            border: '1px solid black',
-                            objectFit: 'cover',
-                            cursor: 'pointer',
-                        }}
-                    />
-                    <Box
+                scrollbarColor: '#0088d7 transparent',
+                }}
+            >
+                {loadingReports && (
+                <Box
                     sx={{
-                        position: 'absolute',
-                        bottom: 6,
-                        left: 0,
-                        right: 0,
-                        width: '100%',
-                        bgcolor: 'rgba(0,0,0,0.6)',
-                        color: '#fff',
-                        px: '0.625vw',
-                        py: '0.365vw',
-                        fontSize: '0.7292vw',
-                        borderRadius: '0px 0px 6px 6px'
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    pt: '4vw',
                     }}
+                >
+                <Typography
+                    variant="subtitle2"
+                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.8vw' }}
                     >
-                        {`Report ${idx + 1}`}
-                    </Box>
-                    </Box>
-                ))}
+                    Loading latest reports…
+                    </Typography>
+                    <CircularProgress size="1.667vw" />
+                </Box>
+                )}
+                {reportsError && !loadingReports && (
+                <Typography sx={{ px: 1, color: '#c62828', fontSize: '0.85vw' }}>
+                    {reportsError}
+                </Typography>
+                )}
+                {!loadingReports && !reportsError && latestReports.length === 0 && (
+                <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
+                    No reports available yet.
+                </Typography>
+                )}
+                {!loadingReports && !reportsError && latestReports.length === 0 && (
+                <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
+                    No reports available yet.
+                </Typography>
+                )}
+
+                {!loadingReports && !reportsError && latestReports.length > 0 && (
+                    latestReports.map((report, idx) => (
+                        <Box
+                        key={report.pdf_filename || idx}
+                        onClick={() => handleOpenReport(report)}
+                        sx={{
+                            width: '48%',
+                            height:'auto',
+                            mb: '0.625vw',
+                            borderRadius: '6px',
+                            overflow: 'hidden',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                            bgcolor: '#ffffff',
+                            border: '1px solid #00000033',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}
+                        >
+                        {/* preview image – sits directly above the filename tile */}
+                        <Box
+                            component="img"
+                            src={previewImages[idx % previewImages.length]}
+                            alt={report.pdf_filename || `Report ${idx + 1}`}
+                            sx={{
+                            width: '100%',
+                            height:'auto',
+                            objectFit: 'cover',
+                            display: 'block',
+                            flexShrink: 0,
+                            }}
+                        />
+
+                        {/* filename tile */}
+                        <Box
+                            sx={{
+                            bgcolor: 'rgba(0,0,0,0.7)',
+                            color: '#fff',
+                            px: '0.625vw',
+                            py: '0.365vw',
+                            fontSize: '0.7292vw',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.3vw',
+                            }}
+                        >
+                            <Typography
+                            sx={{
+                                fontSize: '0.7292vw',
+                                fontWeight: 500,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '80%',
+                            }}
+                            >
+                            {report.pdf_filename || `Report ${idx + 1}`}
+                            </Typography>
+
+                            <IconButton
+                            size="small"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDownloadReport(report);
+                            }}
+                            sx={{ p: 0 }}
+                            >
+                            <img
+                                src={download_report}
+                                style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }}
+                            />
+                            </IconButton>
+                        </Box>
+                        </Box>
+                    ))
+                )}
+
             </Box>
                     {/* <Box
                         sx={{
@@ -774,54 +927,111 @@ return (
         </Box>
     </Box>
 
-    {/* Old placeholder preview modal */}
+    {/* Latest report PDF preview modal (real data from backend) */}
     {selectedReport && (
         <Box
         sx={{
-            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-            bgcolor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999, display: 'flex',
-            alignItems: 'center', justifyContent: 'center',
+            position: 'fixed',
+            inset: 0,
+            bgcolor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         }}
         onClick={() => setSelectedReport(null)}
         >
         <Box
             sx={{
-            width: '57.29vw', height: '46.88vw', bgcolor: '#F5FAFFD9',
-            borderRadius: 2, boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative',
+            width: '70vw',
+            height: '80vh',
+            bgcolor: '#F5FAFFD9',
+            borderRadius: 2,
+            boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
+            display: 'flex',
+            flexDirection: 'column',
             }}
             onClick={(e) => e.stopPropagation()}
         >
             <Box
             sx={{
-                backgroundColor: '#0088D6CC', height: '3.2vw', width: '100%',
-                borderTopLeftRadius: 4, borderTopRightRadius: 4, flexShrink: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: '0.417vw',
+                backgroundColor: '#0088D6CC',
+                height: '3.2vw',
+                width: '100%',
+                borderTopLeftRadius: 4,
+                borderTopRightRadius: 4,
+                flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                px: '0.833vw',
             }}
             >
-            <Typography sx={{ color: '#ffffff', fontSize: '0.833vw', fontWeight: 700 }}>
-                {selectedReport}
+            <Typography
+                sx={{
+                color: '#ffffff',
+                fontSize: '0.9vw',
+                fontWeight: 700,
+                maxWidth: '60vw',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                }}
+            >
+                {selectedReport.pdf_filename || 'Latest report'}
             </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.6vw' }}>
+                <Button
+                size="small"
+                variant="outlined"
+                component="a"
+                href={addZoomParam(selectedReportUrl, 100) || undefined}
+                target={selectedReportUrl ? '_blank' : undefined}
+                rel={selectedReportUrl ? 'noreferrer' : undefined}
+                sx={{
+                    color: '#fff',
+                    borderColor: 'rgba(255,255,255,0.7)',
+                    textTransform: 'none',
+                    '&:hover': {
+                    borderColor: '#fff',
+                    background: 'rgba(255,255,255,0.08)',
+                    },
+                    fontSize: '0.7292vw',
+                    py: 0.3,
+                    px: '0.625vw',
+                }}
+                >
+                Open in new tab
+                </Button>
+                <IconButton onClick={() => handleDownloadReport(selectedReport)}>
+                <img
+                    src={download_report}
+                    style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }}
+                />
+                </IconButton>
             </Box>
-            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', width: '100%', p: '0.833vw' }}>
-            <Box sx={{ position: 'relative', maxWidth: '60%', maxHeight: '85%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Box component="img" src={placeholder_4} alt="Placeholder 4" sx={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                <Box sx={{ position: 'absolute', top: '0vw', right: '-3.5vw', display: 'flex', flexDirection: 'column', gap: '0.625vw' }}>
-                <IconButton sx={{ width: '3vw', height: '3vw', color: '#081A33', backgroundColor: '#FFD95CE5', borderRadius: '50%', '&:hover': {backgroundColor: '#FFCB42'} }}>
-                    <EditOutlinedIcon sx={{ fontSize: '1.042vw' }} />
-                </IconButton>
-                <IconButton sx={{ width: '3vw', height: '3vw', color: '#081A33', backgroundColor: '#FFD95CE5', borderRadius: '50%', '&:hover': {backgroundColor: '#FFCB42'} }}>
-                    <img src={download_report} style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }} />
-                </IconButton>
-                <IconButton sx={{ width: '3vw', height: '3vw', color: '#081A33', backgroundColor: '#FFD95CE5', borderRadius: '50%', '&:hover': {backgroundColor: '#FFCB42'} }}>
-                    <img src={save_template} style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }} />
-                </IconButton>
-                <IconButton sx={{ width: '3vw', height: '3vw', color: '#081A33', backgroundColor: '#FFD95CE5', borderRadius: '50%', '&:hover': {backgroundColor: '#FFCB42'} }}>
-                    <img src={generate_report} style={{ width: '1.042vw', height: '1.042vw', objectFit: 'contain' }} />
-                </IconButton>
-                </Box>
             </Box>
+            <Box sx={{ flex: 1, p: '0.833vw' }}>
+            {selectedReportUrl ? (
+                <Box
+                component="iframe"
+                src={addZoomParam(selectedReportUrl, 100)}
+                title="Latest report preview"
+                sx={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    border: 0,
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                    backgroundColor: '#fff',
+                    borderRadius: 1,
+                }}
+                />
+            ) : (
+                <Typography sx={{ p: 2 }}>Preview unavailable.</Typography>
+            )}
             </Box>
+
         </Box>
         </Box>
     )}
