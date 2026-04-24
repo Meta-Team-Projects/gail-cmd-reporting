@@ -56,6 +56,7 @@ const DocumentSelection = ({
     onNavigateToReport,
     selectedDocs,
     setSelectedDocs,
+    referenceDocsRefreshKey,
     setUploadStatus,
     setUploadSnackOpen,
     setUploadProgressKey,
@@ -75,8 +76,11 @@ const DocumentSelection = ({
     const [stats, setStats] = useState(null);
     const fileInputRef = useRef(null)
     const createdUrlsRef = useRef(new Set());
+    const hasMountedRefreshRef = useRef(false);
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
+    
+    const [reportDate, setReportDate] = useState(new Date().toISOString().slice(0, 7));
 
     const [refLoading, setRefLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
@@ -255,6 +259,15 @@ const DocumentSelection = ({
                 } catch {}
             };
     }, []);
+
+    useEffect(() => {
+        if (!hasMountedRefreshRef.current) {
+            hasMountedRefreshRef.current = true;
+            return;
+        }
+
+        fetchReferencePdfs();
+    }, [referenceDocsRefreshKey]);
 
 
     const refUrlByName = useMemo(
@@ -504,6 +517,30 @@ const DocumentSelection = ({
                             <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '1.0417vw', color: '#081A33' }}>
                                 Reference Document Repository
                             </Typography>
+                            <TextField
+                                type="month"
+                                variant="outlined"
+                                size="small"
+                                value={reportDate}
+                                onChange={(e) => setReportDate(e.target.value)}
+                                InputLabelProps={{ shrink: true }}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        borderRadius: 2,
+                                        fontSize: '0.7292vw',
+                                        '& fieldset': { borderColor: '#BDBDBD' }, // Matches standard border
+                                        '&:hover fieldset': { borderColor: '#515151' },
+                                        '&.Mui-focused fieldset': { borderColor: '#FFD95C' }, // Brand highlight
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        cursor: 'pointer',
+                                        padding: '8px 12px',
+                                    },
+                                    '& ::-webkit-calendar-picker-indicator': {
+                                        cursor: 'pointer',
+                                    },
+                                }}
+                            />
                         </Box>
                         {/* <Stack direction="row" sx={{ flexWrap: 'wrap', gap: '0.41vw' }}>
                             <Box sx={{ 

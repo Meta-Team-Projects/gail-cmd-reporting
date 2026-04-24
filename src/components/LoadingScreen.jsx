@@ -1,48 +1,42 @@
 import React from 'react';
+import { Box, Typography, LinearProgress } from '@mui/material';
 
 export default function LoadingScreen() {
     return (
-        <div style={{
+        <Box sx={{
             position: 'fixed',
             top: 0,
             left: 0,
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            background: '#000000',
-            zIndex: 1000,
+            bgcolor: '#F1F8FF',
+            zIndex: 2000,
         }}>
-            <div style={{
-                color: '#ffffff',
-                textAlign: 'center'
-            }}>
-                <div style={{
-                    fontSize: '24px',
-                    marginBottom: '20px'
-                }}>
+            <Box sx={{ width: '20vw', textAlign: 'center' }}>
+                <Typography 
+                    sx={{ 
+                        fontSize: '1.2vw', 
+                        color: '#000000', 
+                        mb: '2vh',
+                        fontWeight: 500 
+                    }}
+                >
                     Loading...
-                </div>
-                <div style={{
-                    width: '50px',
-                    height: '50px',
-                    border: '5px solid #333',
-                    borderTop: '5px solid #ffffff',
-                    borderRadius: '50%',
-                    margin: '0 auto',
-                    animation: 'spin 1s linear infinite',
-                }}>
-                </div>
-                <style>
-                    {`
-                        @keyframes spin {
-                            0% { transform: rotate(0deg); }
-                            100% { transform: rotate(360deg); }
+                </Typography>
+                <LinearProgress 
+                    sx={{
+                        height: '0.8vh',
+                        borderRadius: '0.4vh',
+                        bgcolor: 'rgba(0, 51, 102, 0.1)',
+                        '& .MuiLinearProgress-bar': {
+                            bgcolor: '#003366',
                         }
-                    `}
-                </style>
-            </div>
-        </div>
+                    }}
+                />
+            </Box>
+        </Box>
     );
 }

@@ -96,6 +96,8 @@ const ReportGeneration = ({
     const [currentPage, setCurrentPage] = useState(0)
     const itemsPerPage = 7;
 
+    const [reportMonth, setReportMonth] = useState(new Date().toISOString().slice(0, 7));
+
     const [refLoading, setRefLoading] = useState(true);
     useEffect(() => {
         const t = setTimeout(() => setRefLoading(false), 45000); // 45 seconds
@@ -278,7 +280,7 @@ const ReportGeneration = ({
     const handleDownloadDocx = () => { downloadBlob(finalDocUrl, finalDocName); handleCloseDownloadMenu(); };
 
 
-        const startGenerate = async () => {
+    const startGenerate = async () => {
         setGenError('');
         // revoke previous blobs if any
         if (finalDocUrl) { try { URL.revokeObjectURL(finalDocUrl); } catch {} }
@@ -293,7 +295,13 @@ const ReportGeneration = ({
         startFakeProgress();
         try {
             const endpoint = `${import.meta.env.VITE_CHAT_API_URL}/generate-report`;
-            const templateNumber = getTemplateNumber() ?? 12;
+            const templateNumber = getTemplateNumber() ?? 6;
+
+            const queryParams = {
+                template: templateNumber,
+                report_month: reportMonth
+            };
+
             // 1) DOCX
             let resDocx;
             if (selectedTemplateDocxFile) {
@@ -304,8 +312,7 @@ const ReportGeneration = ({
                     fd,
                     {
                         responseType: 'blob',
-                        // axios will append this as ?template=6|12
-                        params: { template: templateNumber }
+                        params: queryParams
                     }
                 );
             } else {
@@ -314,7 +321,7 @@ const ReportGeneration = ({
                     {},
                     {
                         responseType: 'blob',
-                        params: { template: templateNumber }
+                        params: queryParams
                     }
                 );
             }
@@ -353,9 +360,9 @@ const ReportGeneration = ({
             }
             setIsGenerating(false);
         }
-        };
+    };
 
-        useEffect(() => {
+    useEffect(() => {
         return () => {
             if (progressTimerRef.current) clearInterval(progressTimerRef.current);
             try {
@@ -679,21 +686,46 @@ const disabledYellowSx = {
                             <Typography sx={{ opacity: 0.75 }}>
                                 Click “Generate Report” to create the final report.
                             </Typography>
-                            <Box sx={{ display:'flex', gap:'0.625vw', mt:'0.625vw' }}>
-                            <Button
-                                variant="contained"
-                                onClick={startGenerate}
-                                disabled={isGenerating}
-                                sx={{
-                                    bgcolor:'#FFD95C',
-                                    color:'#081A33',
-                                    fontWeight:600,
-                                    '&:hover':{ bgcolor:'#FFCB42' },
-                                    ...disabledYellowSx
-                                }}
-                            >
-                                Generate Report
-                            </Button>
+                            <Box sx={{ display:'flex', alignItems: 'center', gap:'0.625vw', mt:'0.625vw' }}>
+                                <TextField
+                                    type="month"
+                                    variant="outlined"
+                                    size="small"
+                                    value={reportMonth}
+                                    onChange={(e) => setReportMonth(e.target.value)}
+                                    InputLabelProps={{ shrink: true }}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            borderRadius: 2,
+                                            fontSize: '0.7292vw',
+                                            '& fieldset': { borderColor: '#BDBDBD' }, // Matches standard border
+                                            '&:hover fieldset': { borderColor: '#515151' },
+                                            '&.Mui-focused fieldset': { borderColor: '#FFD95C' }, // Brand highlight
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            cursor: 'pointer',
+                                            padding: '8px 12px',
+                                        },
+                                        '& ::-webkit-calendar-picker-indicator': {
+                                            cursor: 'pointer',
+                                        },
+                                        flexGrow: 1,
+                                    }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    onClick={startGenerate}
+                                    disabled={isGenerating}
+                                    sx={{
+                                        bgcolor:'#FFD95C',
+                                        color:'#081A33',
+                                        fontWeight:600,
+                                        '&:hover':{ bgcolor:'#FFCB42' },
+                                        ...disabledYellowSx
+                                    }}
+                                >
+                                    Generate Report
+                                </Button>
                             </Box>
                             </>
                         )}

@@ -33,6 +33,7 @@ import TemplateSelection from './components/TemplateSelection';
 import DocumentSelection from './components/DocumentSelection';
 import GeneratePreview from './components/GeneratePreview';
 import ReportGeneration from './components/ReportGeneration';
+import Login from './components/Login';
 
 const darkTheme = createTheme({
   palette: {
@@ -110,6 +111,10 @@ function App() {
   const [selectedPreview, setSelectedPreview] = useState(null)
   const [selectedDocs, setSelectedDocs] = useState([])
   const [isEditingTemplate, setIsEditingTemplate] = useState(false);
+  const [referenceDocsRefreshKey, setReferenceDocsRefreshKey] = useState(0);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [appLoading, setAppLoading] = useState(false);
 
   const handleGenerateNewResponse = () => {
     setIsEditingTemplate(false);
@@ -246,7 +251,15 @@ function App() {
   const renderRightMenu = () => {
     switch (activeRightMenu) {
       case MenuType.DOCUMENT_INGESTION:
-        return <DocumentIngestion open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
+        return (
+          <DocumentIngestion
+            open={rightSidebarOpen}
+            onToggle={handleRightDrawerToggle}
+            onReferenceDocsRefresh={() =>
+              setReferenceDocsRefreshKey(prev => prev + 1)
+            }
+          />
+        )
       case MenuType.AI_CONFIGURATION:
         return <AIConfiguration open={rightSidebarOpen} onToggle={handleRightDrawerToggle} />
       case MenuType.FAQS:
@@ -303,16 +316,26 @@ function App() {
     setRightSidebarOpen(true)
   }
 
-  const [appLoading, setAppLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => setAppLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
+    const handleLogin = () => {
+    setAppLoading(true);
+    setTimeout(() => {
+      setIsAuthenticated(true);
+      setAppLoading(false);
+    }, 1500);
+  };
+  
   if (appLoading) {
     return <LoadingScreen />;
   }
-
+  if (!isAuthenticated) {
+    return (
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Login onLogin={handleLogin} />
+      </ThemeProvider>
+    );
+  }
+  
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -468,6 +491,7 @@ function App() {
             selectedPreview={selectedPreview}
             selectedDocs={selectedDocs}
             setSelectedDocs={setSelectedDocs}
+            referenceDocsRefreshKey={referenceDocsRefreshKey}
             onNavigateToTemplate={() => setCurrentPage('template-select')}
             // onNavigateToReport={() => setCurrentPage('generate-preview')}/>
             onNavigateToReport={() => setCurrentPage('report-gen')}

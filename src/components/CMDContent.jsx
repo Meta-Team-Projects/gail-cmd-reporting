@@ -539,8 +539,9 @@ return (
                 gap: '2%',
                 pr: '1.25vw',
                 maxheight: '30vw',
-                overflowY: 'auto',
+                overflowY: 'scroll',
                 overflowX: 'hidden',
+                scrollbarGutter: 'stable',
                 '&::-webkit-scrollbar': { width: '0.2083vw' },
                 '&::-webkit-scrollbar-track': { background: 'transparent' },
                 '&::-webkit-scrollbar-thumb': {
@@ -552,38 +553,39 @@ return (
                 }}
             >
                 {loadingReports && (
-                <Box
-                    sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    pt: '4vw',
-                    }}
-                >
-                <Typography
-                    variant="subtitle2"
-                    sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.8vw' }}
+                    <Box
+                        sx={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        pt: '4vw',
+                        }}
                     >
-                    Loading latest reports…
-                    </Typography>
-                    <CircularProgress size="1.667vw" />
-                </Box>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{ fontWeight: 600, fontSize: '0.8854vw', color: '#081A33', mb: '0.8vw' }}
+                        >
+                        Loading latest reports…
+                        </Typography>
+                        <CircularProgress size="1.667vw" />
+                    </Box>
                 )}
                 {reportsError && !loadingReports && (
-                <Typography sx={{ px: 1, color: '#c62828', fontSize: '0.85vw' }}>
-                    {reportsError}
-                </Typography>
+                    <Typography sx={{ px: 1, color: '#c62828', fontSize: '0.85vw' }}>
+                        {reportsError}
+                    </Typography>
                 )}
                 {!loadingReports && !reportsError && latestReports.length === 0 && (
-                <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
-                    No reports available yet.
-                </Typography>
+                    <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
+                        No reports available yet.
+                    </Typography>
                 )}
                 {!loadingReports && !reportsError && latestReports.length === 0 && (
-                <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
-                    No reports available yet.
-                </Typography>
+                    <Typography sx={{ px: 1, color: '#081A33', fontSize: '0.85vw' }}>
+                        No reports available yet.
+                    </Typography>
                 )}
 
                 {!loadingReports && !reportsError && latestReports.length > 0 && (

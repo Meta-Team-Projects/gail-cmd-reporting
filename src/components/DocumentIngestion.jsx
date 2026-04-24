@@ -32,6 +32,7 @@ import {
     FilterList as FilterIcon,
     Add as AddIcon,
     ExpandMore as ExpandMoreIcon,
+    Close
 } from '@mui/icons-material'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
@@ -52,7 +53,7 @@ const globalStyles = {
     },
 };
 
-const DocumentIngestion = ({ open, onToggle }) => {
+const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
     
     const [isWide, setIsWide] = useState(false);
     const [searchTerm, setSearchTerm] = useState('')
@@ -76,6 +77,8 @@ const DocumentIngestion = ({ open, onToggle }) => {
     const repoOptions = ['Document Repository', 'Report Templates Repository']
     const [selectedRepo, setSelectedRepo] = useState('Document Repository') // default selected
 
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [reportDate, setReportDate] = useState(new Date().toISOString().slice(0, 7));
 
     const sentenceCase = str =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -172,44 +175,53 @@ const DocumentIngestion = ({ open, onToggle }) => {
         fetchDocuments();
     }, [selectedRepo]);
 
-    const handleUploadFiles = async (e) => {
-        const files = Array.from(e.target.files)
+    const handleFileChange = (e) => {
+        if (e.target.files) {
+            setSelectedFiles(prev => [...prev, ...Array.from(e.target.files)]);
+        }
+    };
+    const handleRemoveFile = (indexToRemove) => {
+        setSelectedFiles(prev => prev.filter((_, index) => index !== indexToRemove));
+    };
+
+    const handleUploadFiles = async (files) => {
+        // const files = Array.from(e.target.files)
         const tooBig = files.filter(f => f.size > 10 * 1024 * 1024)
         if (tooBig.length) {
-            alert(`These file(s) exceed 10 MB and won’t be uploaded:\n${tooBig.map(f=>f.name).join('\n')}`)
-            e.target.value = null
-            return
+            alert(`Some files are too large: ${tooBig.map(f => f.name).join(', ')}`);
+            return;
         }
-        const formData = new FormData()
-        files.forEach(f => formData.append('files', f))
-        formData.append('source', uploadSource)
-
-        formData.append('repository_type', selectedRepo === 'Document Repository' ? 'documents' : 'report_templates')
+        setUploadStatus('loading');
+        setUploadSnackOpen(true);
+        setUploadProgressKey(prev => prev + 1) // reset progress bar animation
 
         const startMs = Date.now();
         try {
-            setUploadStatus('loading')
-            setUploadSnackOpen(true)
-            setUploadProgressKey(prev => prev + 1) // reset progress bar animation
+            const uploadPromises = files.map(file => {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('source', uploadSource);
+                formData.append('repository_type', selectedRepo === 'Document Repository' ? 'documents' : 'report_templates');
+                formData.append('report_date', reportDate);
 
-            await axios.post(
-                `${import.meta.env.VITE_CHAT_API_URL}/upload-docs`,
-                formData,
-                { headers: { 'Content-Type': 'multipart/form-data' } }
-            )
+                return axios.post( `${import.meta.env.VITE_CHAT_API_URL}/ingest-document`, formData, { 
+                    headers: { 'Content-Type': 'multipart/form-data' } 
+                });
+            });
+
+            await Promise.all(uploadPromises);
 
             const elapsed = Math.max(1, (Date.now() - startMs) / 1000);
             setUploadDuration(elapsed);
 
-            await fetchDocuments()
-            setUploadStatus('success')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
+            await fetchDocuments();
+            onReferenceDocsRefresh?.();
+            setUploadStatus('success');
         } catch (err) {
-            console.error('Error uploading files', err)
-            setUploadStatus('error')
-            setTimeout(() => setUploadSnackOpen(false), 4000)
+            console.error('Error uploading files', err);
+            setUploadStatus('error');
         } finally {
-        e.target.value = null
+            setTimeout(() => setUploadSnackOpen(false), 4000);
         }
     }
 
@@ -311,9 +323,10 @@ const DocumentIngestion = ({ open, onToggle }) => {
                         select
                         value={selectedRepo}
                         onChange={(e) => setSelectedRepo(e.target.value)}
+                        //disabled
                         size="medium"
                         variant="standard"
-                        InputProps={{ disableUnderline: true }}
+                        InputProps={{ disableUnderline: true, readOnly: true }}
                         sx={{
                             width: '100%',
                             '& label': {
@@ -335,18 +348,18 @@ const DocumentIngestion = ({ open, onToggle }) => {
                             '& .MuiSelect-icon': { color: '#081A33' },
                             color: '#081A33',
                         }}
-                        SelectProps={{
-                            MenuProps: {
-                                PaperProps: {
-                                    sx: {
-                                        bgcolor: '#FFFBEF',
-                                        color: '#081A33',
-                                        '& .MuiMenuItem-root:hover': { bgcolor: '#FFD95C' },
-                                        '& .Mui-selected': { bgcolor: '#FFD95C !important', fontWeight: 600 },
-                                    },
-                                },
-                            },
-                        }}
+                        // SelectProps={{
+                        //     MenuProps: {
+                        //         PaperProps: {
+                        //             sx: {
+                        //                 bgcolor: '#FFFBEF',
+                        //                 color: '#081A33',
+                        //                 '& .MuiMenuItem-root:hover': { bgcolor: '#FFD95C' },
+                        //                 '& .Mui-selected': { bgcolor: '#FFD95C !important', fontWeight: 600 },
+                        //             },
+                        //         },
+                        //     },
+                        // }}
                     >
                         {repoOptions.map((opt) => (
                             <MenuItem key={opt} value={opt}>
@@ -507,123 +520,146 @@ const DocumentIngestion = ({ open, onToggle }) => {
                                 gap: 0.5,
                             }}
                         >
-                            
-                            {/* --- CATEGORY DROPDOWN FOR UPLOAD --- */}
-                            {/* <TextField
-                            select
-                            label="Select the Category"
-                            value={uploadSource}
-                            onChange={e => setUploadSource(e.target.value)}
-                            size="medium"
-                            sx={{
-                                mt: 1,
-                                mb:1,
-                                width: '90%',
-                                '& label': {
-                                    color: '#081A33', // Label color
-                                    fontWeight: 500,
-                                    fontSize: '0.7292vw' // 14px at 1920px screen
-                                },
-                                '& label.Mui-focused': {
-                                    color: '#081A33', // Focused label color
-                                },
-                                '& .MuiOutlinedInput-root': {
-                                    bgcolor: '#fff', // Background of dropdown
-                                    borderRadius: 2,
-                                    '& fieldset': {
-                                        borderColor: '#FFD95C', // Default border
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: '#FEC636', // Hover border
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#EDCC09', // Focus border
-                                    },
-                                    '& .MuiSelect-icon': {
-                                        color: '#081A33', // your desired icon color
-                                    },
-                                },
-                            }}
-                            SelectProps={{
-                                MenuProps: {
-                                PaperProps: {
-                                    sx: {
-                                    bgcolor: '#FFFBEF', // Dropdown menu background
-                                    color: '#081A33',   // Text color
-                                    '& .MuiMenuItem-root:hover': {
-                                        bgcolor: '#FFD95C', // Hover effect on items
-                                    },
-                                    '& .Mui-selected': {
-                                        bgcolor: '#FFD95C !important', // Selected item background
-                                        fontWeight: 600,
-                                    },
-                                    }
-                                }
-                                }
-                            }}
-                            >
-                                {categoryOptions.slice(1).map(cat => (
-                                    <MenuItem
-                                    key={cat}
-                                    value={cat.toLowerCase().replace(/ /g,'_')}
-                                    sx={{
-                                        display: 'block',           // Force block layout
-                                        textAlign: 'left',  }}
-                                    >
-                                    <Typography variant="body2" sx={{ textAlign: 'left', fontSize: '0.7292vw' }}>
-                                        {cat}
-                                    </Typography>
-                                    </MenuItem>
-                                ))}
-                            </TextField> */}
-
                             {/* hidden file input + upload handler */}
+                            
+                                <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
+                                <Typography variant="caption" display="block" color="#515151"
+                                sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -1}}>
+                                    Choose a file
+                                </Typography>
+                                <Typography variant="caption" display="block" color="#515151"
+                                sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -1}}>
+                                    DOCX format, up to 10MB
+                                </Typography>
+                            {selectedFiles.length === 0 ? (
+                                <Button
+                                    variant="contained"
+                                    onClick={() => fileInputRef.current.click()}
+                                    sx={{
+                                    borderRadius: 2,
+                                    bgcolor: '#FFD95C',
+                                    color: '#515151',
+                                    textTransform: 'none',
+                                    px: 3,
+                                    py: 0.5,
+                                    fontWeight: 500,
+                                    fontSize: '0.7292vw',
+                                    mb:1,
+                                    }}
+                                >
+                                    Browse File
+                                </Button>
+                            ) : (
+                                <Box sx={{display: 'flex', flexDirection: 'column', gap: '0.4167vw'}}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => fileInputRef.current.click()}
+                                        sx={{
+                                        borderRadius: 2,
+                                        bgcolor: '#FFD95C',
+                                        color: '#515151',
+                                        textTransform: 'none',
+                                        px: 3,
+                                        py: 0.5,
+                                        fontWeight: 500,
+                                        fontSize: '0.7292vw',
+                                        mb:1,
+                                        }}
+                                    >
+                                        Browse File
+                                    </Button>
+                                    {selectedFiles.map((file, index) => (
+                                        <Box
+                                          key={index}
+                                          sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            width: '100%',
+                                            mt: 0.5
+                                          }}
+                                        >
+                                            <Typography variant="caption" sx={{fontSize: '0.7292vw', fontWeight: 600}}>
+                                                {file.name}
+                                            </Typography>
+                                            <IconButton 
+                                                size="small"
+                                                onClick={() => handleRemoveFile(index)}
+                                                sx={{padding: '2px', color: '#081A33'}}
+                                            >
+                                                <Close sx={{fontSize: '0.7292vw'}} />
+                                            </IconButton>
+                                        </Box>
+                                    ))}
+                                    <Box sx={{
+                                        display: 'flex',
+                                        gap: '0.4167vw',
+                                    }}>
+                                        <TextField
+                                            type="month"
+                                            variant="outlined"
+                                            size="small"
+                                            value={reportDate}
+                                            onChange={(e) => setReportDate(e.target.value)}
+                                            InputLabelProps={{ shrink: true }}
+                                            sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    borderRadius: 2,
+                                                    fontSize: '0.7292vw',
+                                                    '& fieldset': { borderColor: '#BDBDBD' }, // Matches standard border
+                                                    '&:hover fieldset': { borderColor: '#515151' },
+                                                    '&.Mui-focused fieldset': { borderColor: '#FFD95C' }, // Brand highlight
+                                                },
+                                                '& .MuiInputBase-input': {
+                                                    cursor: 'pointer',
+                                                    padding: '8px 12px',
+                                                },
+                                                '& ::-webkit-calendar-picker-indicator': {
+                                                    cursor: 'pointer',
+                                                },
+                                                flexGrow: 1,
+                                            }}
+                                        />
+                                        <Button
+                                          variant="contained"
+                                          onClick={() => {
+                                            handleUploadFiles(selectedFiles);
+                                            setSelectedFiles([]);
+                                          }}
+                                          sx={{
+                                            borderRadius: 2,
+                                            bgcolor: '#FFD95C',
+                                            color: '#515151',
+                                            textTransform: 'none',
+                                            fontWeight: 500,
+                                            fontSize: '0.7292vw',
+                                          }}
+                                        >
+                                            Upload
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            )}
+
                             <input
-                            type="file"
-                            multiple
-                            hidden
-                            ref={fileInputRef}
-                            onChange={handleUploadFiles}
+                              type="file"
+                              multiple
+                              hidden
+                              ref={fileInputRef}
+                              onChange={handleFileChange}
                             />
 
-                            <CloudUpload sx={{ fontSize: '2.0833vw', color: '#081A33' }} /> 
+                            {/* {stats?.last_upload_date && (
+                                 <Typography
+                                     variant="caption"
+                                     display="block"
+                                     color="#515151"
+                                     sx={{ fontWeight: 500, fontSize: '0.625vw', mt:-1, mb: 1 }}
+                                 >
+                                     Last updated on {stats.last_upload_date}
+                                 </Typography>
+                             )} */}
                             
-                            <Typography variant="caption" display="block" color="#515151"
-                            sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -1}}>
-                                Choose a file
-                            </Typography>
-                            <Typography variant="caption" display="block" color="#515151"
-                            sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -1}}>
-                                DOCX format, up to 10MB
-                            </Typography>
-                            {stats?.last_upload_date && (
-                                <Typography
-                                    variant="caption"
-                                    display="block"
-                                    color="#515151"
-                                    sx={{ fontWeight: 500, fontSize: '0.625vw', mt:-1, mb: 1 }}
-                                >
-                                    Last updated on {stats.last_upload_date}
-                                </Typography>
-                            )}
-                            
-                            <Button
-                                variant="contained"
-                                onClick={() => fileInputRef.current.click()}
-                                sx={{
-                                borderRadius: 2,
-                                bgcolor: '#FFD95C',
-                                color: '#515151',
-                                textTransform: 'none',
-                                px: 3,
-                                py: 0.5,
-                                fontWeight: 500,
-                                fontSize: '0.7292vw',
-                                mb:1,
-                                }}
-                            >
-                                Browse File
-                            </Button>
                         </Box>
                     </Box> 
                 {stats && (
@@ -945,7 +981,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                                             </Button>
                                         </DialogActions>
                                     </Dialog>
-                                    <IconButton 
+                                    {/* <IconButton 
                                     size="small"
                                     onClick={e => {
                                             e.stopPropagation();
@@ -955,7 +991,7 @@ const DocumentIngestion = ({ open, onToggle }) => {
                                         <Tooltip title='Delete' placement='bottom' arrow>
                                             <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
                                         </Tooltip>
-                                    </IconButton>
+                                    </IconButton> */}
                                 </ListItem>
                             ))}
                         </List>
