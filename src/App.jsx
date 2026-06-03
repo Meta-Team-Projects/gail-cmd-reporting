@@ -15,18 +15,13 @@ import {
 } from '@mui/icons-material'
 import Sidebar from './components/Sidebar'
 import { getNextSessionName } from './components/utils';
-import MainContent from './components/MainContent'
 import DocumentIngestion from './components/DocumentIngestion'
 import AIConfiguration from './components/AIConfiguration'
-import FAQs from './components/FAQs'
 import SavedNotes from './components/SavedNotes'
-import SavedQueries from './components/SavedQueries'
 import SessionLog from './components/SessionLog'
-import Formulate from './components/Formulate'
 import { MenuType } from './constants/menuTypes'
 import Text from './components/Text'
 import LoadingScreen from './components/LoadingScreen'
-import TopPanel from './components/TopPanel'
 import { v4 as uuidv4 } from 'uuid'
 import CMDContent from './components/CMDContent';
 import TemplateSelection from './components/TemplateSelection';
