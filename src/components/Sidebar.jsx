@@ -298,36 +298,7 @@ const Sidebar = ({
                 )}
             </Box>
 
-            {/* <Box sx={{ px: 2, pb: 2, mx: -2 }}>
-                {open ? (<RecentSessions
-                    embedded
-                    open={open}
-                    onToggle={handleDrawerToggle}
-                    sessions={sessions}
-                    activeSessionID={activeSessionID}
-                    onSessionSelect={onSessionSelect}
-                    onRename={onRename}
-                    onDelete={onDelete}
-                    onReset={onReset}
-                />
-                ) : (
-                    <Box sx={{display: 'flex', justifyContent: 'center', py: 1}}>
-                        <Tooltip 
-                        PopperProps={{modifiers: [{
-                            name: 'offset',
-                            options: { offset: [0, 14]}
-                        }]}}
-                        title="Recent Sessions" placement="right" arrow>
-                        < AccessTimeIcon sx={{color: '#999'}}/>
-                        </Tooltip>
-                    </Box>
-                )}
-            </Box> 
-
-            <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} /> */}
             <List>
-                {/* <ListItem disablePadding>{renderMenuItem(menuItems[0])}</ListItem>
-                <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} /> */}
                 {menuItems.slice(1, 4).map((item) => (
                     <ListItem key={item.text} disablePadding>
                         {renderMenuItem(item)}
@@ -340,7 +311,7 @@ const Sidebar = ({
                         {renderMenuItem(item)}
                     </ListItem>
                 ))}
-                {/* <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} /> */}
+                <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} />
             </List>
 
             <Box sx={{ mt: 'auto' }}>
@@ -440,7 +411,9 @@ const Sidebar = ({
                 PaperProps={{
                     sx: {
                         borderRadius: 2,
-                        width: 500,
+                        width: '100%',
+                        maxWidth: 500,
+                        mx: 2,
                         px: 3,
                         py: 4,
                         bgcolor: '#F5F7FA',
@@ -463,7 +436,7 @@ const Sidebar = ({
                         }
                     }}
                 >
-                    <CloseIcon />
+                    <CloseIcon sx={{ fontSize: '1.25rem' }} />
                 </IconButton>
 
                 <DialogContent 
@@ -471,22 +444,22 @@ const Sidebar = ({
                         display: 'flex', 
                         flexDirection: 'column', 
                         alignItems: 'center',
-                        gap: 2.5,
+                        gap: 1.5,
                         p: 0 
                     }}
                 >
                     {/* Top Center Profile Circle */}
                     <Avatar 
                         sx={{ 
-                            width: 80, 
-                            height: 80, 
+                            width: '4.167rem', 
+                            height: '4.167rem', 
                             bgcolor: '#0088d7',
                             mb: 1
                         }}
                     />
 
                     {/* 3 Static Display Fields */}
-                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                         
                         {/* Field: Name */}
                         <Box>
@@ -494,7 +467,7 @@ const Sidebar = ({
                                 sx={{ 
                                     color: '#0088d7', 
                                     fontWeight: 500, 
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.85rem',
                                     mb: 0.5 
                                 }}
                             >
@@ -517,7 +490,7 @@ const Sidebar = ({
                                 sx={{ 
                                     color: '#0088d7', 
                                     fontWeight: 500, 
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.85rem',
                                     mb: 0.5 
                                 }}
                             >
@@ -540,7 +513,7 @@ const Sidebar = ({
                                 sx={{ 
                                     color: '#0088d7', 
                                     fontWeight: 500, 
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.85rem',
                                     mb: 0.5 
                                 }}
                             >
@@ -570,7 +543,9 @@ const Sidebar = ({
                 PaperProps={{
                     sx: {
                         borderRadius: 2,
-                        width: 500,
+                        width: '100%',
+                        maxWidth: 500,
+                        mx: 2,
                         px: 3,
                         pt: 5, // Extra top padding to ensure typography avoids the close button
                         pb: 4,
@@ -594,14 +569,14 @@ const Sidebar = ({
                         }
                     }}
                 >
-                    <CloseIcon />
+                    <CloseIcon sx={{ fontSize: '1.25rem' }} />
                 </IconButton>
 
                 <DialogContent sx={{ p: 0 }}>
                     <Typography 
                         sx={{ 
                             color: '#687382', // Matching your secondary text color accent
-                            fontSize: '1rem', 
+                            fontSize: '0.95rem', 
                             lineHeight: 1.6,
                             textAlign: 'center'
                         }}
