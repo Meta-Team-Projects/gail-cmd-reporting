@@ -49,7 +49,7 @@ const SavedNotes = ({
     savedNotes = [],
     setSelectedNote,
     onDeleteNote  }) => {
-    const categories = ['All', 'Pinned', 'Formulated Responses']
+    const categories = ['All', 'Pinned']
     const [notes, setNotes] = useState(savedNotes);
     const [isWide, setIsWide] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('All');
@@ -192,12 +192,11 @@ const SavedNotes = ({
             ref={panelRef}
             sx={{
                 width: open ? (isWide ? '46.88vw' : '26.04vw') : 0,
-                height: '87.5vh',
-                    position: 'fixed',
-                    right: '1.4vw',
-                    top: '9.5vh',
+                height: '93vh',
+                position: 'fixed',
+                right: '1.98vw',
+                top: '3.5vh',
                 bgcolor: 'background.sidebar',
-                transform: 'translateZ(0)',
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'width 0.3s ease',
@@ -341,7 +340,6 @@ const SavedNotes = ({
                     .filter(note => {
                         if (selectedCategory === 'All') return true;
                         if (selectedCategory === 'Pinned') return note.pinned;
-                        if (selectedCategory === 'Formulated Responses') return note.formulated;
                         return true;
                     })
                     .map((note, index) => (

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Drawer,
     List,
@@ -12,7 +12,12 @@ import {
     useTheme,
     useMediaQuery,
     Divider,
-    Tooltip
+    Tooltip,
+    Menu,
+    MenuItem,
+    Avatar,
+    TextField,
+    Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material'
 import {
     Home,
@@ -24,7 +29,8 @@ import {
     History,
     AccountCircle,
     Help,
-    ChevronLeft
+    ChevronLeft,
+    Close as CloseIcon,
 } from '@mui/icons-material'
 
 import DifferenceIcon from '@mui/icons-material/Difference'
@@ -33,6 +39,8 @@ import { MenuType } from '../constants/menuTypes'
 import RecentSessions from './RecentSessions'
 import FilePresentIcon from '@mui/icons-material/FilePresent'
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
 
 const drawerWidth = '12.5vw'
 const collapsedWidth = '3vw'
@@ -41,7 +49,7 @@ const menuItems = [
     { text: 'Notepad', icon: <EditNoteIcon />, type: 'TOGGLE_NOTEPAD' },
     { text: 'Home', icon: <Home />, type: MenuType.NONE },
     //{ text: 'New Session', icon: <DifferenceIcon />, type: 'NEW_SESSION' },
-    //{ text: 'Saved Notes', icon: <Note />, type: MenuType.SAVED_NOTES, disabled: '' },
+    { text: 'Saved Notes', icon: <Note />, type: MenuType.SAVED_NOTES, disabled: '' },
     // { text: 'Report Repository', icon: <FilePresentIcon />, type: MenuType.DOCUMENT_INGESTION, disabled: '' },
     { text: 'Document Manager', icon: <QuestionAnswer />, type: MenuType.DOCUMENT_INGESTION, disabled: '' },
     //{ text: 'Saved Queries', icon: <GetApp />, type: MenuType.SAVED_QUERIES, disabled: '' },
@@ -65,26 +73,99 @@ const Sidebar = ({
     onRename,
     onDelete,
     onReset,
+    onLogout
 }) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-    const handleMenuItemClick = (menuType) => {
-        if (menuType === 'TOGGLE_NOTEPAD') {
-            if (typeof onNotepadToggle === 'function') onNotepadToggle()
-            return
+    const [openProfileDialog, setOpenProfileDialog] = useState(false);
+    const [openSupportDialog, setOpenSupportDialog] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogoutClick = () => {
+        handleMenuClose();
+        if (typeof onLogout === 'function') {
+            onLogout();
         }
-        if (menuType === MenuType.DOCUMENT_INGESTION) {
-            if (typeof onMenuClick === 'function') onMenuClick(MenuType.DOCUMENT_INGESTION)
+    };
+
+    const handleMenuItemClick = (itemOrType, event) => {
+        const isObject = typeof itemOrType === 'object' && itemOrType !== null;
+        const itemText = isObject ? itemOrType.text : '';
+        const menuType = isObject ? itemOrType.type : itemOrType;
+
+        if (itemText === 'Profile') {
+            setAnchorEl(event.currentTarget);
             return;
         }
+        
+        if (itemText === 'Support') {
+            setOpenSupportDialog(true);
+            return;
+        }
+
+        if (menuType === 'TOGGLE_NOTEPAD') {
+            if (typeof onNotepadToggle === 'function') onNotepadToggle();
+            return;
+        }
+        
         if (menuType === 'NEW_SESSION') {
-            if (typeof onMenuClick === 'function') onMenuClick('NEW_SESSION')
-            return
+            if (typeof onMenuClick === 'function') onMenuClick('NEW_SESSION');
+            return;
         }
+        
         if (menuType !== MenuType.NONE && typeof onMenuClick === 'function') {
-            onMenuClick(menuType)
+            onMenuClick(menuType);
         }
+    };
+
+    const menuPaperSx = {
+        mt: '0vh',
+        py: '0.45vh',
+        minWidth: '10vw',
+        borderRadius: '0.8vw',
+        //border: '0.05vw solid rgba(255, 255, 255, 0.14)',
+        background: 'linear-gradient(180deg, #0b396a 0%, #135aa1 100%)',
+        boxShadow: '0 1vh 2.4vh rgba(18, 18, 18, 0.28)',
+        overflow: 'hidden',
+        '& .MuiList-root': {
+            py: '0.35vh',
+        },
+    }
+
+    const menuItemSx = {
+        minHeight: '3.8vh',
+        px: '0.9vw',
+        py: '0.7vh',
+        gap: '0.65vw',
+        color: '#FFFFFF',
+        fontSize: '0.73vw',
+        fontWeight: 500,
+        lineHeight: 1.2,
+        justifyContent: 'flex-start',
+        '& .MuiSvgIcon-root': {
+            fontSize: '0.95vw',
+            color: '#FFFFFF',
+            flexShrink: 0,
+        },
+        '&:hover': {
+            bgcolor: 'rgba(243, 242, 239, 0.1)',
+        },
+        '&.Mui-focusVisible': {
+            bgcolor: 'rgba(255, 217, 92, 0.18)',
+        },
+        '&.Mui-disabled': {
+            color: 'rgba(255, 255, 255, 0.42)',
+            opacity: 1,
+            '& .MuiSvgIcon-root': {
+                color: 'rgba(255, 255, 255, 0.42)',
+            },
+        },
     }
 
     const renderMenuItem = (item) => (
@@ -267,11 +348,12 @@ const Sidebar = ({
                         <ListItem key={item.text} disablePadding>
                             <Tooltip title={!open ? item.text : ''} placement="right" arrow>
                                 <ListItemButton
-                                onClick={() => handleMenuItemClick(item.type)}
+                                onClick={(e) => handleMenuItemClick(item, e)}
                                 selected={activeMenu === item.type}
                                 sx={{
                                     pl: 2,
                                     justifyContent: open ? 'initial' : 'center',
+                                    color: '#fff',
                                     bgcolor: 'transparent',
                                     '&:hover': {
                                     bgcolor: 'transparent',
@@ -292,10 +374,7 @@ const Sidebar = ({
                                     '& svg': {
                                         fontSize: '1vw',
                                     },
-                                    //Darker theme
-                                    color: activeMenu === item.type ? '#678092' : '#678092',
-                                    //Lighter theme
-                                    //color: activeMenu === item.type ? '#303030' : '#081A3366',
+                                    color: '#fff',
                                     }}
                                 >
                                     {item.icon}
@@ -306,7 +385,7 @@ const Sidebar = ({
                                     primaryTypographyProps={{
                                     sx: {
                                         fontSize: '0.8333vw',
-                                        color: activeMenu === item.type ? '#678092' : '#678092',
+                                        color: '#fff',
                                     }
                                     }}
                                     />
@@ -317,11 +396,242 @@ const Sidebar = ({
                     ))}
                 </List>
 
+                <Menu
+                  anchorEl={anchorEl}
+                  open={isMenuOpen}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  PaperProps={{
+                    sx: menuPaperSx
+                  }}
+                >
+                    <MenuItem
+                      onClick={() => {
+                        setOpenProfileDialog(true);
+                        handleMenuClose();
+                    }}
+                      sx={menuItemSx}
+                    >
+                        <PersonIcon />
+                        Go To Profile
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleLogoutClick}
+                      sx={menuItemSx}
+                    >
+                        <LogoutIcon />
+                        Logout
+                    </MenuItem>
+                </Menu>
             </Box>
         </>
     )
 
+    const dialogs = (
+        <>
+            {/* Profile Dialog */}
+            <Dialog
+                open={openProfileDialog}
+                onClose={() => setOpenProfileDialog(false)}
+                container={() => document.body}
+                BackdropProps={{ sx: { backdropFilter: 'grayscale(0.5) brightness(0.5)' } }}
+                PaperProps={{
+                    sx: {
+                        borderRadius: 2,
+                        width: 500,
+                        px: 3,
+                        py: 4,
+                        bgcolor: '#F5F7FA',
+                        boxShadow: '0px 4px 8px rgba(18,18,18,0.25)',
+                        position: 'relative' 
+                    }
+                }}  
+            >
+                {/* Absolute Positioned Close Button */}
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setOpenProfileDialog(false)}
+                    sx={{
+                        position: 'absolute',
+                        right: 10,
+                        top: 10,
+                        color: '#687382',
+                        '&:hover': {
+                            backgroundColor: '#c8e4f45a',
+                        }
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                <DialogContent 
+                    sx={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center',
+                        gap: 2.5,
+                        p: 0 
+                    }}
+                >
+                    {/* Top Center Profile Circle */}
+                    <Avatar 
+                        sx={{ 
+                            width: 80, 
+                            height: 80, 
+                            bgcolor: '#0088d7',
+                            mb: 1
+                        }}
+                    />
+
+                    {/* 3 Static Display Fields */}
+                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        
+                        {/* Field: Name */}
+                        <Box>
+                            <Typography 
+                                sx={{ 
+                                    color: '#0088d7', 
+                                    fontWeight: 500, 
+                                    fontSize: '0.95rem',
+                                    mb: 0.5 
+                                }}
+                            >
+                                Name
+                            </Typography>
+                            <Box 
+                                sx={{ 
+                                    width: '100%', 
+                                    height: '40px', 
+                                    border: '1px solid #687382', 
+                                    borderRadius: '4px',
+                                    bgcolor: 'transparent'
+                                }} 
+                            />
+                        </Box>
+
+                        {/* Field: Email */}
+                        <Box>
+                            <Typography 
+                                sx={{ 
+                                    color: '#0088d7', 
+                                    fontWeight: 500, 
+                                    fontSize: '0.95rem',
+                                    mb: 0.5 
+                                }}
+                            >
+                                Email
+                            </Typography>
+                            <Box 
+                                sx={{ 
+                                    width: '100%', 
+                                    height: '40px', 
+                                    border: '1px solid #687382', 
+                                    borderRadius: '4px',
+                                    bgcolor: 'transparent'
+                                }} 
+                            />
+                        </Box>
+
+                        {/* Field: Title */}
+                        <Box>
+                            <Typography 
+                                sx={{ 
+                                    color: '#0088d7', 
+                                    fontWeight: 500, 
+                                    fontSize: '0.95rem',
+                                    mb: 0.5 
+                                }}
+                            >
+                                Title
+                            </Typography>
+                            <Box 
+                                sx={{ 
+                                    width: '100%', 
+                                    height: '40px', 
+                                    border: '1px solid #687382', 
+                                    borderRadius: '4px',
+                                    bgcolor: 'transparent'
+                                }} 
+                            />
+                        </Box>
+
+                    </Box>
+                </DialogContent>
+            </Dialog>
+
+            {/* Support Dialog */}
+            <Dialog
+                open={openSupportDialog}
+                onClose={() => setOpenSupportDialog(false)}
+                container={() => document.body}
+                BackdropProps={{ sx: { backdropFilter: 'grayscale(0.5) brightness(0.5)' } }}
+                PaperProps={{
+                    sx: {
+                        borderRadius: 2,
+                        width: 500,
+                        px: 3,
+                        pt: 5, // Extra top padding to ensure typography avoids the close button
+                        pb: 4,
+                        bgcolor: '#F5F7FA',
+                        boxShadow: '0px 4px 8px rgba(18,18,18,0.25)',
+                        position: 'relative' 
+                    }
+                }}  
+            >
+                {/* Absolute Positioned Close Button */}
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setOpenSupportDialog(false)}
+                    sx={{
+                        position: 'absolute',
+                        right: 10,
+                        top: 10,
+                        color: '#687382',
+                        '&:hover': {
+                            backgroundColor: '#c8e4f45a',
+                        }
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                <DialogContent sx={{ p: 0 }}>
+                    <Typography 
+                        sx={{ 
+                            color: '#687382', // Matching your secondary text color accent
+                            fontSize: '1rem', 
+                            lineHeight: 1.6,
+                            textAlign: 'center'
+                        }}
+                    >
+                        In case of any issue related to chatbot performance please reach out to{' '}
+                        <Box component="span" sx={{ color: '#0088d7', fontWeight: 600 }}>
+                            Soujanya Mondal
+                        </Box>
+                        , Senior Manager CSPA at{' '}
+                        <Box 
+                            component="a" 
+                            href="mailto:smondal@gail.co.in" 
+                            sx={{ 
+                                color: '#0088d7', 
+                                textDecoration: 'none', 
+                                fontWeight: 500,
+                                '&:hover': { textDecoration: 'underline' } 
+                            }}
+                        >
+                            smondal@gail.co.in
+                        </Box>
+                        .
+                    </Typography>
+                </DialogContent>
+            </Dialog>
+        </>
+    );
+
     return (
+        <>
+        {dialogs}
         <Box
             component="nav"
             sx={{
@@ -365,6 +675,7 @@ const Sidebar = ({
                 {drawer}
             </Drawer>
         </Box>
+        </>
     )
 }
 
