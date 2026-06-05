@@ -194,7 +194,7 @@ const SavedNotes = ({
                 width: open ? (isWide ? '46.88vw' : '26.04vw') : 0,
                 height: '93vh',
                 position: 'fixed',
-                right: '1.98vw',
+                right: '1.4vw',
                 top: '3.5vh',
                 bgcolor: 'background.sidebar',
                 display: 'flex',
@@ -208,7 +208,7 @@ const SavedNotes = ({
             }}
         >
             <Box sx={{
-                p: 3,
+                p: 2,
                 position: 'relative',
                 bgcolor: 'background.sidebar',
                 borderBottom: '1px solid',
