@@ -298,7 +298,7 @@ const Sidebar = ({
                 )}
             </Box>
 
-            <Box sx={{ px: 2, pb: 2, mx: -2 }}>
+            {/* <Box sx={{ px: 2, pb: 2, mx: -2 }}>
                 {open ? (<RecentSessions
                     embedded
                     open={open}
@@ -322,18 +322,19 @@ const Sidebar = ({
                         </Tooltip>
                     </Box>
                 )}
-            </Box>
+            </Box> 
 
-            <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} />
+            <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} /> */}
             <List>
-                <ListItem disablePadding>{renderMenuItem(menuItems[0])}</ListItem>
-                <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} />
+                {/* <ListItem disablePadding>{renderMenuItem(menuItems[0])}</ListItem>
+                <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} /> */}
                 {menuItems.slice(1, 4).map((item) => (
                     <ListItem key={item.text} disablePadding>
                         {renderMenuItem(item)}
                     </ListItem>
                 ))}
                 <Divider sx={{ mx: 2, my: 1, borderColor: '#e0e0e0' }} />
+                <ListItem disablePadding>{renderMenuItem(menuItems[0])}</ListItem>
                 {menuItems.slice(4).map((item) => (
                     <ListItem key={item.text} disablePadding>
                         {renderMenuItem(item)}
