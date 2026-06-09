@@ -366,6 +366,7 @@ function App() {
           onReset={handleResetSession}
           layoutMode={layoutMode}
           onLogout={handleLogout}
+          onNavigateToCMDContent={() => setCurrentPage('cmd')}
         />
         <Box
           component="main"

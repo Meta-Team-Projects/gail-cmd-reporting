@@ -73,7 +73,8 @@ const Sidebar = ({
     onRename,
     onDelete,
     onReset,
-    onLogout
+    onLogout,
+    onNavigateToCMDContent
 }) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -98,6 +99,13 @@ const Sidebar = ({
         const isObject = typeof itemOrType === 'object' && itemOrType !== null;
         const itemText = isObject ? itemOrType.text : '';
         const menuType = isObject ? itemOrType.type : itemOrType;
+
+        if (itemText === 'Home') {
+            if (typeof onNavigateToCMDContent === 'function') {
+                onNavigateToCMDContent();
+            }
+            return;
+        }
 
         if (itemText === 'Profile') {
             setAnchorEl(event.currentTarget);
@@ -171,7 +179,7 @@ const Sidebar = ({
     const renderMenuItem = (item) => (
         <Tooltip title={!open ? item.text : ''} placement="right" arrow>
             <ListItemButton
-                onClick={item.disabled ? undefined : () => handleMenuItemClick(item.type)}
+                onClick={item.disabled ? undefined : (e) => handleMenuItemClick(item, e)}
                 disabled={item.disabled}
                 selected={item.type === 'TOGGLE_NOTEPAD' ? showNotepad : activeMenu === item.type}
                 sx={{
