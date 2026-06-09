@@ -39,9 +39,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw   from 'rehype-raw'
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-
+import { downloadAnswerAsPdf } from './downloadResponse';
 
 const SavedNotes = ({ 
     open, onToggle,
@@ -112,8 +110,6 @@ const SavedNotes = ({
         }
     };
 
-    const messageRefs = useRef([]);
-
     const handlePinToggle = (index) => {
         setNotes(prev => {
             const updated = [...prev];
@@ -128,62 +124,14 @@ const SavedNotes = ({
     };
 
 
-    const handleDownload = async (index) => {
-        const element = messageRefs.current[index];
-        if (!element) return;
-
-        const clone = element.cloneNode(true);
-        const wrapper = document.createElement('div');
-        wrapper.style.padding = '20px';
-        wrapper.style.backgroundColor = '#ffffff';
-        wrapper.appendChild(clone);
-
-        document.body.appendChild(wrapper);
-        const canvas = await html2canvas(wrapper, {
-            backgroundColor: '#ffffff',
-            scale: 2,
-            useCORS: true,
-        });
-        document.body.removeChild(wrapper);
-
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        const pdfBlob = pdf.output('blob');
-
-        if (window.showSaveFilePicker) {
-            try {
-                const handle = await window.showSaveFilePicker({
-                    suggestedName: 'note.pdf',
-                    types: [{ description: 'PDF Document', accept: { 'application/pdf': ['.pdf'] } }],
-                });
-                const writable = await handle.createWritable();
-                await writable.write(pdfBlob);
-                await writable.close();
-            } catch {
-                const blobUrl = URL.createObjectURL(pdfBlob);
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = 'note.pdf';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(blobUrl);
-            }
-        } else {
-            const blobUrl = URL.createObjectURL(pdfBlob);
-            const a = document.createElement('a');
-            a.href = blobUrl;
-            a.download = 'note.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(blobUrl);
-        }
-    };
+    const handleDownload = (note) => {
+        downloadAnswerAsPdf({
+            response: note.content,
+            sources: note.sources,
+            title: note.title || 'Saved Note',
+            filename: `${note.title || 'note'}.pdf`
+        })
+    }
 
     const panelRef = useRef<HTMLDivElement>(null);
 
@@ -344,7 +292,6 @@ const SavedNotes = ({
                     })
                     .map((note, index) => (
                     <ListItem
-                        ref={(el) => messageRefs.current[index] = el}
                         key={index}
                         sx={{
                             bgcolor: '#FFFFFF',   //later
@@ -403,7 +350,7 @@ const SavedNotes = ({
                                         }, }}>
                                         
                                     <Download 
-                                    onClick={() => handleDownload(index)}
+                                    onClick={() => handleDownload(note)}
                                     sx={{ fontSize: '0.6667vw', color: '#000000' }} />
                                 </IconButton>
                                 </Tooltip>
