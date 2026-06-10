@@ -231,8 +231,8 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
     };
 
     const handleUploadFiles = async (files) => {
-        // const files = Array.from(e.target.files)
-        const tooBig = files.filter(f => f.size > 10 * 1024 * 1024)
+        const MAX_SIZE = 512 * 1024 * 1024;
+        const tooBig = files.filter(f => f.size > MAX_SIZE)
         if (tooBig.length) {
             alert(`Some files are too large: ${tooBig.map(f => f.name).join(', ')}`);
             return;
@@ -575,7 +575,7 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
                                 </Typography>
                                 <Typography variant="caption" display="block" color="#515151"
                                 sx={{ fontWeight: 500, fontSize: '0.625vw', mt: -1}}>
-                                    DOCX format, up to 10MB
+                                    DOCX format, up to 512MB
                                 </Typography>
                             {selectedFiles.length === 0 ? (
                                 <Button
@@ -705,7 +705,6 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
                                      Last updated on {stats.last_upload_date}
                                  </Typography>
                              )} */}
-                            
                         </Box>
                     </Box> 
                 {stats && (
@@ -1044,6 +1043,7 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
                         return (
                         <List sx={{ px: 0, mb: 1 }}>
                             {docs
+                            .sort((a, b) => parseDocDate(b) - parseDocDate(a))
                             .filter(name =>
                                 name.toLowerCase().includes(searchTerm.toLowerCase())
                             )
