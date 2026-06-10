@@ -118,9 +118,11 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
 
     const handleDeleteDoc = async (docName) => {
     try {
-            await axios.post(
-                `${import.meta.env.VITE_CHAT_API_URL}/deactivate-documents`,
-                { document_names: [docName] }
+            await axios.delete(
+                `${import.meta.env.VITE_CHAT_API_URL}/reference-documents`,
+                { 
+                    data: { filenames: [docName] }
+                }
             );
         } catch (error) {
             console.error('Error deactivating document', error);
@@ -1116,85 +1118,7 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
                                             </Typography>
                                         )}
                                     </Box>
-                                    {/* --- Delete Confirmation Dialog --- */}
-                                    <Dialog
-                                        open={openDeleteDialog}
-                                        onClose={() => setOpenDeleteDialog(false)}
-                                        container={() => panelRef.current}
-                                        disablePortal
-                                        BackdropProps={{ sx: { backgroundColor: 'rgba(255, 255, 255, 0)' , backdropFilter: 'blur(1px)',
-                                            position: 'absolute',
-                                            inset: 0,
-                                        } }}
-                                        PaperProps={{
-                                            sx: {
-                                                borderRadius: 2,
-                                                width: '80%',
-                                                maxWidth: 400,
-                                                px: 1,
-                                                bgcolor: '#F5F7FA',        // or whatever light grey
-                                                boxShadow: '0px 4px 8px rgba(18,18,18,0.25)',
-                                            }
-                                        }}  
-                                        >
-                                        <DialogTitle
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            pb: 0.5,
-                                            color: '#687382',
-                                        }}>
-                                            <Delete/> Delete Document?</DialogTitle>
-                                        <DialogContent
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            color: '#687382',
-                                            }}>
-                                            <Typography>Are you sure you want to delete this document?</Typography>
-                                        </DialogContent>
-                                        <DialogActions
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            mt:-2,
-                                            mb:1,
-                                            }}>
-                                            <Button 
-                                                sx={{
-                                                color: '#687382',
-                                                width: 200,
-                                                borderRadius: 999,
-                                                }}
-                                                onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
-                                            <Button
-                                            variant="contained"
-                                            sx={{
-                                                backgroundColor: '#0088d7',
-                                                py: 1,
-                                                width: 200,
-                                                borderRadius: 999,
-                                                color: '#fff',
-                                                '&:hover': {
-                                                backgroundColor: '#0072b1',
-                                                }
-                                            }}
-                                            onClick={confirmDeleteDoc}
-                                            >
-                                            Delete
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                    {/* <IconButton 
+                                    <IconButton 
                                     size="small"
                                     onClick={e => {
                                             e.stopPropagation();
@@ -1204,7 +1128,7 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
                                         <Tooltip title='Delete' placement='bottom' arrow>
                                             <Delete sx={{ fontSize: '0.8333vw', color: '#f08a8a' }} />
                                         </Tooltip>
-                                    </IconButton> */}
+                                    </IconButton>
                                 </ListItem>
                             ))}
                         </List>
@@ -1212,6 +1136,85 @@ const DocumentIngestion = ({ open, onToggle, onReferenceDocsRefresh }) => {
                     })()}
                     </Box>
                 </Box>
+                {/* --- Delete Confirmation Dialog --- */}
+                <Dialog
+                    open={openDeleteDialog}
+                    onClose={() => setOpenDeleteDialog(false)}
+                    container={() => panelRef.current}
+                    disablePortal
+                    BackdropProps={{ sx: { backgroundColor: 'rgba(255, 255, 255, 0)' , backdropFilter: 'blur(1px)',
+                        position: 'absolute',
+                        inset: 0,
+                    } }}
+                    PaperProps={{
+                        sx: {
+                            borderRadius: 2,
+                            width: '80%',
+                            maxWidth: 400,
+                            px: 1,
+                            bgcolor: '#F5F7FA',        // or whatever light grey
+                            boxShadow: '0px 4px 8px rgba(18,18,18,0.25)',
+                        }
+                    }}  
+                >
+                    <DialogTitle
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        justifyContent: 'center',
+                        pb: 0.5,
+                        color: '#687382',
+                    }}>
+                        <Delete/> Delete Document?</DialogTitle>
+                    <DialogContent
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        justifyContent: 'center',
+                        color: '#687382',
+                    }}>
+                        <Typography>Are you sure you want to delete this document?</Typography>
+                    </DialogContent>
+                    <DialogActions
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        justifyContent: 'center',
+                        mt:-2,
+                        mb:1,
+                    }}>
+                        <Button 
+                        onClick={() => setOpenDeleteDialog(false)}
+                        sx={{
+                            color: '#687382',
+                            width: 200,
+                            borderRadius: 999,
+                        }}>
+                            Cancel
+                        </Button>
+                        <Button
+                        variant="contained"
+                        onClick={confirmDeleteDoc}
+                        sx={{
+                            backgroundColor: '#0088d7',
+                            py: 1,
+                            width: 200,
+                            borderRadius: 999,
+                            color: '#fff',
+                            '&:hover': {
+                            backgroundColor: '#0072b1',
+                            }
+                        }}>
+                            Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Paper>
         </>
     )
