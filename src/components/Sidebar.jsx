@@ -265,9 +265,9 @@ const Sidebar = ({
                 justifyContent: open ? 'flex-start' : 'center',
                 alignItems: 'center', gap: open ? 1 : 0 }}>
                 <Box component="img"
-                    src="/gail_logo.png" alt="Logo"
+                    src="/gail_logo_new.png" alt="Logo"
                     onClick={!open ? handleDrawerToggle : undefined}
-                    sx={{ width: '2.083vw', height: '2.083vw',
+                    sx={{ height: '2.083vw',
                     cursor: !open ? 'pointer' : 'default',
                     transition: 'transform 0.2s ease-in-out',
                     '&:hover':{

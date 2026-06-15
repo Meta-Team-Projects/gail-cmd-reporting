@@ -144,8 +144,8 @@ const Login = ({ onLogin }) => {
         >
           <Box sx={{ maxWidth: '36vw' }}>
             <Box component="img"
-              src="/gail_logo.png" alt="Logo"
-              sx={{ width: '6.771vw', height: '5.729vw'}} 
+              src="/gail_logo_new.png" alt="Logo"
+              sx={{height: '5.729vw'}} 
             />
 
             <Typography
