@@ -267,7 +267,7 @@ const Sidebar = ({
                 <Box component="img"
                     src="/gail_logo_new.png" alt="Logo"
                     onClick={!open ? handleDrawerToggle : undefined}
-                    sx={{ height: '2.083vw',
+                    sx={{ height: !open ? '1.5vw' : '2.083vw',
                     cursor: !open ? 'pointer' : 'default',
                     transition: 'transform 0.2s ease-in-out',
                     '&:hover':{
